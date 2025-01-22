@@ -18,7 +18,7 @@ const Navbar = () => {
         <Button color="inherit" component={Link} to="/contact">
           Kapcsolat
         </Button>
-        {/* Bejelentkezés gomb */}
+
         <Button 
           color="inherit" 
           component={Link} 
