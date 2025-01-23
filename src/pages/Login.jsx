@@ -6,7 +6,9 @@ import axios from 'axios';
 import { blue } from '@mui/material/colors';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
+
 const Login = () => {
+  const [isloggedin, setIsLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -22,15 +24,13 @@ const Login = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('https://localhost:5001/auth/login', {
+      const response = await axios.post('https://localhost:5001/login', {
         email,
         password,
       });
 
-      // Refresh és Access tokenek cookie-kba tárolása
       document.cookie = `accessToken=${response.data.accessToken}; path=/;`;
       document.cookie = `refreshToken=${response.data.refreshToken}; path=/;`;
-
       navigate('/');
     } catch (error) {
       setErrorMessage('Hibás email vagy jelszó!');
@@ -39,9 +39,10 @@ const Login = () => {
     }
   };
 
+  if (isloggedin) {
   return (
-    <Box 
-      sx={{ 
+    <Box
+      sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -58,18 +59,18 @@ const Login = () => {
         <Typography variant="h4" gutterBottom>
           Bejelentkezés
         </Typography>
-        <TextField 
-          label="Email" 
-          variant="outlined" 
-          fullWidth 
+        <TextField
+          label="Email"
+          variant="outlined"
+          fullWidth
           margin="normal"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <TextField 
-          label="Jelszó" 
-          variant="outlined" 
-          fullWidth 
+        <TextField
+          label="Jelszó"
+          variant="outlined"
+          fullWidth
           margin="normal"
           type={showPassword ? 'text' : 'password'}
           value={password}
@@ -93,25 +94,30 @@ const Login = () => {
           </Typography>
         )}
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 0.5 }}>
-        <Button
-          variant="text"
-          sx={{ fontSize: '0.7rem' }}
-          onClick={() => navigate('/register')}
-        >
-          Még nincs felhasználód?
-        </Button>
-        <Button 
-          variant="contained" 
-          sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] } }}
-          onClick={handleLogin}
-          disabled={loading}
-        >
-          {loading ? 'Bejelentkezés...' : 'Bejelentkezés'}
-        </Button>
+          <Button
+            variant="text"
+            sx={{ fontSize: '0.7rem' }}
+            onClick={() => navigate('/register')}
+          >
+            Még nincs felhasználód?
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] } }}
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? 'Bejelentkezés...' : 'Bejelentkezés'}
+          </Button>
         </Box>
       </Box>
     </Box>
   );
+}
+else{
+  return <div>something went wrong :c
+  </div>
+}
 };
 
 export default Login;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
@@ -7,7 +7,9 @@ import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
 
+
 function App() {
+
   return (
     <Router>
       <Navbar />

@@ -51,7 +51,7 @@ const Register = () => {
 
     setLoading(true);
     try {
-      await axios.post('https://localhost:5001/auth/register', {
+      await axios.post('https://localhost:5001/register', {
         email,
         username,
         password,
