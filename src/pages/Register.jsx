@@ -1,15 +1,18 @@
 // Register.jsx
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, LinearProgress } from '@mui/material';
+import { TextField, Button, Box, Typography, LinearProgress, IconButton, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { blue, green, yellow, red } from '@mui/material/colors';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({ level: 'rossz', color: red[500], progress: 33 });
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -69,7 +72,6 @@ const Register = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100vh',
         padding: '5%',
       }}
     >
@@ -103,11 +105,23 @@ const Register = () => {
           variant="outlined" 
           fullWidth 
           margin="normal"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => handlePasswordChange(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
-        <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginY: 0 }}>
           <LinearProgress 
             variant="determinate" 
             value={passwordStrength.progress} 
@@ -120,9 +134,10 @@ const Register = () => {
           variant="outlined" 
           fullWidth 
           margin="normal"
-          type="password"
+          type={showConfirmPassword ? 'text' : 'password'}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          
         />
         {errorMessage && (
           <Typography color="error" sx={{ marginTop: 2 }}>

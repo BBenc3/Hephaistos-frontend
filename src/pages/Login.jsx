@@ -1,14 +1,16 @@
 // Login.jsx
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, IconButton, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { blue } from '@mui/material/colors';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -69,9 +71,21 @@ const Login = () => {
           variant="outlined" 
           fullWidth 
           margin="normal"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         {errorMessage && (
           <Typography color="error" sx={{ marginTop: 2 }}>
