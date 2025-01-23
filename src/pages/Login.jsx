@@ -1,30 +1,39 @@
+// Login.jsx
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { blue } from '@mui/material/colors';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setErrorMessage('Minden mezőt ki kell tölteni!');
+      return;
+    }
+
+    setLoading(true);
     try {
-      const response = await axios.post('https://api.example.com/login', {
-        username,
+      const response = await axios.post('https://localhost:5001/auth/login', {
+        email,
         password,
       });
 
-      // JWT token fogadása
-      const token = response.data.token;
+      // Refresh és Access tokenek cookie-kba tárolása
+      document.cookie = `accessToken=${response.data.accessToken}; path=/;`;
+      document.cookie = `refreshToken=${response.data.refreshToken}; path=/;`;
 
-      // Token elmentése a localStorage-ba
-      localStorage.setItem('token', token);
-
-      // Navigálj a főoldalra
       navigate('/');
     } catch (error) {
-      console.error('Hiba a bejelentkezés során:', error);
+      setErrorMessage('Hibás email vagy jelszó!');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,37 +44,58 @@ const Login = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100vh',
+        padding: '5%',
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        Bejelentkezés
-      </Typography>
-      <TextField 
-        label="Felhasználónév" 
-        variant="outlined" 
-        fullWidth 
-        margin="normal"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <TextField 
-        label="Jelszó" 
-        variant="outlined" 
-        fullWidth 
-        margin="normal"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleLogin}
-        sx={{ marginTop: 2 }}
+      <Box
+        sx={{
+          width: { xs: '90%', sm: '60%', md: '30%' },
+          textAlign: 'center',
+        }}
       >
-        Bejelentkezés
-      </Button>
+        <Typography variant="h4" gutterBottom>
+          Bejelentkezés
+        </Typography>
+        <TextField 
+          label="Email" 
+          variant="outlined" 
+          fullWidth 
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField 
+          label="Jelszó" 
+          variant="outlined" 
+          fullWidth 
+          margin="normal"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {errorMessage && (
+          <Typography color="error" sx={{ marginTop: 2 }}>
+            {errorMessage}
+          </Typography>
+        )}
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 0.5 }}>
+        <Button
+          variant="text"
+          sx={{ fontSize: '0.7rem' }}
+          onClick={() => navigate('/register')}
+        >
+          Még nincs felhasználód?
+        </Button>
+        <Button 
+          variant="contained" 
+          sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] } }}
+          onClick={handleLogin}
+          disabled={loading}
+        >
+          {loading ? 'Bejelentkezés...' : 'Bejelentkezés'}
+        </Button>
+        </Box>
+      </Box>
     </Box>
   );
 };
