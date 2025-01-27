@@ -1,24 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext'; // Import the hook
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, handleLogout } = useAuth(); // Use the global auth state
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
-    setIsLoggedIn(!!token); // Ha van token, akkor igaz.
-  }, [document.cookie]);
-
-  const handleLogout = () => {
-    document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    setIsLoggedIn(false);
-    navigate('/login');
-  };
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +16,21 @@ const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const logout = () => {
+    // Remove accessToken from localStorage
+    localStorage.removeItem('accessToken');
+    
+    // Clear refreshToken from cookies
+    document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    
+    // Call handleLogout to update the global state
+    handleLogout();
+    
+    // Redirect to the login page
+    navigate('/login');
+  };
+  
 
   return (
     <AppBar position="static" color="primary">
@@ -54,7 +58,10 @@ const Navbar = () => {
             <MenuItem component={Link} to="/schedule" onClick={handleMenuClose}>Órarend</MenuItem>
             <MenuItem component={Link} to="/contact" onClick={handleMenuClose}>Kapcsolat</MenuItem>
             {isLoggedIn ? (
-              <MenuItem onClick={() => { handleLogout(); handleMenuClose(); }}>Kijelentkezés</MenuItem>
+              <>
+                <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>Profil</MenuItem>
+                <MenuItem onClick={() => { logout(); handleMenuClose(); }}>Kijelentkezés</MenuItem>
+              </>
             ) : (
               <MenuItem component={Link} to="/login" onClick={handleMenuClose}>Bejelentkezés</MenuItem>
             )}
@@ -71,13 +78,18 @@ const Navbar = () => {
             Kapcsolat
           </Button>
           {isLoggedIn ? (
-            <Button 
-              color="inherit" 
-              onClick={handleLogout} 
-              sx={{ marginLeft: 'auto' }}
-            >
-              Kijelentkezés
-            </Button>
+            <>
+              <Button color="inherit" component={Link} to="/profile" sx={{ marginLeft: 'auto' }}>
+                Profil
+              </Button>
+              <Button 
+                color="inherit" 
+                onClick={logout} 
+                sx={{ marginLeft: 'auto' }}
+              >
+                Kijelentkezés
+              </Button>
+            </>
           ) : (
             <Button 
               color="inherit" 
