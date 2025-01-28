@@ -27,6 +27,13 @@ const Navbar = () => {
         >
           Bejelentkezés
         </Button>
+        <Button color="inherit" 
+          component={Link} 
+          to="/edit" 
+          sx={{ marginLeft: 'auto' }} // Jobbra igazítás
+          >
+          Módosítás
+        </Button>
       </Toolbar>
     </AppBar>
   );
