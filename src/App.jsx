@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Register from './pages/Register';
 import { AuthProvider } from './contexts/AuthContext';
 import UserProfileEdit from './pages/UserProfileEdit';
+import UserDelete from './pages/UserDelete';
 import Profile from './pages/UserProfile';
 import { UserProvider } from './contexts/UserContext';
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} />
+          <Route path="/userdelete" element={<UserDelete />} />
           <Route path="/profile" element={<Profile />} /> {/* Add the Profile route */}
           <Route path="/editprofile" element={<UserProfileEdit />} />
         </Routes>
