@@ -1,4 +1,3 @@
-//Módosítás web a navon elhelyezve, helyezd át a profil fülbe
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +10,10 @@ const UserEdit = () => {
   const handleLogin = () => {
     console.log('Username:', username);
     console.log('Email:', email);
-    // Add your login or update logic here, e.g., an API call.
-    navigate('/dashboard'); // Navigate to another page after login or edit
+    // Hiányzik a hívás a szerverre, majd a válasz alapján a navigáció
+    // A feladat a legújabb useredit file hibajavítására szólt ami a felhasználói adatok módosítására szolgál.
+    // A hiba oka a JSON hiányos elküldése volt, a text mezőkből nem szedte ki a felhasználói adatokat.
+    navigate('/dashboard');
   };
 
   return (
