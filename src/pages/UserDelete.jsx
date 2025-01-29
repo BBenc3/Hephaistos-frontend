@@ -1,65 +1,75 @@
 import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Alert from "@mui/material/Alert";
 
-function FelhasznaloTorles() {
-  const [userId, setUserId] = useState("");
-  const [message, setMessage] = useState("");
+const DeactivateProfile = () => {
+  const [isDeactivated, setIsDeactivated] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-
+  const handleDeactivate = async () => {
     try {
-      const response = await fetch("/api/felhasznalo/torles", {
-        method: "POST",
+      const accessToken = localStorage.getItem("accessToken");
+
+      if (!accessToken) {
+        throw new Error("Nincs bejelentkezve a felhasználó.");
+      }
+
+      const response = await fetch("http://localhost:5001/api/users/me", {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ id: userId }),
       });
 
-      const data = await response.json();
+      const responseText = await response.text(); 
 
-      if (response.ok) {
-        setMessage(`Felhasználó (${userId}) sikeresen törölve.`);
-        setUserId("");
-      } else {
-        setMessage(`Hiba történt: ${data.message}`);
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = { error: responseText };
       }
-    } catch (error) {
-      setMessage(`Hálózati hiba: ${error.message}`);
+
+      if (!response.ok) {
+        throw new Error(data.error || "Hiba történt a profil inaktiválása során.");
+      }
+
+      setIsDeactivated(true);
+    } catch (err) {
+      console.error("Hiba:", err.message);
+      setError(err.message);
     }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
-      <h1 className="text-xl font-bold">Felhasználó törlése</h1>
-      <form onSubmit={handleDelete} className="space-y-4">
-        <div>
-          <label htmlFor="userId" className="block font-medium text-gray-700">
-            Felhasználó ID:
-          </label>
-          <input
-            type="text"
-            id="userId"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-        >
-          Törlés
-        </button>
-      </form>
-      {message && (
-        <div className="mt-4 p-2 bg-gray-100 rounded-md text-gray-700">
-          {message}
-        </div>
-      )}
-    </div>
+    <Card style={{ maxWidth: 400, margin: "20px auto", padding: "16px" }}>
+      <CardContent style={{ textAlign: "center" }}>
+        <h2 style={{ fontSize: "1.5rem", marginBottom: "16px" }}>Profil Inaktiválása</h2>
+        {isDeactivated ? (
+          <Alert severity="success">A profilod sikeresen inaktiválva lett.</Alert>
+        ) : (
+          <>
+            <p style={{ marginBottom: "16px" }}>Biztosan inaktiválni szeretnéd a profilod?</p>
+            <Button 
+              variant="contained" 
+              color="error" 
+              onClick={handleDeactivate}
+            >
+              Profil Inaktiválása
+            </Button>
+          </>
+        )}
+        {error && (
+          <Alert severity="error" style={{ marginTop: "16px" }}>
+            {error}
+          </Alert>
+        )}
+      </CardContent>
+    </Card>
   );
-}
+};
 
-export default FelhasznaloTorles;
+export default DeactivateProfile;
