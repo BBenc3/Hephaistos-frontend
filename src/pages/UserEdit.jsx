@@ -16,8 +16,10 @@ const UserEdit = () => {
     }
     
     try {
+      //Method: PUT URL: localhost:5001/api/users/me
       const response = await fetch('http://localhost:3000/update-user', {
         method: 'POST',
+        //Missing accesstoken
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
       });
@@ -25,6 +27,7 @@ const UserEdit = () => {
       if (response.ok) {
         navigate('/dashboard');
       } else {
+        //console helyett alert üzenetek
         console.error('Hiba történt a frissítés során');
       }
     } catch (error) {
