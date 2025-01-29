@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,31 +7,39 @@ const UserEdit = () => {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const handleUpdate = async () => {
     const userData = { username: username.trim(), email: email.trim() };
     
     if (!userData.username || !userData.email) {
-      console.error('Hiányzó adatok!');
+      alert('Hiányzó adatok!');
       return;
     }
     
     try {
-      //Method: PUT URL: localhost:5001/api/users/me
-      const response = await fetch('http://localhost:3000/update-user', {
-        method: 'POST',
-        //Missing accesstoken
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch('http://localhost:5001/api/users/me', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify(userData),
       });
       
       if (response.ok) {
+        alert('Sikeres módosítás!');
         navigate('/dashboard');
       } else {
-        //console helyett alert üzenetek
-        console.error('Hiba történt a frissítés során');
+        alert('Hiba történt a frissítés során');
       }
     } catch (error) {
-      console.error('Hálózati hiba:', error);
+      alert('Hálózati hiba:', error);
     }
   };
 
