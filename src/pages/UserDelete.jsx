@@ -5,6 +5,8 @@ import CardContent from "@mui/material/CardContent";
 import Alert from "@mui/material/Alert";
 
 const DeactivateProfile = () => {
+  //Az adatbázisban történik meg a deaktiválás automatikusan az accasstoken alapján beazonosított felhasználó esetében. Jelen esetben szükségtelen több statet hozzáadni az erroron kívül
+  //Ezen kívül ez a sor nincsen használva a kód többi részében sehol. 
   const [isDeactivated, setIsDeactivated] = useState(false);
   const [error, setError] = useState(null);
 
