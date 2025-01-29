@@ -7,13 +7,29 @@ const UserEdit = () => {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log('Username:', username);
-    console.log('Email:', email);
-    // Hiányzik a hívás a szerverre, majd a válasz alapján a navigáció
-    // A feladat a legújabb useredit file hibajavítására szólt ami a felhasználói adatok módosítására szolgál.
-    // A hiba oka a JSON hiányos elküldése volt, a text mezőkből nem szedte ki a felhasználói adatokat.
-    navigate('/dashboard');
+  const handleUpdate = async () => {
+    const userData = { username: username.trim(), email: email.trim() };
+    
+    if (!userData.username || !userData.email) {
+      console.error('Hiányzó adatok!');
+      return;
+    }
+    
+    try {
+      const response = await fetch('http://localhost:3000/update-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+      
+      if (response.ok) {
+        navigate('/dashboard');
+      } else {
+        console.error('Hiba történt a frissítés során');
+      }
+    } catch (error) {
+      console.error('Hálózati hiba:', error);
+    }
   };
 
   return (
@@ -22,7 +38,7 @@ const UserEdit = () => {
         backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'a',
+        alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
       }}
@@ -33,7 +49,7 @@ const UserEdit = () => {
       <TextField
         label="E-mail"
         variant="outlined"
-        width = "30%"
+        sx={{ width: '30%' }}
         margin="normal"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -41,16 +57,22 @@ const UserEdit = () => {
       <TextField
         label="Felhasználónév"
         variant="outlined"
-        width = "30%"
+        sx={{ width: '30%' }}
         margin="normal"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
-        <a href=''>Jelszó módosítás</a>
+      <Button
+        variant="text"
+        onClick={() => navigate('/change-password')}
+        sx={{ marginTop: 1 }}
+      >
+        Jelszó módosítás
+      </Button>
       <Button
         variant="contained"
         color="primary"
-        onClick={handleLogin}
+        onClick={handleUpdate}
         sx={{ marginTop: 2 }}
       >
         Módosítás
