@@ -57,6 +57,9 @@ const UserProfile = () => {
         <Typography>
           <strong>Active:</strong> {user.active ? "Yes" : "No"}
         </Typography>
+        <Typography>
+          <strong>Delete:</strong> {user.delete}
+        </Typography>
       </Box>
       <Button
         variant="text"
