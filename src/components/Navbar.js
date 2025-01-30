@@ -27,6 +27,7 @@ const Navbar = () => {
         >
           Bejelentkezés
         </Button>
+        // A gombot át kell helyezni, hogy a profil oldalról lehessen módosítani a felhasználói adatokat
         <Button color="inherit" 
           component={Link} 
           to="/edit" 
