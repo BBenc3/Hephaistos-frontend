@@ -89,6 +89,7 @@ const Login = () => {
   return (
     <Box
       sx={{
+        backgroundcolor: 'lightblue',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

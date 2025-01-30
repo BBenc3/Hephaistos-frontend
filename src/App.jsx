@@ -7,10 +7,9 @@ import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
 import { AuthProvider } from './contexts/AuthContext';
-import UserProfileEdit from './pages/UserProfileEdit';
-import UserDelete from './pages/UserDelete';
 import Profile from './pages/UserProfile';
 import { UserProvider } from './contexts/UserContext';
+import UserEdit from './pages/UserEdit';
 
 function App() {
 
@@ -27,7 +26,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/userdelete" element={<UserDelete />} />
           <Route path="/profile" element={<Profile />} /> {/* Add the Profile route */}
-          <Route path="/editprofile" element={<UserProfileEdit />} />
+          <Route path="/edit" element={<UserEdit />} /> {/* Módosító oldal */}
         </Routes>
       </Router>
       </UserProvider>
