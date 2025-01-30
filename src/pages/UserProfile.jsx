@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // Új változó a hiba kezelésére
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +30,25 @@ const UserProfile = () => {
       setLoading(false); // Ha a user már betöltött, nincs szükség újratöltésre
     }
   }, [user, setUser]);
+
+  const handleDeactivate = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken'); // Az access token lekérése
+
+      const response = await axios.delete("https://localhost:5001/api/users/me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // A token a kéréshez
+        },
+      });
+
+      if (response.status === 200) {
+        setUser(null); // A felhasználó adatai törlése a sikeres deaktiválás után
+        navigate("/login"); // Átirányítás a bejelentkezési oldalra
+      }
+    } catch (err) {
+      setError("Hiba történt a profil inaktiválása során.");
+    }
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -65,6 +85,15 @@ const UserProfile = () => {
       >
         Módosítás
       </Button>
+      <Button
+        variant="contained"
+        color="error"
+        sx={{ marginTop: "16px" }}
+        onClick={handleDeactivate}
+      >
+        Profil Inaktiválása
+      </Button>
+      {error && <Typography color="error" sx={{ marginTop: "16px" }}>{error}</Typography>}
     </Paper>
   );
 };
