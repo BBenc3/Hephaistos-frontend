@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Box, Button, useMediaQuery } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext'; // Import the hook
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
-  const { isLoggedIn, handleLogout } = useAuth(); // Use the global auth state
+  const { isLoggedIn, handleLogout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery('(max-width: 900px)');
+
+  useEffect(() => {
+    if (!isSmallScreen) {
+      setAnchorEl(null); // Menü bezárása, ha visszaváltunk asztali nézetre
+    }
+  }, [isSmallScreen]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -18,19 +25,11 @@ const Navbar = () => {
   };
 
   const logout = () => {
-    // Remove accessToken from localStorage
     localStorage.removeItem('accessToken');
-    
-    // Clear refreshToken from cookies
     document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    
-    // Call handleLogout to update the global state
     handleLogout();
-    
-    // Redirect to the login page
     navigate('/login');
   };
-  
 
   return (
     <AppBar position="static" color="primary">
@@ -38,69 +37,63 @@ const Navbar = () => {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Hephaistos
         </Typography>
-        <div>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ display: { xs: 'block', md: 'none' } }}
-            onClick={handleMenuOpen}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem component={Link} to="/" onClick={handleMenuClose}>Főoldal</MenuItem>
-            <MenuItem component={Link} to="/schedule" onClick={handleMenuClose}>Órarend</MenuItem>
-            <MenuItem component={Link} to="/contact" onClick={handleMenuClose}>Kapcsolat</MenuItem>
+
+        {/* Asztali nézetben a gombok láthatók, nincs menü ikon */}
+        {!isSmallScreen ? (
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button color="inherit" component={Link} to="/">
+              Főoldal
+            </Button>
+            <Button color="inherit" component={Link} to="/schedule">
+              Órarend
+            </Button>
+            <Button color="inherit" component={Link} to="/contact">
+              Kapcsolat
+            </Button>
             {isLoggedIn ? (
               <>
-                <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>Profil</MenuItem>
-                <MenuItem onClick={() => { logout(); handleMenuClose(); }}>Kijelentkezés</MenuItem>
+                <Button color="inherit" component={Link} to="/profile">
+                  Profil
+                </Button>
+                <Button color="inherit" onClick={logout}>
+                  Kijelentkezés
+                </Button>
               </>
             ) : (
-              <MenuItem component={Link} to="/login" onClick={handleMenuClose}>Bejelentkezés</MenuItem>
+              <Button color="inherit" component={Link} to="/login">
+                Bejelentkezés
+              </Button>
             )}
-          </Menu>
-        </div>
-        <div style={{ display: { xs: 'none', md: 'flex' } }}>
-          <Button color="inherit" component={Link} to="/">
-            Főoldal
-          </Button>
-          <Button color="inherit" component={Link} to="/schedule">
-            Órarend
-          </Button>
-          <Button color="inherit" component={Link} to="/contact">
-            Kapcsolat
-          </Button>
-          {isLoggedIn ? (
-            <>
-              <Button color="inherit" component={Link} to="/profile" sx={{ marginLeft: 'auto' }}>
-                Profil
-              </Button>
-              <Button 
-                color="inherit" 
-                onClick={logout} 
-                sx={{ marginLeft: 'auto' }}
-              >
-                Kijelentkezés
-              </Button>
-            </>
-          ) : (
-            <Button 
-              color="inherit" 
-              component={Link} 
-              to="/login" 
-              sx={{ marginLeft: 'auto' }}
+          </Box>
+        ) : (
+          /* Mobil nézetben csak a menü ikon jelenik meg */
+          <Box>
+            <IconButton
+              size="large"
+              color="inherit"
+              onClick={handleMenuOpen}
             >
-              Bejelentkezés
-            </Button>
-          )}
-        </div>
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem component={Link} to="/" onClick={handleMenuClose}>Főoldal</MenuItem>
+              <MenuItem component={Link} to="/schedule" onClick={handleMenuClose}>Órarend</MenuItem>
+              <MenuItem component={Link} to="/contact" onClick={handleMenuClose}>Kapcsolat</MenuItem>
+              {isLoggedIn ? (
+                <>
+                  <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>Profil</MenuItem>
+                  <MenuItem onClick={() => { logout(); handleMenuClose(); }}>Kijelentkezés</MenuItem>
+                </>
+              ) : (
+                <MenuItem component={Link} to="/login" onClick={handleMenuClose}>Bejelentkezés</MenuItem>
+              )}
+            </Menu>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
