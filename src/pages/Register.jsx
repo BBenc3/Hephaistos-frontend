@@ -57,7 +57,7 @@ const Register = () => {
         password,
       });
 
-      navigate('/auth/login');
+      navigate('/Login');
     } catch (error) {
       setErrorMessage('Hiba a regisztráció során!');
     } finally {

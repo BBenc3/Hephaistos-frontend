@@ -10,6 +10,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Profile from './pages/UserProfile';
 import { UserProvider } from './contexts/UserContext';
 import UserEdit from './pages/UserEdit';
+import UserDelete from './pages/UserDelete';
 
 function App() {
 
