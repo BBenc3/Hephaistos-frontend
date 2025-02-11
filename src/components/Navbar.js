@@ -1,102 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Box, Button, useMediaQuery } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import CustomButton from "./CustomButton";
+import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
-const Navbar = () => {
-  const { isLoggedIn, handleLogout } = useAuth();
-  const [anchorEl, setAnchorEl] = useState(null);
+// Styled button component (unchanged)
+const NavbarButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  textTransform: "none",
+  fontSize: "16px",
+  fontWeight: theme.typography.fontWeightBold,
+  "&:hover": {
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+  },
+}));
+
+export default function Navbar() {
   const navigate = useNavigate();
-  const isSmallScreen = useMediaQuery('(max-width: 900px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check if screen is small (mobile)
+  
+  const [drawerOpen, setDrawerOpen] = useState(false); // State to control drawer visibility
 
-  useEffect(() => {
-    if (!isSmallScreen) {
-      setAnchorEl(null); // Menü bezárása, ha visszaváltunk asztali nézetre
-    }
-  }, [isSmallScreen]);
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const logout = () => {
-    localStorage.removeItem('accessToken');
-    document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    handleLogout();
-    navigate('/login');
-  };
+  // Function to render navigation links
+  const renderNavLinks = () => (
+    <>
+      <NavbarButton onClick={() => navigate("/")}>Főoldal</NavbarButton>
+      <NavbarButton onClick={() => navigate("/orarend-generalas")}>Órarend generálás</NavbarButton>
+    </>
+  );
 
   return (
-    <AppBar position="static" color="primary">
-      <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+    <AppBar position="static" sx={{ backgroundColor: theme.palette.background.default }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: theme.palette.primary.main, fontSize: "24px", fontWeight: "bold" }}>
           Hephaistos
         </Typography>
 
-        {/* Asztali nézetben a gombok láthatók, nincs menü ikon */}
-        {!isSmallScreen ? (
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button color="inherit" component={Link} to="/">
-              Főoldal
-            </Button>
-            <Button color="inherit" component={Link} to="/schedule">
-              Órarend
-            </Button>
-            <Button color="inherit" component={Link} to="/contact">
-              Kapcsolat
-            </Button>
-            {isLoggedIn ? (
-              <>
-                <Button color="inherit" component={Link} to="/profile">
-                  Profil
-                </Button>
-                <Button color="inherit" onClick={logout}>
-                  Kijelentkezés
-                </Button>
-              </>
-            ) : (
-              <Button color="inherit" component={Link} to="/login">
-                Bejelentkezés
-              </Button>
-            )}
-          </Box>
-        ) : (
-          /* Mobil nézetben csak a menü ikon jelenik meg */
-          <Box>
+        {/* Show hamburger menu on mobile */}
+        {isMobile ? (
+          <>
             <IconButton
-              size="large"
               color="inherit"
-              onClick={handleMenuOpen}
+              onClick={toggleDrawer}
+              sx={{ color: theme.palette.primary.main }} // Set hamburger icon color to primary color
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
+
+            {/* Drawer for mobile menu */}
+            <Drawer
+              anchor="right"
+              open={drawerOpen}
+              onClose={toggleDrawer}
+              sx={{
+                "& .MuiDrawer-paper": {
+                  backgroundColor: theme.palette.primary.main, // Set drawer background to primary color
+                  color: theme.palette.common.white, // Set text color to white
+                },
+              }}
             >
-              <MenuItem component={Link} to="/" onClick={handleMenuClose}>Főoldal</MenuItem>
-              <MenuItem component={Link} to="/schedule" onClick={handleMenuClose}>Órarend</MenuItem>
-              <MenuItem component={Link} to="/contact" onClick={handleMenuClose}>Kapcsolat</MenuItem>
-              {isLoggedIn ? (
-                <>
-                  <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>Profil</MenuItem>
-                  <MenuItem onClick={() => { logout(); handleMenuClose(); }}>Kijelentkezés</MenuItem>
-                </>
-              ) : (
-                <MenuItem component={Link} to="/login" onClick={handleMenuClose}>Bejelentkezés</MenuItem>
-              )}
-            </Menu>
-          </Box>
+              <List>
+                <ListItem button onClick={() => { navigate("/"); toggleDrawer(); }}>
+                  <ListItemText primary="Főoldal" />
+                </ListItem>
+                <ListItem button onClick={() => { navigate("/orarend-generalas"); toggleDrawer(); }}>
+                  <ListItemText primary="Órarend generálás" />
+                </ListItem>
+              </List>
+            </Drawer>
+          </>
+        ) : (
+          <div>{renderNavLinks()}</div> // Render normal nav for larger screens
         )}
+
+        <CustomButton size="small" onClick={() => navigate("/bejelentkezes")}>
+          Bejelentkezés
+        </CustomButton>
       </Toolbar>
     </AppBar>
   );
-};
-
-export default Navbar;
+}
