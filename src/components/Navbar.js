@@ -14,6 +14,7 @@ const NavbarButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.main,
   textTransform: "none",
   fontSize: "16px",
+  marginRight:"5px",
   fontWeight: theme.typography.fontWeightBold,
   "&:hover": {
     backgroundColor: "rgba(255, 255, 255, 0.1)",

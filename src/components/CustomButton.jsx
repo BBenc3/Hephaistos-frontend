@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { useTheme } from "@mui/material/styles";
 
 const CustomButton = styled(Button)(({ theme, size }) => {
   if (size !== "small" && size !== "large") {
