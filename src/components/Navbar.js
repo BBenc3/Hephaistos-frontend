@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import CustomButton from "./CustomButton";
+import CustomButton from "./Button";
 import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -84,7 +84,7 @@ export default function Navbar() {
           <div>{renderNavLinks()}</div> // Render normal nav for larger screens
         )}
 
-        <CustomButton size="small" onClick={() => navigate("/bejelentkezes")}>
+        <CustomButton size="small" onClick={() => navigate("/login")}>
           Bejelentkezés
         </CustomButton>
       </Toolbar>
