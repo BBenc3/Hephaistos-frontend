@@ -51,20 +51,22 @@ const Register = () => {
         backgroundImage: 'url(/bg.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        padding: 3,
+
       }}
     >
       <Box
         sx={{
           backgroundColor: '#F6F4E8',
-          padding: 4,
+ 
           borderRadius: 3,
           boxShadow: 3,
           width: { xs: '90%', sm: '60%', md: '40%' },
           textAlign: 'center'
-        }}
+        }}>
+      <Box
+      sx={{padding:'1%'}}
       >
-        <img src="public\hephaistos_logo.png" alt="Logo" style={{ width: 120, height: 120, marginBottom: 16 }} />
+        <img src="\logo.png" alt="Logo" style={{ width: 120, height: 120, marginBottom: 16 }} />
         <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#004D40', marginBottom: 3 }}>Regisztráció</Typography>
         
         <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
@@ -130,49 +132,25 @@ const Register = () => {
             <StepLabel>Lépés címe</StepLabel>
           </Step>
         </Stepper>
-        <Box
-        sx={{
-          padding: '1%',
-          backgroundColor: 'white',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          cursor: 'pointer',
-          mt: 3,
-          borderRadius: 2,
-          boxShadow: 2,
-        }}
-        onClick={() => setOpenDropdown(!openDropdown)} // Dropdown toggle
-      >
-        <Typography variant="h6" sx={{ color: '#004D40' }}>
-          Már van fiókod?{' '}
-          <span style={{ color: '#1D8C8C', fontWeight: 'bold' }}>Jelentkezz be!</span>
-        </Typography>
-      </Box>
-      </Box>
 
-      {/* Fehér díszléc és legördülő effektus */}
-      
-
-      {openDropdown && (
-        <Box
-          sx={{
-            width: '1222px',
-            height: 'auto',
-            backgroundColor: 'white',
-            boxShadow: 3,
-            mt: 1,
-            borderRadius: 2,
-            padding: 2,
-            textAlign: 'center',
-          }}
-        >
-          {/* Ide teheted a legördülő tartalmat */}
-          <Typography variant="body1" sx={{ color: '#004D40' }}>
-            Itt jöhet egy legördülő tartalom!
+      </Box>
+<Box
+            sx={{
+              backgroundColor: '#FFFFFF',
+              padding: 2,
+              borderRadius: '8px',
+              textAlign: 'center',
+              boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
+              marginTop: 2,
+            }}
+            onClick={() => navigate('/login')}
+          >
+          <Typography variant="h6" sx={{ color: '#004D40' }}>
+            Már van fiókod?{' '}
+            <span style={{ color: '#1D8C8C', fontWeight: 'bold' }} >Jelentkezz be!</span>
           </Typography>
         </Box>
-      )}
+        </Box>
     </Box>
   );
 };
