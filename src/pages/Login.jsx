@@ -54,12 +54,11 @@ const Login = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#F5F5DC',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '5%',
+        paddingTop: '5%',
       }}
     >
       <LoginForm handleLogin={handleLogin} />
