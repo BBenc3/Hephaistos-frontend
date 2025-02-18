@@ -1,65 +1,56 @@
-import React from "react";
-import { Dropdown } from "react-bootstrap";
-import { PersonCircle, BoxArrowRight } from "react-bootstrap-icons"; // Bootstrap icons
+// UserProfileDropdown.jsx
+import React, { useState } from "react";
+import { Menu, MenuItem, Avatar, Typography, IconButton } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
-import Skeleton from "react-loading-skeleton"; // You can install this library for a nice skeleton effect
-import "react-loading-skeleton/dist/skeleton.css";
-import { useTheme } from "@mui/material/styles"; // Importing MUI's theme hook
 
-const UserProfileDropdown = ({ user }) => {
-  const { isLoggedIn, handleLogout } = useAuth(); // Get authentication state and logout function
-  const theme = useTheme(); // Get the theme
+const UserProfileDropdown = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { user, handleLogout } = useAuth(); // Feltételezve, hogy a felhasználó adatokat az AuthContext biztosítja
 
-  const handleLogoutClick = () => {
-    handleLogout(); // Call the logout function from the AuthContext
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  // Check if user is defined and has the required properties
-  const userName = user?.name || "username";
-  const userProfilePicture = user?.profilePicture;
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogoutClick = () => {
+    handleLogout();
+    handleMenuClose();
+  };
+
+  const placeholderName = "Felhasználó név"; // Placeholder név
+  const placeholderAvatar = "https://via.placeholder.com/40"; // Placeholder avatar URL
+
+  const displayName = user?.name || placeholderName; // Ha nincs név, használjuk a placeholdert
+  const displayAvatar = user?.avatar || placeholderAvatar; // Ha nincs avatar, használjuk a placeholdert
 
   return (
-    <Dropdown>
-      <Dropdown.Toggle
-        variant="success"
-        id="user-profile-dropdown"
-        style={{ backgroundColor: theme.palette.primary.main }} // Set the background color to the primary color
+    <>
+      <IconButton onClick={handleMenuOpen} color="inherit">
+        <Avatar src={displayAvatar} alt={displayName} />
+        <Typography variant="body1" sx={{ marginLeft: 1 }}>
+          {displayName} ({user?.role || "Nincs szerep"})
+        </Typography>
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        sx={{
+          "& .MuiMenu-paper": {
+            backgroundColor: "#166B6B", // Itt állítjuk be a háttérszínt
+            color: "#ffffff", // Fehér szöveg a sötét háttérhez
+          },
+        }}
       >
-        <div className="d-flex align-items-center"> {/* Flexbox for alignment */}
-          {/* Profile picture or Skeleton Loader */}
-          {userProfilePicture ? (
-            <img
-              src={userProfilePicture}
-              alt="profile"
-              className="rounded-circle"
-              width="40"
-              height="40"
-            />
-          ) : (
-            <Skeleton circle width={40} height={40} /> // Skeleton loader when picture is not available
-          )}
-
-          {/* Username or Skeleton Loader */}
-          <span
-            className="ms-2"
-            style={{ color: "#FFFFFF" }} // Set the username color to white
-          >
-            {userName} {/* Fallback to "username" if name is missing */}
-          </span>
-        </div>
-      </Dropdown.Toggle>
-
-      {isLoggedIn && (
-        <Dropdown.Menu>
-          <Dropdown.Item href="/profile">
-            <PersonCircle className="me-2" /> Profil
-          </Dropdown.Item>
-          <Dropdown.Item onClick={handleLogoutClick}>
-            <BoxArrowRight className="me-2" /> Kijelentkezés
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      )}
-    </Dropdown>
+        <MenuItem onClick={handleMenuClose}>Fiók beállítások</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Profil</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Kijelentkezés</MenuItem>
+      </Menu>
+    </>
   );
 };
 

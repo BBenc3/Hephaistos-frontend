@@ -9,13 +9,13 @@ import CustomButton from "./Button";
 import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "../contexts/AuthContext";
-import UserProfileDropdown from "./UserProfileDropdown";
+import UserProfileDropdown from "./UserProfileDropdown"; // Importáljuk a UserProfileDropdown komponenst
 
 const NavbarButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.main,
   textTransform: "none",
   fontSize: "16px",
-  marginRight:"5px",
+  marginRight: "5px",
   fontWeight: theme.typography.fontWeightBold,
   "&:hover": {
     backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -27,7 +27,7 @@ export default function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isLoggedIn, handleLogout } = useAuth(); // Get authentication state and logout function
+  const { isLoggedIn } = useAuth(); // Get authentication state
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -79,9 +79,8 @@ export default function Navbar() {
         )}
 
         {isLoggedIn ? (
-         <UserProfileDropdown>
           
-         </UserProfileDropdown>
+          <UserProfileDropdown/> // Itt jelenik meg a UserProfileDropdown
         ) : (
           <CustomButton size="small" onClick={() => navigate("/login")}>
             Bejelentkezés
