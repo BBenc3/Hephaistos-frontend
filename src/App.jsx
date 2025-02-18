@@ -13,6 +13,8 @@ import { UserProvider } from './contexts/UserContext';
 import UserEdit from './pages/UserEdit';
 import UserDelete from './pages/UserDelete';
 
+
+//dont forget to use the color theme and the auth context
 function App() {
 
   return (

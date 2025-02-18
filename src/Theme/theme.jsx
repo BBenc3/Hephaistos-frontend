@@ -1,4 +1,4 @@
-// src/theme.js
+//unused colors are commented out for future use
 import { createTheme } from "@mui/material/styles";
 import colors from "./colors"; // Correct path to colors.js
 

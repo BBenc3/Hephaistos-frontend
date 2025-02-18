@@ -1,11 +1,13 @@
-// UserProfileDropdown.jsx
 import React, { useState } from "react";
 import { Menu, MenuItem, Avatar, Typography, IconButton } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 
 const UserProfileDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { user, handleLogout } = useAuth(); // Feltételezve, hogy a felhasználó adatokat az AuthContext biztosítja
+  const { user, handleLogout } = useAuth();
+  const theme = useTheme();
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -20,18 +22,34 @@ const UserProfileDropdown = () => {
     handleMenuClose();
   };
 
-  const placeholderName = "Felhasználó név"; // Placeholder név
-  const placeholderAvatar = "https://via.placeholder.com/40"; // Placeholder avatar URL
+  const placeholderName = "Felhasználó név"; // Placeholder name
+  const displayAvatar = "https://via.placeholder.com/40"; // Placeholder avatar URL
 
-  const displayName = user?.name || placeholderName; // Ha nincs név, használjuk a placeholdert
-  const displayAvatar = user?.avatar || placeholderAvatar; // Ha nincs avatar, használjuk a placeholdert
+  const displayName = user?.name || placeholderName; // Use placeholder if no user name
 
   return (
-    <>
-      <IconButton onClick={handleMenuOpen} color="inherit">
-        <Avatar src={displayAvatar} alt={displayName} />
-        <Typography variant="body1" sx={{ marginLeft: 1 }}>
-          {displayName} ({user?.role || "Nincs szerep"})
+    <Box sx={{ display: 'flex', alignItems: 'center' }}> {/* Wrap with Box for layout */}
+      <IconButton
+        onClick={handleMenuOpen}
+        color="inherit"
+        sx={{
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.secondary.main,
+          padding: "10px",
+          borderRadius: 2,
+          "&:hover": {
+            backgroundColor: theme.palette.primary.dark,
+          },
+          marginRight: theme.spacing(1), // Add some spacing
+          [theme.breakpoints.down('sm')]: { // Responsive styles
+            padding: '3px',
+            fontSize: '0.8rem',
+          },
+        }}
+      >
+        <Avatar src={user?.avatar || displayAvatar} alt={displayName} sx={{ width: 30, height: 30, [theme.breakpoints.down('sm')]: { width: 25, height: 25 } }} />
+        <Typography variant="body1" sx={{ marginLeft: "8px", [theme.breakpoints.down('sm')]: { fontSize: '0.8rem' } }}>
+          {displayName}
         </Typography>
       </IconButton>
 
@@ -41,16 +59,16 @@ const UserProfileDropdown = () => {
         onClose={handleMenuClose}
         sx={{
           "& .MuiMenu-paper": {
-            backgroundColor: "#166B6B", // Itt állítjuk be a háttérszínt
-            color: "#ffffff", // Fehér szöveg a sötét háttérhez
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.secondary.main,
           },
         }}
-      >
-        <MenuItem onClick={handleMenuClose}>Fiók beállítások</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Profil</MenuItem>
+      > 
+        <MenuItem onClick={handleMenuClose}>Felhasználói profil</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Profilbeállítások</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Kijelentkezés</MenuItem>
-      </Menu>
-    </>
+        </Menu>
+      </Box>
   );
 };
 

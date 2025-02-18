@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "./Button";
-import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from "@mui/material";
+import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery, Paper } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "../contexts/AuthContext";
 import UserProfileDropdown from "./UserProfileDropdown"; // Importáljuk a UserProfileDropdown komponenst
@@ -79,8 +79,7 @@ export default function Navbar() {
         )}
 
         {isLoggedIn ? (
-          
-          <UserProfileDropdown/> // Itt jelenik meg a UserProfileDropdown
+            <UserProfileDropdown/>
         ) : (
           <CustomButton size="small" onClick={() => navigate("/login")}>
             Bejelentkezés
