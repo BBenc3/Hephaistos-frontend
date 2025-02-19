@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 import CustomButton from "./Button";
 import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useAuth } from "../contexts/AuthContext";
+import UserProfileDropdown from "./UserProfileDropdown";
 
-// Styled button component (unchanged)
 const NavbarButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.main,
   textTransform: "none",
@@ -24,15 +25,14 @@ const NavbarButton = styled(Button)(({ theme }) => ({
 export default function Navbar() {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check if screen is small (mobile)
-  
-  const [drawerOpen, setDrawerOpen] = useState(false); // State to control drawer visibility
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { isLoggedIn, handleLogout } = useAuth(); // Get authentication state and logout function
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  // Function to render navigation links
   const renderNavLinks = () => (
     <>
       <NavbarButton onClick={() => navigate("/")}>Főoldal</NavbarButton>
@@ -47,26 +47,20 @@ export default function Navbar() {
           Hephaistos
         </Typography>
 
-        {/* Show hamburger menu on mobile */}
         {isMobile ? (
           <>
-            <IconButton
-              color="inherit"
-              onClick={toggleDrawer}
-              sx={{ color: theme.palette.primary.main }} // Set hamburger icon color to primary color
-            >
+            <IconButton color="inherit" onClick={toggleDrawer} sx={{ color: theme.palette.primary.main }}>
               <MenuIcon />
             </IconButton>
 
-            {/* Drawer for mobile menu */}
             <Drawer
               anchor="right"
               open={drawerOpen}
               onClose={toggleDrawer}
               sx={{
                 "& .MuiDrawer-paper": {
-                  backgroundColor: theme.palette.primary.main, // Set drawer background to primary color
-                  color: theme.palette.common.white, // Set text color to white
+                  backgroundColor: theme.palette.primary.main,
+                  color: theme.palette.common.white,
                 },
               }}
             >
@@ -81,12 +75,18 @@ export default function Navbar() {
             </Drawer>
           </>
         ) : (
-          <div>{renderNavLinks()}</div> // Render normal nav for larger screens
+          <div>{renderNavLinks()}</div>
         )}
 
-        <CustomButton size="small" onClick={() => navigate("/login")}>
-          Bejelentkezés
-        </CustomButton>
+        {isLoggedIn ? (
+         <UserProfileDropdown>
+          
+         </UserProfileDropdown>
+        ) : (
+          <CustomButton size="small" onClick={() => navigate("/login")}>
+            Bejelentkezés
+          </CustomButton>
+        )}
       </Toolbar>
     </AppBar>
   );

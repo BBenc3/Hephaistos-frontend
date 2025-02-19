@@ -1,6 +1,6 @@
 // src/theme.js
 import { createTheme } from "@mui/material/styles";
-import colors from "./colors";
+import colors from "./colors"; // Correct path to colors.js
 
 const theme = createTheme({
   palette: {

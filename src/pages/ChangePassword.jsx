@@ -4,19 +4,19 @@ import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
 import { useAuth } from '../contexts/AuthContext';
-import LoginForm from '../components/LoginForm';
+import ChangePasswordForm from '../components/ChangePasswordForm';
 
-const Login = () => {
-  const { isLoggedIn, handleLogin } = useAuth();
+const ChangePassword = () => {
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/');
+    if (!isLoggedIn) {
+      navigate('/login');
     }
   }, [isLoggedIn, navigate]);
 
-  if (isLoggedIn) {
+  if (!isLoggedIn) {
     return (
       <Box
         sx={{
@@ -34,17 +34,17 @@ const Login = () => {
           }}
         >
           <Typography variant="h4" gutterBottom>
-            Már be vagy jelentkezve!
+            Nincs bejelentkezve!
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Már be vagy jelentkezve, ha vissza szeretnél térni a főoldalra, kattints az alábbi gombra.
+            A jelszó módosításához be kell jelentkezned.
           </Typography>
           <Button
             variant="contained"
             sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] } }}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/login')}
           >
-            Vissza a főoldalra
+            Bejelentkezés
           </Button>
         </Box>
       </Box>
@@ -61,9 +61,16 @@ const Login = () => {
         paddingTop: '5%',
       }}
     >
-      <LoginForm handleLogin={handleLogin} />
+      <ChangePasswordForm />
+      <Typography
+        variant="body2"
+        sx={{ marginTop: 2, color: blue[500], cursor: 'pointer' }}
+        onClick={() => navigate('/forgot-password')}
+      >
+        Elfelejtettem a jelszavam
+      </Typography>
     </Box>
   );
 };
 
-export default Login;
+export default ChangePassword;
