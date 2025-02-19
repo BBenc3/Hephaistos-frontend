@@ -1,5 +1,4 @@
-// src/colors.js
-
+// unused colors are commented out for future use
 const colors = {
     primary: "#166B6B", // main color used for buttons and text
     secondary: "#FFFFFF", // secondary background color, e.g., for hover states

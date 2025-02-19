@@ -1,10 +1,10 @@
-// Register.jsx
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, LinearProgress, IconButton, InputAdornment } from '@mui/material';
+import { TextField, Button, Box, Typography, Stepper, Step, StepLabel } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { blue, green, yellow, red } from '@mui/material/colors';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -13,25 +13,9 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState({ level: 'rossz', color: red[500], progress: 33 });
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false); // Dropdown state
   const navigate = useNavigate();
-
-  const evaluatePasswordStrength = (password) => {
-    if (password.length < 6) {
-      return { level: 'rossz', color: red[500], progress: 33 };
-    } else if (password.length < 10) {
-      return { level: 'megfelelő', color: yellow[500], progress: 66 };
-    } else {
-      return { level: 'jó', color: green[500], progress: 100 };
-    }
-  };
-
-  const handlePasswordChange = (password) => {
-    setPassword(password);
-    setPasswordStrength(evaluatePasswordStrength(password));
-  };
 
   const handleRegister = async () => {
     if (!email || !username || !password || !confirmPassword) {
@@ -44,115 +28,129 @@ const Register = () => {
       return;
     }
 
-    if (passwordStrength.level === 'rossz') {
-      setErrorMessage('A jelszó nem elég erős!');
-      return;
-    }
-
-    setLoading(true);
     try {
       await axios.post('https://localhost:5001/register', {
         email,
         username,
         password,
       });
-
       navigate('/Login');
     } catch (error) {
       setErrorMessage('Hiba a regisztráció során!');
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <Box 
-      sx={{ 
+    <Box
+      sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '5%',
+        minHeight: '100vh',
+        backgroundImage: 'url(/bg.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+
       }}
     >
       <Box
         sx={{
-          width: { xs: '90%', sm: '60%', md: '30%' },
-          textAlign: 'center',
-        }}
+          backgroundColor: '#F6F4E8',
+ 
+          borderRadius: 3,
+          boxShadow: 3,
+          width: { xs: '90%', sm: '60%', md: '40%' },
+          textAlign: 'center'
+        }}>
+      <Box
+      sx={{padding:'1%'}}
       >
-        <Typography variant="h4" gutterBottom>
-          Regisztráció
-        </Typography>
-        <TextField 
-          label="Email" 
-          variant="outlined" 
-          fullWidth 
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField 
-          label="Felhasználónév" 
-          variant="outlined" 
-          fullWidth 
-          margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <TextField 
-          label="Jelszó" 
-          variant="outlined" 
-          fullWidth 
-          margin="normal"
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => handlePasswordChange(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <Box sx={{ display: 'flex', alignItems: 'center', marginY: 0 }}>
-          <LinearProgress 
-            variant="determinate" 
-            value={passwordStrength.progress} 
-            sx={{ flexGrow: 1, marginRight: 1, height: 10, borderRadius: 5, backgroundColor: '#e0e0e0', '& .MuiLinearProgress-bar': { backgroundColor: passwordStrength.color } }}
-          />
-          <Typography>{passwordStrength.level}</Typography>
+        <img src="\logo.png" alt="Logo" style={{ width: 120, height: 120, marginBottom: 16 }} />
+        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#004D40', marginBottom: 3 }}>Regisztráció</Typography>
+        
+        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+          <TextField label="Teljes név" variant="outlined" fullWidth value={username} onChange={(e) => setUsername(e.target.value)} sx={{ backgroundColor: 'white' }} />
+          <TextField label="E-mail" variant="outlined" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} sx={{ backgroundColor: 'white' }} />
         </Box>
-        <TextField 
-          label="Jelszó megerősítése" 
-          variant="outlined" 
-          fullWidth 
-          margin="normal"
-          type={showConfirmPassword ? 'text' : 'password'}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          
-        />
-        {errorMessage && (
-          <Typography color="error" sx={{ marginTop: 2 }}>
-            {errorMessage}
-          </Typography>
-        )}
-        <Button 
-          variant="contained" 
-          sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] }, marginTop: 2 }}
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <TextField
+            label="Jelszó"
+            variant="outlined"
+            fullWidth
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ backgroundColor: 'white' }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            label="Jelszó ismét"
+            variant="outlined"
+            fullWidth
+            type={showConfirmPassword ? 'text' : 'password'}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            sx={{ backgroundColor: 'white' }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+        {errorMessage && <Typography color="error" sx={{ mt: 2 }}>{errorMessage}</Typography>}
+        <Button
+          variant="contained"
+          fullWidth
+          sx={{ mt: 2, backgroundColor: '#1D8C8C', '&:hover': { backgroundColor: '#004D40' }, borderRadius: 2 }}
           onClick={handleRegister}
-          disabled={loading}
         >
-          {loading ? 'Regisztráció...' : 'Regisztráció'}
+          REGISZTRÁCIÓ
         </Button>
+
+        <Stepper activeStep={1} sx={{ mt: 3 }}>
+          <Step>
+            <StepLabel>Lépés címe</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Lépés címe</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Lépés címe</StepLabel>
+          </Step>
+        </Stepper>
+
       </Box>
+<Box
+            sx={{
+              backgroundColor: '#FFFFFF',
+              padding: 2,
+              borderRadius: '8px',
+              textAlign: 'center',
+              boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
+              marginTop: 2,
+            }}
+            onClick={() => navigate('/login')}
+          >
+          <Typography variant="h6" sx={{ color: '#004D40' }}>
+            Már van fiókod?{' '}
+            <span style={{ color: '#1D8C8C', fontWeight: 'bold' }} >Jelentkezz be!</span>
+          </Typography>
+        </Box>
+        </Box>
     </Box>
   );
 };
