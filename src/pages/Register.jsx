@@ -5,6 +5,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTheme } from '@mui/material/styles';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleNextStep = async () => {
     if (!email || !username || !password || !confirmPassword) {
@@ -54,7 +56,7 @@ const Register = () => {
     >
       <Box
         sx={{
-          backgroundColor: '#F6F4E8',
+          backgroundColor: theme.palette.background.default,
           borderRadius: 3,
           boxShadow: 3,
           width: { xs: '90%', sm: '60%', md: '40%' },
@@ -63,7 +65,7 @@ const Register = () => {
       >
         <Box sx={{ padding: '1%', marginLeft: 6, marginRight: 6 }}>
           <img src="/logo.png" alt="Logo" style={{ width: 120, height: 120, marginBottom: 16 }} />
-          <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#004D40', marginBottom: 3 }}>Adatok megadása</Typography>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Adatok megadása</Typography>
 
           <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
             <TextField label="Teljes név" variant="outlined" fullWidth value={username} onChange={(e) => setUsername(e.target.value)} sx={{ backgroundColor: 'white' }} />
@@ -111,7 +113,7 @@ const Register = () => {
           <Button
             variant="contained"
             fullWidth
-            sx={{ mt: 2, backgroundColor: '#1D8C8C', '&:hover': { backgroundColor: '#004D40' }, borderRadius: 2 }}
+            sx={{ mt: 2, backgroundColor: theme.palette.primary.main, '&:hover': { backgroundColor: theme.palette.primary.dark }, borderRadius: 2 }}
             onClick={handleNextStep}
           >
             Tovább
@@ -125,7 +127,7 @@ const Register = () => {
         </Box>
         <Box
           sx={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: theme.palette.secondary.main,
             padding: 2,
             borderRadius: '8px',
             textAlign: 'center',
@@ -134,22 +136,15 @@ const Register = () => {
           }}
           onClick={() => navigate('/login')}
         >
-          <Typography variant="h6" sx={{ color: '#004D40' }}>
+          <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
             Már van fiókod?{' '}
-            <span style={{ color: '#1D8C8C', fontWeight: 'bold' }}>Jelentkezz be!</span>
+            <Typography
+              component="span"
+              sx={{ color: theme.palette.primary.main, fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              Jelentkezz be!
+            </Typography>
           </Typography>
-        </Box>
-      </Box>
-
-      {/* Footer Section */}
-      <Box sx={{ width: '100%', textAlign: 'center', padding: 2, backgroundColor: 'transparent', marginTop: 4 }}>
-        <Typography variant="body2" fontWeight="bold">Üzemeltető és fejlesztő: Hephaistos Kft.</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap', mt: 1 }}>
-          <Typography variant="body2" sx={{ cursor: 'pointer' }} onClick={() => navigate('/contact')}>Kapcsolat</Typography>
-          <Typography variant="body2" sx={{ cursor: 'pointer' }} onClick={() => navigate('/privacy-policy')}>Adatkezelési nyilatkozat</Typography>
-          <Typography variant="body2" sx={{ cursor: 'pointer' }} onClick={() => navigate('/technical-info')}>Technikai információk</Typography>
-          <Typography variant="body2">© 2025 Hephaistos. Minden jog fenntartva</Typography>
-          <Typography variant="body2" sx={{ cursor: 'pointer' }} onClick={() => navigate('/faq')}>GYIK</Typography>
         </Box>
       </Box>
     </Box>

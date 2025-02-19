@@ -1,4 +1,3 @@
-//unused colors are commented out for future use
 import { createTheme } from "@mui/material/styles";
 import colors from "./colors"; // Correct path to colors.js
 
@@ -15,6 +14,18 @@ const theme = createTheme({
     },
     text: {
       primary: colors.text,
+    },
+    error: {
+      main: colors.error,
+    },
+    warning: {
+      main: colors.warning,
+    },
+    info: {
+      main: colors.info,
+    },
+    success: {
+      main: colors.success,
     },
   },
   typography: {
