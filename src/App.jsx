@@ -1,39 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
-import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
 import { AuthProvider } from './contexts/AuthContext';
 import Profile from './pages/UserProfile';
-import { UserProvider } from './contexts/UserContext';
 import UserEdit from './pages/UserEdit';
 import UserDelete from './pages/UserDelete';
+import ProtectedRoute from './components/ProtectedRoute';
 
-
-//dont forget to use the color theme and the auth context
 function App() {
-
   return (
     <AuthProvider>
-      <UserProvider>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} /> 
-          <Route path="/register" element={<Register />} />
-          <Route path="/userdelete" element={<UserDelete />} />
-          <Route path="/profile" element={<Profile />} /> {/* Add the Profile route */}
-          <Route path="/edit" element={<UserEdit />} /> {/* Módosító oldal */}
-        </Routes>
-      </Router>
-      </UserProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
+            <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
+            <Route path="/edit" element={<ProtectedRoute element={<UserEdit />} />} />
+          </Routes>
+        </Router>
     </AuthProvider>
   );
 }
