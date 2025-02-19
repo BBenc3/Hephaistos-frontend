@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import LoginForm from '../components/LoginForm';
 
 const Login = () => {
-  const { isLoggedIn, handleLogin } = useAuth();
+  const { isLoggedIn, login, error } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,7 +61,12 @@ const Login = () => {
         paddingTop: '5%',
       }}
     >
-      <LoginForm handleLogin={handleLogin} />
+      {error && (
+        <Typography color="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Typography>
+      )}
+      <LoginForm handleLogin={login} />
     </Box>
   );
 };

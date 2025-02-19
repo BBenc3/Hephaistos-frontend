@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-//
+import { useAuth } from '../contexts/AuthContext';
+
 const UserEdit = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    if (!isLoggedIn) {
       navigate('/login');
+    } else {
+      setUsername(user.username);
+      setEmail(user.email);
     }
-  }, [navigate]);
+  }, [isLoggedIn, user, navigate]);
 
   const handleUpdate = async () => {
     const userData = { username: username.trim(), email: email.trim() };
-    
+
     if (!userData.username || !userData.email) {
       alert('Hiányzó adatok!');
       return;
     }
-    
+
     try {
       const response = await fetch('http://localhost:5001/api/users/me', {
         method: 'PUT',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
         body: JSON.stringify(userData),
       });
-      
+
       if (response.ok) {
         alert('Sikeres módosítás!');
-        navigate('/dashboard');
+        navigate('/profile');
       } else {
         alert('Hiba történt a frissítés során');
       }

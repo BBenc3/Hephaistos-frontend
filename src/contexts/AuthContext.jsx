@@ -1,31 +1,63 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 
-
-// Create the AuthContext
 const AuthContext = createContext();
 
-// AuthProvider component to provide the context to the app
+const initialState = {
+  user: null,
+  isLoggedIn: false,
+  error: null,
+};
+
+const authReducer = (state, action) => {
+  switch (action.type) {
+    case 'LOGIN_SUCCESS':
+      return {
+        ...state,
+        user: action.payload,
+        isLoggedIn: true,
+        error: null,
+      };
+    case 'LOGIN_FAILURE':
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case 'LOGOUT':
+      return initialState;
+    default:
+      return state;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [state, dispatch] = useReducer(authReducer, initialState);
 
-  useEffect(() => {
-    // Check if accessToken is in localStorage
-    const token = sessionStorage.getItem('accessToken');
-    setIsLoggedIn(!!token); // Set logged in state based on the presence of accessToken
-  }, []); // Empty dependency array ensures this runs once on component mount
+  const login = async (credentials) => {
+    try {
+      // Bejelentkezési logika
+      const user = {}; // API hívás eredménye
+      dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
+    }
+  };
 
-  const handleLogin = () => setIsLoggedIn(true);
-  const handleLogout = () => {
-    sessionStorage.removeItem('accessToken'); // Remove accessToken from sessionStorage on logout
-    setIsLoggedIn(false);
+  const logout = () => {
+    // Kijelentkezési logika
+    dispatch({ type: 'LOGOUT' });
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, handleLogin, handleLogout }}>
+    <AuthContext.Provider value={{ ...state, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use the AuthContext
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
