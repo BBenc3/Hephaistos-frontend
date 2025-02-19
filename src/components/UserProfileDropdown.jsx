@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Menu, MenuItem, Avatar, Typography, IconButton } from "@mui/material";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext"; // Ensure this path is correct
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
 const UserProfileDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { user, handleLogout } = useAuth();
+  const { user, logout } = useAuth();
   const theme = useTheme();
 
   const handleMenuOpen = (event) => {
@@ -18,14 +18,12 @@ const UserProfileDropdown = () => {
   };
 
   const handleLogoutClick = () => {
-    handleLogout();
+    logout();
     handleMenuClose();
   };
 
-  const placeholderName = "Felhasználó név"; // Placeholder name
   const displayAvatar = "https://via.placeholder.com/40"; // Placeholder avatar URL
-
-  const displayName = user?.name || placeholderName; // Use placeholder if no user name
+  const displayName = user?.username || "Felhasználó név"; // Use username if available
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}> {/* Wrap with Box for layout */}
@@ -67,8 +65,8 @@ const UserProfileDropdown = () => {
         <MenuItem onClick={handleMenuClose}>Felhasználói profil</MenuItem>
         <MenuItem onClick={handleMenuClose}>Profilbeállítások</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Kijelentkezés</MenuItem>
-        </Menu>
-      </Box>
+      </Menu>
+    </Box>
   );
 };
 

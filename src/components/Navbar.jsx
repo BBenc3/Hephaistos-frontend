@@ -27,7 +27,7 @@ export default function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isLoggedIn } = useAuth(); // Get authentication state
+  const { isLoggedIn, user } = useAuth(); // Get authentication state and user
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -79,7 +79,7 @@ export default function Navbar() {
         )}
 
         {isLoggedIn ? (
-            <UserProfileDropdown/>
+            <UserProfileDropdown user={user} /> // Pass user to UserProfileDropdown
         ) : (
           <CustomButton size="small" onClick={() => navigate("/login")}>
             Bejelentkezés
