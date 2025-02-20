@@ -8,10 +8,17 @@ body {
     width: 100vw; /* Ensures full viewport width */
     margin: 0;
     padding: 0;
+    color: var(--text-color); /* Apply text color from theme */
+}
+
+/* Light mode styles */
+body.light-mode {
+    --background-color: #F5F5F5; /* Light mode background color */
+    --text-color: #004C4C; /* Light mode text color */
 }
 
 /* Dark mode styles */
 body.dark-mode {
-    --background-color: #303030;
-    --text-color: #E0E0E0;
+    --background-color: #303030; /* Dark mode background color */
+    --text-color: #E0E0E0; /* Dark mode text color */
 }

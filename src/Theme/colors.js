@@ -12,7 +12,7 @@ const colors = {
 };
 
 const darkColors = {
-  primary: "#BB86FC",
+  primary: "#1E8E8E", // More contrasting shade for dark mode
   secondary: "#121212",
   background: "#303030",
   text: "#E0E0E0",

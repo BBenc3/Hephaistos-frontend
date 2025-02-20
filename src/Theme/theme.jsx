@@ -1,7 +1,7 @@
 import { createTheme } from "@mui/material/styles";
-import { colors } from "./colors"; 
+import { colors, darkColors } from "./colors";
 
-const theme = createTheme({
+const lightTheme = {
   palette: {
     primary: {
       main: colors.primary,
@@ -32,6 +32,41 @@ const theme = createTheme({
     fontWeightBold: "bold",
     fontSize: 16,
   },
-});
+};
+
+const darkTheme = {
+  palette: {
+    primary: {
+      main: darkColors.primary, // Use the more contrasting shade for dark mode
+    },
+    secondary: {
+      main: darkColors.secondary,
+    },
+    background: {
+      default: darkColors.background,
+    },
+    text: {
+      primary: darkColors.text,
+    },
+    error: {
+      main: darkColors.error,
+    },
+    warning: {
+      main: darkColors.warning,
+    },
+    info: {
+      main: darkColors.info,
+    },
+    success: {
+      main: darkColors.success,
+    },
+  },
+  typography: {
+    fontWeightBold: "bold",
+    fontSize: 16,
+  },
+};
+
+const theme = (mode) => createTheme(mode === 'dark' ? darkTheme : lightTheme);
 
 export default theme;

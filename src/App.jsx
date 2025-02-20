@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
@@ -14,8 +14,11 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { colors, darkColors } from './Theme/colors';
+import CssBaseline from '@mui/material/CssBaseline';
+import { useDarkMode } from './hooks/useDarkMode';
 
-function App({ isDarkMode, setIsDarkMode }) {
+function App() {
+  const [isDarkMode, setIsDarkMode] = useDarkMode();
   const theme = createTheme({
     palette: {
       primary: { main: isDarkMode ? darkColors.primary : colors.primary },
@@ -29,8 +32,13 @@ function App({ isDarkMode, setIsDarkMode }) {
     },
   });
 
+  useEffect(() => {
+    document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
+  }, [isDarkMode]);
+
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <AuthProvider>
         <Router>
           <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
