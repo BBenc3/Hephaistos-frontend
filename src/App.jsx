@@ -11,10 +11,27 @@ import Profile from './pages/UserProfile';
 import UserEdit from './pages/UserEdit';
 import UserDelete from './pages/UserDelete';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+import { colors, darkColors } from './Theme/colors';
 
 function App({ isDarkMode, setIsDarkMode }) {
+  const theme = createTheme({
+    palette: {
+      primary: { main: isDarkMode ? darkColors.primary : colors.primary },
+      secondary: { main: isDarkMode ? darkColors.secondary : colors.secondary },
+      background: { default: isDarkMode ? darkColors.background : colors.background },
+      text: { primary: isDarkMode ? darkColors.text : colors.text },
+      error: { main: isDarkMode ? darkColors.error : colors.error },
+      warning: { main: isDarkMode ? darkColors.warning : colors.warning },
+      info: { main: isDarkMode ? darkColors.info : colors.info },
+      success: { main: isDarkMode ? darkColors.success : colors.success },
+    },
+  });
+
   return (
-    <AuthProvider>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
         <Router>
           <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
           <Routes>
@@ -27,7 +44,8 @@ function App({ isDarkMode, setIsDarkMode }) {
             <Route path="/edit" element={<ProtectedRoute element={<UserEdit />} />} />
           </Routes>
         </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

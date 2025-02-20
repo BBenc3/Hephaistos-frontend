@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
 import { useAuth } from '../contexts/AuthContext';
 import LoginForm from '../components/LoginForm';
+import { useTheme } from '@mui/material/styles';
 
 const Login = () => {
   const { isLoggedIn, login, error } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -24,7 +26,8 @@ const Login = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '5%',
+          minHeight: '100vh',
+          padding: 2,
         }}
       >
         <Box
@@ -58,7 +61,8 @@ const Login = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: '5%',
+        minHeight: '100vh',
+        padding: 2,
       }}
     >
       {error && (

@@ -23,14 +23,13 @@ const NavbarButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export default function Navbar() {
+export default function Navbar({ isDarkMode, setIsDarkMode }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { isLoggedIn, user } = useAuth(); // Get authentication state and user
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
