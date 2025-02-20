@@ -45,7 +45,7 @@ const Register = () => {
           boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
           marginTop: 3,
         }}
-        onClick={() => navigate('/Register2')}
+       
       >
         <Typography variant="body2">
           Már van fiókod?{' '}
