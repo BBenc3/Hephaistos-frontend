@@ -1,4 +1,5 @@
 body {
+    background-color: var(--background-color);
     background-image: url('../public/Background.png'); /* Path assuming the image is in public folder */
     background-size: cover; /* Ensures it covers the entire screen */
     background-position: center; /* Centers the image */
@@ -7,4 +8,10 @@ body {
     width: 100vw; /* Ensures full viewport width */
     margin: 0;
     padding: 0;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    --background-color: #303030;
+    --text-color: #E0E0E0;
 }

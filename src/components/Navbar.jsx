@@ -6,10 +6,11 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "./Button";
-import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery, Paper } from "@mui/material";
+import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery, Paper, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "../contexts/AuthContext";
 import UserProfileDropdown from "./UserProfileDropdown"; // Importáljuk a UserProfileDropdown komponenst
+import { Gear } from 'react-bootstrap-icons';
 
 const NavbarButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -28,9 +29,19 @@ export default function Navbar() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { isLoggedIn, user } = useAuth(); // Get authentication state and user
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
+  };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
 
   const renderNavLinks = () => (
@@ -85,6 +96,19 @@ export default function Navbar() {
             Bejelentkezés
           </CustomButton>
         )}
+
+        <IconButton color="inherit" onClick={handleMenuClick} sx={{ color: theme.palette.primary.main }}>
+          <Gear />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={() => { setIsDarkMode(!isDarkMode); handleMenuClose(); }}>
+            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+          </MenuItem>
+        </Menu>
       </Toolbar>
     </AppBar>
   );

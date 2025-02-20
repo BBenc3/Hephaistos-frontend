@@ -11,4 +11,16 @@ const colors = {
   success: "#4caf50", // success color
 };
 
-export default colors;
+const darkColors = {
+  primary: "#BB86FC",
+  secondary: "#121212",
+  background: "#303030",
+  text: "#E0E0E0",
+  accent: "#03DAC6",
+  error: "#CF6679",
+  warning: "#FFA000",
+  info: "#2196F3",
+  success: "#4CAF50",
+};
+
+export { colors, darkColors };

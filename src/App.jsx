@@ -12,11 +12,11 @@ import UserEdit from './pages/UserEdit';
 import UserDelete from './pages/UserDelete';
 import ProtectedRoute from './components/ProtectedRoute';
 
-function App() {
+function App({ isDarkMode, setIsDarkMode }) {
   return (
     <AuthProvider>
         <Router>
-          <Navbar />
+          <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/schedule" element={<Schedule />} />
