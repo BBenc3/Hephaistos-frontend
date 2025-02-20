@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import CustomButton from "./Button";
-import { IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery, Paper, Menu, MenuItem } from "@mui/material";
+import { useTheme, useMediaQuery, AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useAuth } from "../contexts/AuthContext";
-import UserProfileDropdown from "./UserProfileDropdown"; // Importáljuk a UserProfileDropdown komponenst
+import { styled } from "@mui/material/styles";
 import { Gear } from 'react-bootstrap-icons';
+
+import CustomButton from "./Button";
+import UserProfileDropdown from "./UserProfileDropdown";
+import { useAuth } from "../contexts/AuthContext";
+import CustomDropdown from "./CustomDropdown";
 
 const NavbarButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -28,7 +26,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isLoggedIn, user } = useAuth(); // Get authentication state and user
+  const { isLoggedIn, user } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const toggleDrawer = () => {
@@ -51,7 +49,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
   );
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: theme.palette.background.default }}>
+    <AppBar position="static" sx={{ backgroundColor: `${theme.palette.background.default}CC` }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: theme.palette.primary.main, fontSize: "24px", fontWeight: "bold" }}>
           Hephaistos
@@ -89,7 +87,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
         )}
 
         {isLoggedIn ? (
-            <UserProfileDropdown user={user} /> // Pass user to UserProfileDropdown
+          <UserProfileDropdown user={user} />
         ) : (
           <CustomButton size="small" onClick={() => navigate("/login")}>
             Bejelentkezés
@@ -99,15 +97,11 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
         <IconButton color="inherit" onClick={handleMenuClick} sx={{ color: theme.palette.primary.main }}>
           <Gear />
         </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
+        <CustomDropdown anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
           <MenuItem onClick={() => { setIsDarkMode(!isDarkMode); handleMenuClose(); }}>
             {isDarkMode ? 'Light Mode' : 'Dark Mode'}
           </MenuItem>
-        </Menu>
+        </CustomDropdown>
       </Toolbar>
     </AppBar>
   );

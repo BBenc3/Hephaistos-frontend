@@ -32,12 +32,23 @@ const lightTheme = {
     fontWeightBold: "bold",
     fontSize: 16,
   },
+  components: {
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: colors.background,
+          border: `1px solid ${colors.primary}`,
+          animation: 'fadeIn 0.3s ease-in-out',
+        },
+      },
+    },
+  },
 };
 
 const darkTheme = {
   palette: {
     primary: {
-      main: darkColors.primary, // Use the more contrasting shade for dark mode
+      main: darkColors.primary,
     },
     secondary: {
       main: darkColors.secondary,
@@ -64,6 +75,46 @@ const darkTheme = {
   typography: {
     fontWeightBold: "bold",
     fontSize: 16,
+  },
+  components: {
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: darkColors.background,
+          border: `1px solid ${darkColors.primary}`,
+          animation: 'fadeIn 0.3s ease-in-out',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: darkColors.background,
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: darkColors.text,
+            },
+            '&:hover fieldset': {
+              borderColor: darkColors.primary,
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: darkColors.primary,
+            },
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: darkColors.primary,
+          color: darkColors.text,
+          '&:hover': {
+            backgroundColor: darkColors.primary,
+          },
+        },
+      },
+    },
   },
 };
 

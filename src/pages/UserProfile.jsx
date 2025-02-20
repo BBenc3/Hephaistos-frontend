@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import {
   CircularProgress,
   Typography,
@@ -11,54 +10,13 @@ import {
   useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import useUserData from '../hooks/useUserData';
 
 const UserProfile = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { user, loading, error, handleDeactivate } = useUserData();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('https://localhost:5001/api/users/me', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        });
-        setUser(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError('Hiba történt a felhasználói adatok lekérése közben.');
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  const handleDeactivate = async () => {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-
-      const response = await axios.delete('https://localhost:5001/api/users/me', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (response.status === 200) {
-        setUser(null);
-        navigate('/login');
-      }
-    } catch (err) {
-      console.error('Error deactivating profile:', err);
-      setError('Hiba történt a profil inaktiválása során.');
-    }
-  };
 
   if (loading) {
     return (

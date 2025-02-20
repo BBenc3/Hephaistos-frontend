@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import { TextField, Box, Typography, IconButton, InputAdornment } from '@mui/material';
-import Button from '../components/Button';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useTheme } from '@mui/material/styles';
+import LoginFormFields from './LoginFormFields';
 
-const LoginForm = () => {
+const LoginForm = ({ setNotification }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -19,7 +16,7 @@ const LoginForm = () => {
 
   const handleLoginSubmit = async () => {
     if (!email || !password) {
-      setErrorMessage('Minden mezőt ki kell tölteni!');
+      setNotification({ open: true, message: 'Minden mezőt ki kell tölteni!', severity: 'warning' });
       return;
     }
     setLoading(true);
@@ -27,7 +24,7 @@ const LoginForm = () => {
       await login({ email, password }); // Pass credentials to login function
       navigate('/profile');
     } catch (error) {
-      setErrorMessage('Hibás email vagy jelszó!');
+      setNotification({ open: true, message: 'Hibás email vagy jelszó!', severity: 'error' });
     } finally {
       setLoading(false);
     }
@@ -50,40 +47,42 @@ const LoginForm = () => {
         <Typography variant="h4" gutterBottom>
           Bejelentkezés
         </Typography>
-        <TextField
-          label="Email"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Jelszó"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
+        <LoginFormFields
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          errorMessage={errorMessage}
+          sx={{
+            '& .MuiInputBase-root': {
+              backgroundColor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            '& .MuiInputLabel-root': {
+              color: theme.palette.text.secondary,
+            },
           }}
         />
-        {errorMessage && (
-          <Typography color="error" sx={{ marginTop: 2 }}>
-            {errorMessage}
-          </Typography>
-        )}
         <Button
           variant="contained"
-          sx={{ backgroundColor: theme.palette.primary.main, color: theme.palette.common.white, '&:hover': { backgroundColor: theme.palette.primary.dark }, width: '90%', marginTop: '5%' }}
+          sx={{ 
+            backgroundColor: theme.palette.primary.main, 
+            color: theme.palette.common.white, 
+            '&:hover': { backgroundColor: theme.palette.primary.dark }, 
+            width: '90%', 
+            marginTop: '5%' 
+          }}
           onClick={handleLoginSubmit}
           disabled={loading}
         >

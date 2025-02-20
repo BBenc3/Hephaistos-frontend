@@ -1,51 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import useUserData from '../hooks/useUserData';
 
 const UserEdit = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const { isLoggedIn, user } = useAuth();
+  const { user, isLoggedIn, handleUpdate } = useUserData();
+  const [username, setUsername] = useState(user?.username || '');
+  const [email, setEmail] = useState(user?.email || '');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/login');
-    } else {
-      setUsername(user.username);
-      setEmail(user.email);
-    }
-  }, [isLoggedIn, user, navigate]);
-
-  const handleUpdate = async () => {
-    const userData = { username: username.trim(), email: email.trim() };
-
-    if (!userData.username || !userData.email) {
-      alert('Hiányzó adatok!');
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:5001/api/users/me', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (response.ok) {
-        alert('Sikeres módosítás!');
-        navigate('/profile');
-      } else {
-        alert('Hiba történt a frissítés során');
-      }
-    } catch (error) {
-      alert('Hálózati hiba:', error);
-    }
-  };
+  if (!isLoggedIn) {
+    navigate('/login');
+  }
 
   return (
     <Box
@@ -87,7 +53,7 @@ const UserEdit = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={handleUpdate}
+        onClick={() => handleUpdate({ username, email })}
         sx={{ marginTop: 2 }}
       >
         Módosítás

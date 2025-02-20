@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Menu, MenuItem, Avatar, Typography, IconButton } from "@mui/material";
+import { MenuItem, Avatar, Typography, IconButton } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext"; // Ensure this path is correct
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import CustomDropdown from "./CustomDropdown";
 
 const UserProfileDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,21 +52,11 @@ const UserProfileDropdown = () => {
         </Typography>
       </IconButton>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-        sx={{
-          "& .MuiMenu-paper": {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.secondary.main,
-          },
-        }}
-      > 
+      <CustomDropdown anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         <MenuItem onClick={handleMenuClose}>Felhasználói profil</MenuItem>
         <MenuItem onClick={handleMenuClose}>Profilbeállítások</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Kijelentkezés</MenuItem>
-      </Menu>
+      </CustomDropdown>
     </Box>
   );
 };

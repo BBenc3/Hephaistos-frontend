@@ -1,22 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import Button from '../components/Button';
+import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
-import { useAuth } from '../contexts/AuthContext';
-import LoginForm from '../components/LoginForm';
+import { useAuth } from '../../contexts/AuthContext';
+import LoginForm from '../../components/auth/forms/LoginForm';
 import { useTheme } from '@mui/material/styles';
+import Notification from '../../components/Notification/Notification';
 
 const Login = () => {
   const { isLoggedIn, login, error } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
+  const [notification, setNotification] = useState({ open: false, message: '', severity: 'warning' });
+
+  const handleNotificationClose = () => {
+    setNotification({ ...notification, open: false });
+  };
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/');
+      navigate('/profile');
     }
   }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
+    document.body.classList.add('custom-scrollbar');
+    document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
+    return () => {
+      document.body.classList.remove('custom-scrollbar');
+      document.body.style.overflowY = 'auto'; // Re-enable vertical scrolling
+    };
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      setNotification({ open: true, message: error, severity: 'error' });
+    }
+  }, [error]);
 
   if (isLoggedIn) {
     return (
@@ -26,7 +47,6 @@ const Login = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
           padding: 2,
         }}
       >
@@ -65,12 +85,13 @@ const Login = () => {
         padding: 2,
       }}
     >
-      {error && (
-        <Typography color="error" sx={{ marginBottom: 2 }}>
-          {error}
-        </Typography>
-      )}
-      <LoginForm handleLogin={login} />
+      <LoginForm handleLogin={login} setNotification={setNotification} />
+      <Notification
+        open={notification.open}
+        message={notification.message}
+        severity={notification.severity}
+        onClose={handleNotificationClose}
+      />
     </Box>
   );
 };

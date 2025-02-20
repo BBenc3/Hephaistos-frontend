@@ -35,29 +35,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      // Get access token
       const response = await axios.post('https://localhost:5001/auth/login', credentials);
       const accessToken = response.data.accessToken;
       sessionStorage.setItem('accessToken', accessToken);
       document.cookie = `refreshToken=${response.data.refreshToken}; path=/;`;
 
-      // Fetch user data using access token
       const userResponse = await axios.get('https://localhost:5001/api/users/me', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       const user = userResponse.data;
 
-      // Set user data in context
       dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-      console.log('User logged in:', user); // Log the user state
+      console.log('User logged in:', user);
     } catch (error) {
       dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
-      console.error('Login error:', error); // Log the error
+      console.error('Login error:', error);
     }
   };
 
   const logout = () => {
-    // Kijelentkezési logika
     dispatch({ type: 'LOGOUT' });
   };
 
