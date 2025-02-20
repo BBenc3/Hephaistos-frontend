@@ -52,6 +52,7 @@ const Register = () => {
           <Typography
             component="span"
             sx={{ color: 'primary.main', fontWeight: 'bold', cursor: 'pointer' }}
+            onClick={() => navigate('/login')}
           >
             Jelentkezz be!
           </Typography>

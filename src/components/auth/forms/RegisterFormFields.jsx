@@ -164,18 +164,9 @@ const RegisterFormFields = ({
         />
       </Box>
       {errorMessage && <Typography color="error" sx={{ mt: 2 }}>{errorMessage}</Typography>}
-      <Typography variant="body2" sx={{ mt: 2 }}>
-        Már van fiókod?{' '}
-        <Typography
-          component="span"
-          sx={{ color: theme.palette.primary.main, fontWeight: 'bold', cursor: 'pointer' }}
-          onClick={() => navigate('/login')}
-        >
-          Jelentkezz be
-        </Typography>
-      </Typography>
+    
     </>
   );
 };
 
-export default RegisterFormFields;
+export default RegisterFormFields

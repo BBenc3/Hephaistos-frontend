@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import RegisterFormFields from './RegisterFormFields';
-import RegisterStepper from './RegisterStepper';
+import Logo from './Logo'; // Import the new Logo component
 
 const RegisterForm = ({ setNotification }) => {
   const [email, setEmail] = useState('');
@@ -42,37 +42,46 @@ const RegisterForm = ({ setNotification }) => {
     <Box
       sx={{
         backgroundColor: theme.palette.background.default,
-        borderRadius: 3,
-        boxShadow: 3,
-        width: { xs: '90%', sm: '60%', md: '40%' },
+        width: '60%', // Updated width
+        borderRadius: '12px',
+        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
         textAlign: 'center',
-        padding: '1%',
-        marginLeft: 6,
-        marginRight: 6,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center', // Center content horizontally
       }}
     >
-      <img src="/logo.png" alt="Logo" style={{ width: 120, height: 120, marginBottom: 16 }} />
+      <Logo /> {/* Use the new Logo component */}
       <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Adatok megadása</Typography>
-      <RegisterFormFields
-        email={email}
-        setEmail={setEmail}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-        confirmPassword={confirmPassword}
-        setConfirmPassword={setConfirmPassword}
-        errorMessage={errorMessage}
-      />
-      <Button
-        variant="contained"
-        fullWidth
-        sx={{ mt: 2, backgroundColor: theme.palette.primary.main, '&:hover': { backgroundColor: theme.palette.primary.dark }, borderRadius: 2 }}
-        onClick={handleNextStep}
-      >
-        Tovább
-      </Button>
-      <RegisterStepper activeStep={1} />
+      <Box sx={{ padding: '2%', width: '100%' }}> {/* Adjust padding */}
+        <RegisterFormFields
+          email={email}
+          setEmail={setEmail}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          confirmPassword={confirmPassword}
+          setConfirmPassword={setConfirmPassword}
+          errorMessage={errorMessage}
+        />
+        <Button
+          variant="contained"
+          fullWidth
+          sx={{ 
+            mt: 2, 
+            backgroundColor: theme.palette.primary.main, 
+            marginTop: 5, 
+            width: '40%', 
+            '&:hover': { backgroundColor: theme.palette.primary.dark }, 
+            borderRadius: 2,
+            alignSelf: 'center' // Center button horizontally
+          }}
+          onClick={handleNextStep}
+        >
+          Regisztráció
+        </Button>
+      </Box>
     </Box>
   );
 };

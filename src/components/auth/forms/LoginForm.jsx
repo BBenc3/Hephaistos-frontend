@@ -34,7 +34,7 @@ const LoginForm = ({ setNotification }) => {
     <Box
       sx={{
         backgroundColor: theme.palette.background.default,
-        width: { xs: '90%', sm: '60%', md: '40%' },
+        width: '40%', // Updated width
         borderRadius: '12px',
         boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
         textAlign: 'center',
@@ -80,7 +80,7 @@ const LoginForm = ({ setNotification }) => {
             backgroundColor: theme.palette.primary.main, 
             color: theme.palette.common.white, 
             '&:hover': { backgroundColor: theme.palette.primary.dark }, 
-            width: '90%', 
+            width: '40%', 
             marginTop: '5%' 
           }}
           onClick={handleLoginSubmit}
