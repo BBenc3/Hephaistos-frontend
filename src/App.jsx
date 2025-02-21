@@ -16,6 +16,7 @@ import { createTheme } from '@mui/material/styles';
 import { colors, darkColors } from './Theme/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDarkMode } from './hooks/useDarkMode';
+import About from './pages/About'; // Add this line
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useDarkMode();
@@ -50,6 +51,7 @@ function App() {
             <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
             <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
             <Route path="/edit" element={<ProtectedRoute element={<UserEdit />} />} />
+            <Route path="/about" element={<About />} /> {/* Add this line */}
           </Routes>
         </Router>
       </AuthProvider>

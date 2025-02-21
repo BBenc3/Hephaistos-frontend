@@ -18,6 +18,7 @@ const useUserData = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
+          withCredentials: true, // Add this line to include cookies in the request
         });
         setUser(response.data);
         setLoading(false);
