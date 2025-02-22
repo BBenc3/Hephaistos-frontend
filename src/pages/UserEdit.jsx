@@ -7,11 +7,20 @@ const UserEdit = () => {
   const { user, isLoggedIn, handleUpdate } = useUserData();
   const [username, setUsername] = useState(user?.username || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   if (!isLoggedIn) {
     navigate('/login');
   }
+
+  const handleSubmit = async () => {
+    try {
+      await handleUpdate({ username, email });
+    } catch (err) {
+      setError('Hiba történt a módosítás során.');
+    }
+  };
 
   return (
     <Box
@@ -27,6 +36,11 @@ const UserEdit = () => {
       <Typography variant="h4" gutterBottom>
         Módosítás
       </Typography>
+      {error && (
+        <Typography color="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Typography>
+      )}
       <TextField
         label="E-mail"
         variant="outlined"
@@ -53,7 +67,7 @@ const UserEdit = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => handleUpdate({ username, email })}
+        onClick={handleSubmit}
         sx={{ marginTop: 2 }}
       >
         Módosítás

@@ -73,7 +73,7 @@ const useUserData = () => {
         alert('Sikeres módosítás!');
         navigate('/profile');
       } else {
-        alert('Hiba történt a frissítés során');
+        throw new Error('Hiba történt a frissítés során');
       }
     } catch (error) {
       alert('Hálózati hiba:', error);

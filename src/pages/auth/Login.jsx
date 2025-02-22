@@ -86,6 +86,13 @@ const Login = () => {
       }}
     >
       <LoginForm handleLogin={login} setNotification={setNotification} />
+      <Button
+        variant="contained"
+        sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] } }}
+        onClick={() => navigate('/forgotpassword')}
+      >
+        Elfelejtettem a jelszavamat
+      </Button>
       <Notification
         open={notification.open}
         message={notification.message}
