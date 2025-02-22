@@ -25,6 +25,9 @@ const ChangePassword = () => {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '5%',
+          [theme.breakpoints.down('sm')]: {
+            padding: '5%',
+          },
         }}
       >
         <Box
@@ -59,6 +62,9 @@ const ChangePassword = () => {
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: '5%',
+        [theme.breakpoints.down('sm')]: {
+          padding: '5%',
+        },
       }}
     >
       <ChangePasswordForm />

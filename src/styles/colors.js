@@ -9,6 +9,7 @@ const colors = {
   warning: "#ff9800", // warning color
   info: "#2196f3", // info color
   success: "#4caf50", // success color
+  paper: "#FFFFFF", // paper background color for light mode
 };
 
 const darkColors = {
@@ -21,6 +22,8 @@ const darkColors = {
   warning: "#FFA000",
   info: "#2196F3",
   success: "#4CAF50",
+  border: "#1E8E8E", // New border color for dark mode
+  paper: "#424242", // paper background color for dark mode
 };
 
 export { colors, darkColors };

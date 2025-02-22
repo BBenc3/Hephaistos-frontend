@@ -42,6 +42,22 @@ const lightTheme = {
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: colors.background,
+          padding: '10px',
+          margin: '10px 0',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          marginTop: '20px',
+        },
+      },
+    },
   },
 };
 
@@ -81,8 +97,12 @@ const darkTheme = {
       styleOverrides: {
         paper: {
           backgroundColor: darkColors.background,
-          border: `1px solid ${darkColors.primary}`,
+          border: `1px solid ${darkColors.border}`,
           animation: 'fadeIn 0.3s ease-in-out',
+          [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            maxWidth: '100%',
+          },
         },
       },
     },
@@ -92,7 +112,7 @@ const darkTheme = {
           backgroundColor: darkColors.background,
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              borderColor: darkColors.text,
+              borderColor: darkColors.border,
             },
             '&:hover fieldset': {
               borderColor: darkColors.primary,
@@ -100,6 +120,9 @@ const darkTheme = {
             '&.Mui-focused fieldset': {
               borderColor: darkColors.primary,
             },
+          },
+          [theme.breakpoints.down('sm')]: {
+            width: '100%',
           },
         },
       },
@@ -112,6 +135,30 @@ const darkTheme = {
           '&:hover': {
             backgroundColor: darkColors.primary,
           },
+          [theme.breakpoints.down('sm')]: {
+            width: '100%',
+          },
+          marginTop: '20px',
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          border: `1px solid ${darkColors.border}`,
+          backgroundColor: darkColors.background,
+          [theme.breakpoints.down('sm')]: {
+            width: '100%',
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: darkColors.background,
+          padding: '10px',
+          margin: '10px 0',
         },
       },
     },

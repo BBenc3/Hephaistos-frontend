@@ -83,6 +83,9 @@ const Login = () => {
         justifyContent: 'center',
         minHeight: '100vh',
         padding: 2,
+        [theme.breakpoints.down('sm')]: {
+          padding: '10px',
+        },
       }}
     >
       <LoginForm handleLogin={login} setNotification={setNotification} />

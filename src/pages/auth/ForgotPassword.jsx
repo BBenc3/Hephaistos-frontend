@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Button from '../../components/Button';
+import { useTheme } from '@mui/material/styles';
 
 const ForgotPassword = () => {
+  const theme = useTheme();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -27,7 +29,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px', [theme.breakpoints.down('sm')]: { padding: '10px' } }}>
       {step === 1 && (
         <>
           <input

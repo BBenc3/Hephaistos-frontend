@@ -4,12 +4,24 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Alert from '@mui/material/Alert';
 import useUserData from '../hooks/useUserData';
+import { useTheme } from '@mui/material/styles';
 
 const DeactivateProfile = () => {
+  const theme = useTheme();
   const { isDeactivated, error, handleDeactivate } = useUserData();
 
   return (
-    <Card style={{ maxWidth: 400, margin: '20px auto', padding: '16px' }}>
+    <Card
+      style={{
+        maxWidth: 400,
+        margin: '20px auto',
+        padding: '16px',
+        [theme.breakpoints.down('sm')]: {
+          width: '100%',
+          padding: '16px',
+        },
+      }}
+    >
       <CardContent style={{ textAlign: 'center' }}>
         <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>Profil Inaktiválása</h2>
         {isDeactivated ? (

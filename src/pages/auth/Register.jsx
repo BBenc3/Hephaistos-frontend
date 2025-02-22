@@ -3,8 +3,10 @@ import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import RegisterForm from '../../components/auth/forms/RegisterForm';
 import Notification from '../../components/Notification/Notification';
+import { useTheme } from '@mui/material/styles';
 
 const Register = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'warning' });
 
@@ -27,6 +29,9 @@ const Register = () => {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 2,
+        [theme.breakpoints.down('sm')]: {
+          padding: '10px',
+        },
       }}
     >
       <RegisterForm setNotification={setNotification} />
@@ -45,7 +50,7 @@ const Register = () => {
           boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
           marginTop: 3,
         }}
-       
+
       >
         <Typography variant="body2">
           Már van fiókod?{' '}

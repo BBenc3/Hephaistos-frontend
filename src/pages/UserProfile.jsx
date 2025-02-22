@@ -40,7 +40,7 @@ const UserProfile = () => {
       sx={{
         padding: theme.spacing(4),
         marginTop: theme.spacing(4),
-        [theme.breakpoints.down('sm')]: { padding: theme.spacing(2), marginTop: theme.spacing(2) },
+        [theme.breakpoints.down('sm')]: { padding: theme.spacing(2), marginTop: theme.spacing(2), width: '100%' },
       }}
     >
       <Typography variant="h5" gutterBottom>

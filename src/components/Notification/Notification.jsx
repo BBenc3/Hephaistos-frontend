@@ -31,7 +31,12 @@ const Notification = ({ open, message, severity, onClose }) => {
       <Alert
         onClose={onClose}
         severity={severity}
-        sx={{ width: '100%', backgroundColor: getBackgroundColor(), color: theme.palette.common.white }}
+        sx={{
+          width: '100%',
+          backgroundColor: getBackgroundColor(),
+          color: theme.palette.common.white,
+          border: `1px solid ${theme.palette.primary.main}` // Apply border color
+        }}
       >
         {message}
       </Alert>

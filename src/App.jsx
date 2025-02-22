@@ -1,23 +1,24 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { colors, darkColors } from './styles/colors';
+import { useDarkMode } from './hooks/useDarkMode';
+import { AuthProvider } from './contexts/AuthContext';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
-import Login from './pages/auth/Login';
-import Navbar from './components/Navbar';
-import Register from './pages/auth/Register';
-import { AuthProvider } from './contexts/AuthContext';
+import About from './pages/About';
 import Profile from './pages/UserProfile';
 import UserEdit from './pages/UserEdit';
 import UserDelete from './pages/UserDelete';
-import ProtectedRoute from './components/ProtectedRoute';
-import { ThemeProvider } from '@mui/material/styles';
-import { createTheme } from '@mui/material/styles';
-import { colors, darkColors } from './Theme/colors';
-import CssBaseline from '@mui/material/CssBaseline';
-import { useDarkMode } from './hooks/useDarkMode';
-import About from './pages/About'; // Add this line
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 import ForgotPassword from './pages/auth/ForgotPassword';
+import { useMediaQuery } from '@mui/material';
+
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useDarkMode();
@@ -34,6 +35,8 @@ function App() {
     },
   });
 
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   useEffect(() => {
     document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
   }, [isDarkMode]);
@@ -43,9 +46,9 @@ function App() {
       <CssBaseline />
       <AuthProvider>
         <Router>
-          <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+          <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} isMobile={isMobile} />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home isMobile={isMobile} />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
