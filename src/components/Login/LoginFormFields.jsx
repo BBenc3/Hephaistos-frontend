@@ -26,6 +26,9 @@ const LoginFormFields = ({
         color="primary"
         sx={{
           backgroundColor: theme.palette.mode === 'dark' && !email ? 'white' : 'inherit',
+          '& .MuiInputBase-input': {
+            color: theme.palette.mode === 'dark' && !email ? 'white' : 'inherit',
+          },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
               borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
@@ -50,6 +53,9 @@ const LoginFormFields = ({
         color="primary"
         sx={{
           backgroundColor: theme.palette.mode === 'dark' && !password ? 'white' : 'inherit',
+          '& .MuiInputBase-input': {
+            color: theme.palette.mode === 'dark' && !password ? 'white' : 'inherit',
+          },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
               borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
