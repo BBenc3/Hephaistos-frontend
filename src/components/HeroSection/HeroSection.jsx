@@ -1,62 +1,73 @@
-import React from 'react';
-import { Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material';
-import './HeroSection.css'; // Importáld a CSS fájlt
+import React, { useState } from 'react';
+import { Box, Typography, Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const HeroSection = () => {
+  const [expanded, setExpanded] = useState(false);
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isDarkMode = theme.palette.mode === 'dark';
+
+  const handleToggle = () => {
+    setExpanded(!expanded);
+  };
 
   return (
     <Box
-      className="hero"
       sx={{
-        backgroundColor: theme.palette.primary.main, // Háttérszín a témából
-        padding: isSmallScreen ? theme.spacing(3) : theme.spacing(6), // Reszponzív padding
-        display: 'flex',
-        flexDirection: isSmallScreen ? 'column' : 'row', // Függőleges elrendezés kisebb képernyőkön
-        alignItems: 'center',
-        position: 'relative', // Pozícionálás a kivágáshoz
+        backgroundColor: theme.palette.background.default,
+        outline: `3px solid ${theme.palette.primary.main}`,
+        color: theme.palette.text.primary,
+        p: 4,
+        borderRadius: 2,
+        boxShadow: 3,
+        overflow: 'hidden',
+        transition: 'height 0.3s ease-in-out',
+        [theme.breakpoints.down('sm')]: {
+          p: 2,
+        },
       }}
     >
       <Box
-        className="hero-image-container"
         sx={{
-          width: isSmallScreen ? '100%' : 'auto', // Kép szélessége kisebb képernyőkön
-          marginBottom: isSmallScreen ? theme.spacing(3) : 0, // Térköz a kép alatt kisebb képernyőkön
-          marginRight: isSmallScreen ? 0 : theme.spacing(6), // Térköz a képtől jobbra nagyobb képernyőkön
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: 'center',
+          mb: 2,
         }}
       >
-        <img
-          src="/logo.png"
-          alt="Logo"
-          className="hero-logo"
-          style={{ maxWidth: '100%', height: 'auto' }} // Kép méretének korlátozása
+        <Box
+          component="img"
+          src={`${process.env.PUBLIC_URL}/logo.png`}
+          alt="Hephaistos Logo"
+          sx={{
+            width: { xs: 100, md: 150 },
+            height: { xs: 100, md: 150 },
+            mr: { md: 2 },
+            mb: { xs: 2, md: 0 },
+          }}
         />
-        <Box className="hero-cutout" sx={{ zIndex: -1 }} /> {/* Kivágás a kép mögött */}
-      </Box>
-      <Box className="hero-text-content">
-        <Typography
-          variant="h6"
-          sx={{
-            color: theme.palette.secondary.main, // Szövegszín a témából
-            marginBottom: theme.spacing(2),
-          }}
-        >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-          scelerisque, orci non dictum mattis, arcu diam viverra elit, in
-          viverra risus nisi eu elit. Nam et libero ut nisi rhoncus pretium.
-          Cras tincidunt, ex vitae condimentum auctor, lectus nisi lacinia...
+        <Typography variant="h3" component="h1">
+          Hephaistos
         </Typography>
-        <Button
-          variant="contained"
-          color="secondary"
-          sx={{
-            float: 'right',
-            bottom: isSmallScreen ? theme.spacing(3) : theme.spacing(6),
-            left: isSmallScreen ? theme.spacing(3) : theme.spacing(6),
-          }}
-        >
-          Rólunk
+      </Box>
+      <Typography variant="body1" sx={{ mt: 2 }}>
+        A középiskolai projektünk célja egy olyan egyetemi órarendgeneráló alkalmazás
+        kifejlesztése, amely segíti a diákokat az órarendjük megtervezésében,
+        minimalizálva az ütközéseket és a szabadidő-kieséseket. Az alkalmazásunk abban nyújt segítséget, hogy optimalizált órarendet készítsen, figyelembe véve a követelményeket és az előfeltételeket.
+      </Typography>
+      {expanded && (
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Ez az alkalmazás nemcsak azoknak a diákoknak nyújt megoldást, akik késésben vannak
+          a tanulmányaikkal, hanem azoknak is, akik előre szeretnék látni a lehetséges
+          órarendjeiket. Célunk egy olyan eszköz létrehozása, amely megkönnyíti a hallgatók
+          életét, csökkenti a stresszt és növeli a tanulmányi hatékonyságot. Az alkalmazás
+          értesítéseket és emlékeztetőket küld a felhasználóknak a közelgő óráikról és fontos
+          határidőkről.
+        </Typography>
+      )}
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Button variant="contained" onClick={handleToggle}>
+          {expanded ? 'Bezárás' : 'Rólunk'}
         </Button>
       </Box>
     </Box>

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useUserData from '../hooks/useUserData';
+import { useTheme } from '@mui/material/styles';
 
 const UserEdit = () => {
+  const theme = useTheme();
   const { user, isLoggedIn, handleUpdate } = useUserData();
   const [username, setUsername] = useState(user?.username || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -31,6 +33,10 @@ const UserEdit = () => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
+        [theme.breakpoints.down('sm')]: {
+          width: '100%',
+          padding: '5%',
+        },
       }}
     >
       <Typography variant="h4" gutterBottom>

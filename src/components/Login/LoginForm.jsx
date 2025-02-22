@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '@mui/material/styles';
 import LoginFormFields from './LoginFormFields';
+import ForgotPasswordButton from '../ForgotPasswordButton';
 
 const LoginForm = ({ setNotification }) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(''); // Define password state
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState(0);
   const navigate = useNavigate();
   const { login } = useAuth();
   const theme = useTheme();
@@ -25,6 +27,7 @@ const LoginForm = ({ setNotification }) => {
       navigate('/profile');
     } catch (error) {
       setNotification({ open: true, message: 'Hibás email vagy jelszó!', severity: 'error' });
+      setFailedAttempts(failedAttempts + 1);
     } finally {
       setLoading(false);
     }
@@ -53,6 +56,7 @@ const LoginForm = ({ setNotification }) => {
           password={password}
           setPassword={setPassword}
           errorMessage={errorMessage}
+          navigate={navigate}
           sx={{
             '& .MuiInputBase-root': {
               backgroundColor: theme.palette.background.paper,
@@ -74,14 +78,15 @@ const LoginForm = ({ setNotification }) => {
             },
           }}
         />
+          <ForgotPasswordButton navigate={navigate} failedAttempts={failedAttempts} />
         <Button
           variant="contained"
-          sx={{ 
-            backgroundColor: theme.palette.primary.main, 
-            color: theme.palette.common.white, 
-            '&:hover': { backgroundColor: theme.palette.primary.dark }, 
-            width: '40%', 
-            marginTop: '5%' 
+          sx={{
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+            '&:hover': { backgroundColor: theme.palette.primary.dark },
+            width: '40%',
+            marginTop: '1%'
           }}
           onClick={handleLoginSubmit}
           disabled={loading}

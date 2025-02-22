@@ -4,9 +4,9 @@ import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
 import { useAuth } from '../../contexts/AuthContext';
-import LoginForm from '../../components/auth/forms/LoginForm';
+import LoginForm from '../../components/Login/LoginForm';
 import { useTheme } from '@mui/material/styles';
-import Notification from '../../components/Notification/Notification';
+import Notification from '../../components/Notification';
 
 const Login = () => {
   const { isLoggedIn, login, error } = useAuth();
@@ -24,14 +24,6 @@ const Login = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  useEffect(() => {
-    document.body.classList.add('custom-scrollbar');
-    document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
-    return () => {
-      document.body.classList.remove('custom-scrollbar');
-      document.body.style.overflowY = 'auto'; // Re-enable vertical scrolling
-    };
-  }, []);
 
   useEffect(() => {
     if (error) {
@@ -80,19 +72,13 @@ const Login = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
         padding: 2,
+        [theme.breakpoints.down('sm')]: {
+          padding: '10px',
+        },
       }}
     >
       <LoginForm handleLogin={login} setNotification={setNotification} />
-      <Button
-        variant="contained"
-        sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] } }}
-        onClick={() => navigate('/forgotpassword')}
-      >
-        Elfelejtettem a jelszavamat
-      </Button>
       <Notification
         open={notification.open}
         message={notification.message}

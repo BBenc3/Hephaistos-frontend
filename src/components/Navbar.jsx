@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTheme, useMediaQuery, AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, MenuItem } from "@mui/material";
+import { useTheme, useMediaQuery, AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, MenuItem, Menu } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 import { Gear } from 'react-bootstrap-icons';
@@ -44,7 +44,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
   const renderNavLinks = () => (
     <>
       <NavbarButton onClick={() => navigate("/")}>Főoldal</NavbarButton>
-      <NavbarButton onClick={() => navigate("/orarend-generalas")}>Órarend generálás</NavbarButton>
+      <NavbarButton onClick={() => navigate("/schedule")}>Órarend generálás</NavbarButton>
     </>
   );
 
@@ -57,30 +57,28 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
 
         {isMobile ? (
           <>
-            <IconButton color="inherit" onClick={toggleDrawer} sx={{ color: theme.palette.primary.main }}>
+            <IconButton color="inherit" onClick={handleMenuClick} sx={{ color: theme.palette.primary.main }}>
               <MenuIcon />
             </IconButton>
 
-            <Drawer
-              anchor="right"
-              open={drawerOpen}
-              onClose={toggleDrawer}
-              sx={{
-                "& .MuiDrawer-paper": {
-                  backgroundColor: theme.palette.primary.main,
-                  color: theme.palette.common.white,
-                },
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
               }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
             >
-              <List>
-                <ListItem button onClick={() => { navigate("/"); toggleDrawer(); }}>
-                  <ListItemText primary="Főoldal" />
-                </ListItem>
-                <ListItem button onClick={() => { navigate("/orarend-generalas"); toggleDrawer(); }}>
-                  <ListItemText primary="Órarend generálás" />
-                </ListItem>
-              </List>
-            </Drawer>
+              <MenuItem onClick={() => { navigate("/"); handleMenuClose(); }}>Főoldal</MenuItem>
+              <MenuItem onClick={() => { navigate("/orarend-generalas"); handleMenuClose(); }}>Órarend generálás</MenuItem>
+            </Menu>
           </>
         ) : (
           <div>{renderNavLinks()}</div>

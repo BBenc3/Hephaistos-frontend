@@ -9,6 +9,7 @@ const LoginFormFields = ({
   password,
   setPassword,
   errorMessage,
+  navigate, // Add navigate as a prop
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
@@ -23,7 +24,7 @@ const LoginFormFields = ({
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         color="primary"
-        sx={{ 
+        sx={{
           backgroundColor: theme.palette.mode === 'dark' && !email ? 'white' : 'inherit',
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
@@ -47,7 +48,7 @@ const LoginFormFields = ({
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         color="primary"
-        sx={{ 
+        sx={{
           backgroundColor: theme.palette.mode === 'dark' && !password ? 'white' : 'inherit',
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
