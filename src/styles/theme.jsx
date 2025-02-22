@@ -99,7 +99,7 @@ const darkTheme = {
           backgroundColor: darkColors.background,
           border: `1px solid ${darkColors.border}`,
           animation: 'fadeIn 0.3s ease-in-out',
-          [theme.breakpoints.down('sm')]: {
+          '@media (maxWidth:599.95px)': {
             width: '100%',
             maxWidth: '100%',
           },
@@ -121,7 +121,7 @@ const darkTheme = {
               borderColor: darkColors.primary,
             },
           },
-          [theme.breakpoints.down('sm')]: {
+          '@media (maxWidth:599.95px)': {
             width: '100%',
           },
         },
@@ -135,7 +135,7 @@ const darkTheme = {
           '&:hover': {
             backgroundColor: darkColors.primary,
           },
-          [theme.breakpoints.down('sm')]: {
+          '@media (maxWidth:599.95px)': {
             width: '100%',
           },
           marginTop: '20px',
@@ -147,7 +147,7 @@ const darkTheme = {
         root: {
           border: `1px solid ${darkColors.border}`,
           backgroundColor: darkColors.background,
-          [theme.breakpoints.down('sm')]: {
+          '@media (maxWidth:599.95px)': {
             width: '100%',
           },
         },

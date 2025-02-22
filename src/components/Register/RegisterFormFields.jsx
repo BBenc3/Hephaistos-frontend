@@ -27,15 +27,15 @@ const RegisterFormFields = ({
 
   return (
     <>
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-        <TextField 
-          label="Teljes név" 
-          variant="outlined" 
-          fullWidth 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)} 
+      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+        <TextField
+          label="Teljes név"
+          variant="outlined"
+          fullWidth
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           color="primary"
-          sx={{ 
+          sx={{
             backgroundColor: theme.palette.mode === 'dark' && !username ? darkColors.background : 'inherit',
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
@@ -56,14 +56,14 @@ const RegisterFormFields = ({
             },
           }}
         />
-        <TextField 
-          label="E-mail" 
-          variant="outlined" 
-          fullWidth 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
+        <TextField
+          label="E-mail"
+          variant="outlined"
+          fullWidth
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           color="primary"
-          sx={{ 
+          sx={{
             backgroundColor: theme.palette.mode === 'dark' && !email ? darkColors.background : 'inherit',
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
@@ -85,7 +85,7 @@ const RegisterFormFields = ({
           }}
         />
       </Box>
-      <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
         <TextField
           label="Jelszó"
           variant="outlined"
@@ -94,7 +94,7 @@ const RegisterFormFields = ({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           color="primary"
-          sx={{ 
+          sx={{
             backgroundColor: theme.palette.mode === 'dark' && !password ? darkColors.background : 'inherit',
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
@@ -132,7 +132,7 @@ const RegisterFormFields = ({
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           color="primary"
-          sx={{ 
+          sx={{
             backgroundColor: theme.palette.mode === 'dark' && !confirmPassword ? darkColors.background : 'inherit',
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
@@ -164,7 +164,7 @@ const RegisterFormFields = ({
         />
       </Box>
       {errorMessage && <Typography color="error" sx={{ mt: 2 }}>{errorMessage}</Typography>}
-    
+
     </>
   );
 };

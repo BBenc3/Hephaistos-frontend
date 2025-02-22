@@ -1,7 +1,9 @@
 import React from 'react';
-import { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert, AlertTitle } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Slide from '@mui/material/Slide';
+import ErrorIcon from '@mui/icons-material/Error';
+import WarningIcon from '@mui/icons-material/Warning';
 
 const Notification = ({ open, message, severity, onClose }) => {
   const theme = useTheme();
@@ -17,11 +19,23 @@ const Notification = ({ open, message, severity, onClose }) => {
     }
   };
 
+  const getIcon = () => {
+    switch (severity) {
+      case 'error':
+        return <ErrorIcon />;
+      case 'warning':
+        return <WarningIcon />;
+      default:
+        return null;
+    }
+  };
+
   const TransitionUp = (props) => {
     return <Slide {...props} direction="up" />;
   };
 
   return (
+
     <Snackbar
       open={open}
       autoHideDuration={6000}
@@ -35,9 +49,9 @@ const Notification = ({ open, message, severity, onClose }) => {
           width: '100%',
           backgroundColor: getBackgroundColor(),
           color: theme.palette.common.white,
-          border: `1px solid ${theme.palette.primary.main}` // Apply border color
         }}
       >
+        {getIcon()}
         {message}
       </Alert>
     </Snackbar>

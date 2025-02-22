@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import RegisterForm from '../../components/auth/forms/RegisterForm';
-import Notification from '../../components/Notification/Notification';
+import RegisterForm from '../../components/Register/RegisterForm';
+import Notification from '../../components/Notification';
 import { useTheme } from '@mui/material/styles';
 
 const Register = () => {
@@ -14,12 +14,6 @@ const Register = () => {
     setNotification({ ...notification, open: false });
   };
 
-  useEffect(() => {
-    document.body.style.overflowY = 'hidden'; // Disable vertical scrolling
-    return () => {
-      document.body.style.overflowY = 'auto'; // Re-enable vertical scrolling
-    };
-  }, []);
 
   return (
     <Box
@@ -49,8 +43,8 @@ const Register = () => {
           textAlign: 'center',
           boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
           marginTop: 3,
+          width: '100%', // Full width for mobile view
         }}
-
       >
         <Typography variant="body2">
           Már van fiókod?{' '}
