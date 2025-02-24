@@ -9,8 +9,6 @@ body {
     margin: 0;
     padding: 0;
     color: var(--text-color); /* Apply text color from theme */
-    overflow: hidden; /* Disable both horizontal and vertical scrolling */
-    overflow-y: scroll; /* Enable vertical scrolling without showing the scrollbar */
 }
 
 /* Light mode styles */
@@ -31,7 +29,7 @@ body.dark-mode {
 
 /* Custom scrollbar styles for WebKit browsers (Chrome, Safari) */
 body.custom-scrollbar::-webkit-scrollbar {
-    display: none; /* Hide scrollbar */
+    width: 8px; /* Set width for the scrollbar */
 }
 
 body.custom-scrollbar::-webkit-scrollbar-track {
@@ -39,6 +37,7 @@ body.custom-scrollbar::-webkit-scrollbar-track {
 }
 
 body.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color); /* Color of the scrollbar thumb */
     background-color: var(--scrollbar-thumb-color); /* Color of the scrollbar thumb */
     border-radius: 20px; /* Rounded corners for the scrollbar thumb */
     border: 3px solid var(--scrollbar-track-color); /* Adds padding around the thumb */

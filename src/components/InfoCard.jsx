@@ -16,6 +16,7 @@ const InfoCard = ({ title, description, delay }) => {
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check visibility on initial render
     return () => window.removeEventListener('scroll', handleScroll);
   }, [title, delay]);
 
@@ -23,15 +24,6 @@ const InfoCard = ({ title, description, delay }) => {
     <Box
       id={title}
       className="info-card"
-      sx={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out',
-        outline: `2px solid ${theme.palette.primary.main}`,
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        borderRadius: '8px',
-        overflow: 'hidden',
-      }}
     >
       <Card>
         <CardContent>

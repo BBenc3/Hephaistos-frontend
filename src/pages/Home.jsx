@@ -6,24 +6,8 @@ import InfoCard from '../components/InfoCard';
 
 const Home = ({ isMobile }) => {
   const theme = useTheme();
-  const [isVisible, setIsVisible] = useState(false);
   const infoCardRef = useRef(null);
 
-  const handleScroll = () => {
-    if (infoCardRef.current) {
-      const rect = infoCardRef.current.getBoundingClientRect();
-      if (rect.top <= window.innerHeight) {
-        setIsVisible(true);
-      }
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   return (
     <Container sx={{ mt: 4, [theme.breakpoints.down('sm')]: { mt: 2, padding: '10px' } }}>
@@ -35,21 +19,21 @@ const Home = ({ isMobile }) => {
         Funkciók
       </Typography>
       <Grid container spacing={4} sx={{ mt: 4 }} ref={infoCardRef}>
-        <Grid item xs={12} sm={4} sx={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s' }}>
+        <Grid item xs={12} sm={4}>
           <InfoCard
             title="Egyszerű és Gyors Generálás"
             description="Gyorsan és egyszerűen generálhat órarendet néhány kattintással."
             delay={0}
           />
         </Grid>
-        <Grid item xs={12} sm={4} sx={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s' }}>
+        <Grid item xs={12} sm={4}>
           <InfoCard
             title="Haladó Generálás"
             description="Haladó beállításokkal testreszabhatja az órarend generálását."
             delay={300}
           />
         </Grid>
-        <Grid item xs={12} sm={4} sx={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s' }}>
+        <Grid item xs={12} sm={4}>
           <InfoCard
             title="Egyedi Generálás"
             description="Teljesen egyedi órarendet hozhat létre saját igényei szerint."
