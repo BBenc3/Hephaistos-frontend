@@ -49,7 +49,7 @@ const UserProfile = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Typography>
-            <strong>Felhasználónév:</strong> {user.username}
+            <strong>Felhasználó név:</strong> {user.username}
           </Typography>
           <Typography>
             <strong>Email:</strong> {user.email}
