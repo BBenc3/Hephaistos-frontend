@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Grid,
+  Avatar,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
@@ -48,6 +49,11 @@ const UserProfile = () => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
+          <Avatar
+            src={user.profilePicturePath || 'https://via.placeholder.com/150'}
+            alt="Profile Picture"
+            sx={{ width: 100, height: 100, marginBottom: theme.spacing(2) }}
+          />
           <Typography>
             <strong>Felhasználó név:</strong> {user.username}
           </Typography>

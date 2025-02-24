@@ -27,7 +27,7 @@ const RegisterForm = ({ setNotification }) => {
     }
 
     try {
-      await axios.post('https://localhost:5001/register', {
+      await axios.post('https://localhost:5001/api/auth/register', {
         email,
         username,
         password,

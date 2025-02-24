@@ -12,7 +12,7 @@ const ForgotPassword = () => {
 
   const handleSendOtp = async () => {
     try {
-      // ...existing code for sending OTP...
+      await axios.post('/api/auth/generate-otp', { email });
       setStep(2);
     } catch (error) {
       console.error(error);
@@ -21,7 +21,7 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async () => {
     try {
-      // ...existing code for verifying OTP and changing password...
+      await axios.put('/api/auth/change-password-after-otp', { email, otp, newPassword });
       console.log('Password changed successfully');
     } catch (error) {
       console.error(error);

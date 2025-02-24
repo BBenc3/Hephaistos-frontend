@@ -35,10 +35,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('https://localhost:5001/auth/login', credentials, {
+      const response = await axios.post('https://localhost:5001/api/auth/login', credentials, {
         withCredentials: true, // Add this line to include cookies in the request
       });
-      const accessToken = response.data.accessToken;
+      const accessToken = response.data.token;
       localStorage.setItem('accessToken', accessToken);
 
       const userResponse = await axios.get('https://localhost:5001/api/users/me', {

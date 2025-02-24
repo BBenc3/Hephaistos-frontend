@@ -23,7 +23,7 @@ const UserProfileDropdown = () => {
     handleMenuClose();
   };
 
-  const displayAvatar = "https://via.placeholder.com/40"; // Placeholder avatar URL
+  const displayAvatar = user?.profilePicturePath || "https://via.placeholder.com/40"; // Use profile picture if available
   const displayName = user?.username || "Felhasználó név"; // Use username if available
 
   return (
@@ -46,7 +46,7 @@ const UserProfileDropdown = () => {
           },
         }}
       >
-        <Avatar src={user?.avatar || displayAvatar} alt={displayName} sx={{ width: 30, height: 30, [theme.breakpoints.down('sm')]: { width: 25, height: 25 } }} />
+        <Avatar src={displayAvatar} alt={displayName} sx={{ width: 30, height: 30, [theme.breakpoints.down('sm')]: { width: 25, height: 25 } }} />
         <Typography variant="body1" sx={{ marginLeft: "8px", [theme.breakpoints.down('sm')]: { fontSize: '0.8rem' } }}>
           {displayName}
         </Typography>

@@ -20,7 +20,7 @@ const ForgotPasswordButton = ({ navigate, failedAttempts }) => {
       sx={{
         color: theme.palette.primary.main,
         cursor: 'pointer',
-        opacity: 0.7, // Make the text translucent
+        opacity: 0.7,
         marginTop: '10px',
         textAlign: 'center',
         animation: animate ? 'flash 1s' : 'none',
