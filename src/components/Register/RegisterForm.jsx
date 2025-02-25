@@ -34,7 +34,30 @@ const RegisterForm = ({ setNotification }) => {
       });
       navigate('/Register2');
     } catch (error) {
-      setNotification({ open: true, message: 'Hiba a regisztráció során!', severity: 'error' });
+      if (error.response && error.response.data) {
+        const { message, errors } = error.response.data;
+        if (errors && Array.isArray(errors)) {
+          const passwordErrorMessages = errors.map(err => {
+            switch (err.code) {
+              case 'PasswordRequiresNonAlphanumeric':
+                return 'A jelszónak tartalmaznia kell legalább egy nem alfanumerikus karaktert.';
+              case 'PasswordRequiresDigit':
+                return 'A jelszónak tartalmaznia kell legalább egy számjegyet (0-9).';
+              case 'PasswordRequiresUpper':
+                return 'A jelszónak tartalmaznia kell legalább egy nagybetűt (A-Z).';
+              default:
+                return err.description;
+            }
+          }).join(' ');
+          setNotification({ open: true, message: `A jelszó nem megfelelő: ${passwordErrorMessages}`, severity: 'warning' });
+        } else if (message && message.includes('Email already exists')) {
+          setNotification({ open: true, message: 'Az email cím már regisztrálva van!', severity: 'warning' });
+        } else {
+          setNotification({ open: true, message: 'Hiba a regisztráció során!', severity: 'error' });
+        }
+      } else {
+        setNotification({ open: true, message: 'Ismeretlen hiba történt!', severity: 'error' });
+      }
     }
   };
 

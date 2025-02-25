@@ -35,7 +35,6 @@ const Notification = ({ open, message, severity, onClose }) => {
   };
 
   return (
-
     <Snackbar
       open={open}
       autoHideDuration={6000}
