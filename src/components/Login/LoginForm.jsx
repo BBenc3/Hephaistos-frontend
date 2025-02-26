@@ -110,7 +110,7 @@ const LoginForm = ({ setNotification }) => {
             <Typography
               component="span"
               sx={{ color: theme.palette.primary.main, fontWeight: 'bold', cursor: 'pointer' }}
-              onClick={() => navigate('/register')}
+              onClick={() => navigate ('/register')}
             >
               Regisztrálj
             </Typography>
