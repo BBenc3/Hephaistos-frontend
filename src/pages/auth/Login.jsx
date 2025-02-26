@@ -20,7 +20,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('*');
+      navigate('/profile');
     }
   }, [isLoggedIn, navigate]);
 

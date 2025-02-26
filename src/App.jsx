@@ -15,7 +15,7 @@ import Profile from './pages/UserProfile';
 import UserEdit from './pages/UserEdit';
 import UserDelete from './pages/UserDelete';
 import Login from './pages/auth/Login';
-import ErrorPage from './pages/ErrorPage';
+import ErrorPage from './components/Error/ErrorPage';
 import Register from './pages/auth/Register/Register';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import { useMediaQuery } from '@mui/material';

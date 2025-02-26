@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme, useMediaQuery, AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, MenuItem, Menu } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
@@ -12,12 +12,13 @@ import { useAuth } from "../contexts/AuthContext";
 import CustomDropdown from "./CustomDropdown";
 import DarkModeToggle from './DarkModeToggle';
 
-const NavbarButton = styled(Button)(({ theme }) => ({
+const NavbarButton = styled(Button)(({ theme, active }) => ({
   color: theme.palette.primary.main,
   textTransform: "none",
   fontSize: "16px",
   marginRight: "5px",
   fontWeight: theme.typography.fontWeightBold,
+  borderBottom: active ? `2px solid ${theme.palette.primary.main}` : "none",
   "&:hover": {
     backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
@@ -48,6 +49,7 @@ const AnimatedGear = styled(Gear)(({ theme, animateForward, animateBackward }) =
 
 export default function Navbar({ isDarkMode, setIsDarkMode }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -83,15 +85,19 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
 
   const renderNavLinks = () => (
     <>
-      <NavbarButton onClick={() => navigate("/")}>Főoldal</NavbarButton>
-      <NavbarButton onClick={() => navigate("/schedule")}>Órarend generálás</NavbarButton>
+      <NavbarButton onClick={() => navigate("/")} active={location.pathname === "/"}>
+        Főoldal
+      </NavbarButton>
+      <NavbarButton onClick={() => navigate("/schedule")} active={location.pathname === "/schedule"}>
+        Órarend generálás
+      </NavbarButton>
     </>
   );
 
   return (
     <AppBar position="static" sx={{ backgroundColor: `${theme.palette.background.default}CC` }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: theme.palette.primary.main, fontSize: "24px", fontWeight: "bold" }}>
+        <Typography variant="h6" component="div" onClick={()=> navigate("/")} sx={{ flexGrow: 1, color: theme.palette.primary.main, fontSize: "24px", fontWeight: "bold", cursor: "pointer", userSelect: "none" }}>
           Hephaistos
         </Typography>
 
