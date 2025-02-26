@@ -10,6 +10,7 @@ const colors = {
   info: "#2196f3", // info color
   success: "#4caf50", // success color
   paper: "#FFFFFF", // paper background color for light mode
+  secondaryText: "#666666", // Added secondary text color for light mode
 };
 
 const darkColors = {
@@ -24,6 +25,7 @@ const darkColors = {
   success: "#4CAF50",
   border: "#1E8E8E", // New border color for dark mode
   paper: "#424242", // paper background color for dark mode
+  secondaryText: "#BBBBBB", // Added secondary text color for dark mode
 };
 
 export { colors, darkColors };
