@@ -15,7 +15,7 @@ const Home = ({ isMobile }) => {
   };
 
   return (
-    <Container sx={{ mt: 4, [theme.breakpoints.down('sm')]: { mt: 2, padding: '10px' } }}>
+    <Container sx={{ mt: 4, [theme.breakpoints.down('sm')]: { mt: 2, padding: '10px', height:'200vh' } }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', mt: '20vh' }}>
         <HeroSection />
       </Box>
@@ -26,7 +26,7 @@ const Home = ({ isMobile }) => {
       <Grid container spacing={4} sx={{ mt: 4 }} ref={infoCardRef}>
         <Grid item xs={12} sm={4}>
           <InfoCard
-            title="Egyszerű és Gyors Generálás"
+            title="Gyors Generálás"
             description={descriptions.simple}
             delay={0}
             theme={theme}

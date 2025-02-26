@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Container, Box, Typography } from '@mui/material';
+import { Button, Container, Box, Typography, Avatar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import './ErrorPage.css'; // Import the new CSS file
@@ -22,16 +22,6 @@ const ErrorPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  React.useEffect(() => {
-    // Disable scrolling
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    return () => {
-      // Re-enable scrolling when component unmounts
-      document.body.style.overflow = 'auto';
-      document.documentElement.style.overflow = 'auto';
-    };
-  }, []);
 
   const handleGoHome = () => {
     navigate('/');
@@ -64,7 +54,7 @@ const ErrorPage = () => {
           <Typography variant="h3" className="error-code" gutterBottom>
             {errorCode}
           </Typography>
-          <img src="/Error.png" alt="Error" className="error-image" draggable="false" onDragStart={(e) => e.preventDefault()} />
+          <Box component="img" src="/Error.png" alt="Error" className="error-image" draggable="false" sx={{ width: '100%', height: '100%' }} />
         </Box>
       </Box>
     </Container>

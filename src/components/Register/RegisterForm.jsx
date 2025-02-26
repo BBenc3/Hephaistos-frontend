@@ -32,7 +32,7 @@ const RegisterForm = ({ setNotification }) => {
         username,
         password,
       });
-      navigate('/Register2');
+      navigate('/login');
     } catch (error) {
       if (error.response && error.response.data) {
         const { message, errors } = error.response.data;
