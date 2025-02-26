@@ -12,7 +12,7 @@ const ForgotPassword = () => {
 
   const handleSendOtp = async () => {
     try {
-      await axios.post('/api/auth/generate-otp', { email });
+      await axios.post('https://localhost:5001/api/auth/generate-otp', { email });
       setStep(2);
     } catch (error) {
       console.error(error);
@@ -21,7 +21,7 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async () => {
     try {
-      await axios.put('/api/auth/change-password-after-otp', { email, otp, newPassword });
+      await axios.put('https://localhost:5001/api/auth/change-password-after-otp', { email, otp, newPassword });
       console.log('Password changed successfully');
     } catch (error) {
       console.error(error);

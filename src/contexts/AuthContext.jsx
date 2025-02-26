@@ -58,8 +58,26 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' });
   };
 
+  const requestOtp = async (email) => {
+    try {
+      await axios.post('https://localhost:5001/api/auth/generate-otp', { email });
+      console.log('OTP requested successfully');
+    } catch (error) {
+      console.error('OTP request error:', error);
+    }
+  };
+
+  const verifyOtp = async (email, otp, newPassword) => {
+    try {
+      await axios.put('https://localhost:5001/api/auth/change-password-after-otp', { email, otp, newPassword });
+      console.log('Password changed successfully');
+    } catch (error) {
+      console.error('OTP verification error:', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp }}>
       {children}
     </AuthContext.Provider>
   );
