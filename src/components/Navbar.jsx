@@ -4,11 +4,13 @@ import { useTheme, useMediaQuery, AppBar, Toolbar, Typography, Button, IconButto
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 import { Gear } from 'react-bootstrap-icons';
+import { keyframes } from '@mui/system';
 
 import CustomButton from "./Button";
 import UserProfileDropdown from "./UserProfileDropdown";
 import { useAuth } from "../contexts/AuthContext";
 import CustomDropdown from "./CustomDropdown";
+import DarkModeToggle from './DarkModeToggle';
 
 const NavbarButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -21,24 +23,62 @@ const NavbarButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const rotateForward = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(45deg);
+  }
+`;
+
+const rotateBackward = keyframes`
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+`;
+
+const AnimatedGear = styled(Gear)(({ theme, animateForward, animateBackward }) => ({
+  animation: animateForward ? `${rotateForward} 0.5s linear` : animateBackward ? `${rotateBackward} 0.5s linear` : 'none',
+  transform: animateForward ? 'rotate(45deg)' : animateBackward ? 'rotate(0deg)' : 'none',
+}));
+
 export default function Navbar({ isDarkMode, setIsDarkMode }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { isLoggedIn, user } = useAuth();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [gearAnchorEl, setGearAnchorEl] = useState(null);
+  const [profileAnchorEl, setProfileAnchorEl] = useState(null);
+  const [animateForward, setAnimateForward] = useState(false);
+  const [animateBackward, setAnimateBackward] = useState(false);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleGearMenuClick = (event) => {
+    setGearAnchorEl(event.currentTarget);
+    setAnimateForward(true);
+    setAnimateBackward(false);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleGearMenuClose = () => {
+    setGearAnchorEl(null);
+    setAnimateForward(false);
+    setAnimateBackward(true);
+  };
+
+  const handleProfileMenuClick = (event) => {
+    setProfileAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setProfileAnchorEl(null);
   };
 
   const renderNavLinks = () => (
@@ -57,47 +97,39 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
 
         {isMobile ? (
           <>
-            <IconButton color="inherit" onClick={handleMenuClick} sx={{ color: theme.palette.primary.main }}>
+            <IconButton color="inherit" onClick={toggleDrawer} sx={{ color: theme.palette.primary.main }}>
               <MenuIcon />
             </IconButton>
 
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={() => { navigate("/"); handleMenuClose(); }}>Főoldal</MenuItem>
-              <MenuItem onClick={() => { navigate("/orarend-generalas"); handleMenuClose(); }}>Órarend generálás</MenuItem>
-            </Menu>
+            <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
+              <List>
+                <ListItem button onClick={() => { navigate("/"); toggleDrawer(); }}>
+                  <ListItemText primary="Főoldal" />
+                </ListItem>
+                <ListItem button onClick={() => { navigate("/schedule"); toggleDrawer(); }}>
+                  <ListItemText primary="Órarend generálás" />
+                </ListItem>
+              </List>
+            </Drawer>
           </>
         ) : (
           <div>{renderNavLinks()}</div>
         )}
 
         {isLoggedIn ? (
-          <UserProfileDropdown user={user} />
+          <UserProfileDropdown anchorEl={profileAnchorEl} onMenuClick={handleProfileMenuClick} onMenuClose={handleProfileMenuClose} user={user} />
         ) : (
           <CustomButton size="small" onClick={() => navigate("/login")}>
             Bejelentkezés
           </CustomButton>
         )}
 
-        <IconButton color="inherit" onClick={handleMenuClick} sx={{ color: theme.palette.primary.main }}>
-          <Gear />
+        <IconButton color="inherit" onClick={handleGearMenuClick} sx={{ color: theme.palette.primary.main }}>
+          <AnimatedGear animateForward={animateForward} animateBackward={animateBackward} />
         </IconButton>
-        <CustomDropdown anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-          <MenuItem onClick={() => { setIsDarkMode(!isDarkMode); handleMenuClose(); }}>
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+        <CustomDropdown anchorEl={gearAnchorEl} open={Boolean(gearAnchorEl)} onClose={handleGearMenuClose}>
+          <MenuItem>
+            <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
           </MenuItem>
         </CustomDropdown>
       </Toolbar>

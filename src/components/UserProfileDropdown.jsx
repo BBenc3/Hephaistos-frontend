@@ -1,26 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { MenuItem, Avatar, Typography, IconButton } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext"; // Ensure this path is correct
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CustomDropdown from "./CustomDropdown";
 
-const UserProfileDropdown = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const { user, logout } = useAuth();
+const UserProfileDropdown = ({ anchorEl, onMenuClick, onMenuClose, user }) => {
+  const { logout } = useAuth();
   const theme = useTheme();
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleLogoutClick = () => {
     logout();
-    handleMenuClose();
+    onMenuClose();
   };
 
   const displayAvatar = user?.profilePicturePath || "https://via.placeholder.com/40"; // Use profile picture if available
@@ -29,7 +20,7 @@ const UserProfileDropdown = () => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}> {/* Wrap with Box for layout */}
       <IconButton
-        onClick={handleMenuOpen}
+        onClick={onMenuClick}
         color="inherit"
         sx={{
           backgroundColor: theme.palette.primary.main,
@@ -52,9 +43,9 @@ const UserProfileDropdown = () => {
         </Typography>
       </IconButton>
 
-      <CustomDropdown anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        <MenuItem onClick={handleMenuClose}>Felhasználói profil</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Profilbeállítások</MenuItem>
+      <CustomDropdown anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onMenuClose}>
+        <MenuItem onClick={onMenuClose}>Felhasználói profil</MenuItem>
+        <MenuItem onClick={onMenuClose}>Profilbeállítások</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Kijelentkezés</MenuItem>
       </CustomDropdown>
     </Box>
