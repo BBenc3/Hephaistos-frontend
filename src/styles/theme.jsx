@@ -14,6 +14,7 @@ const lightTheme = {
     },
     text: {
       primary: colors.text,
+      secondary: colors.secondaryText, // Added secondary text color
     },
     error: {
       main: colors.error,
@@ -58,6 +59,15 @@ const lightTheme = {
         },
       },
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: colors.paper,
+          border: `1px solid ${colors.primary}`,
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        },
+      },
+    },
   },
 };
 
@@ -74,6 +84,7 @@ const darkTheme = {
     },
     text: {
       primary: darkColors.text,
+      secondary: darkColors.secondaryText, // Added secondary text color
     },
     error: {
       main: darkColors.error,
@@ -159,6 +170,15 @@ const darkTheme = {
           backgroundColor: darkColors.background,
           padding: '10px',
           margin: '10px 0',
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: darkColors.paper,
+          border: `1px solid ${darkColors.border}`,
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
         },
       },
     },

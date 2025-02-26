@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, Collapse } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 const HeroSection = () => {
   const [expanded, setExpanded] = useState(false);
   const theme = useTheme();
-  const isDarkMode = theme.palette.mode === 'dark';
 
   const handleToggle = () => {
     setExpanded(!expanded);
@@ -21,7 +20,7 @@ const HeroSection = () => {
         borderRadius: 2,
         boxShadow: 3,
         overflow: 'hidden',
-        transition: 'height 0.3s ease-in-out',
+        transition: 'all 0.3s ease-in-out',
         [theme.breakpoints.down('sm')]: {
           p: 2,
         },
@@ -55,16 +54,18 @@ const HeroSection = () => {
         kifejlesztése, amely segíti a diákokat az órarendjük megtervezésében,
         minimalizálva az ütközéseket és a szabadidő-kieséseket. Az alkalmazásunk abban nyújt segítséget, hogy optimalizált órarendet készítsen, figyelembe véve a követelményeket és az előfeltételeket.
       </Typography>
-      {expanded && (
+
+      {/* Collapse komponens az animációhoz */}
+      <Collapse in={expanded}>
         <Typography variant="body2" sx={{ mt: 2 }}>
           Ez az alkalmazás nemcsak azoknak a diákoknak nyújt megoldást, akik késésben vannak
           a tanulmányaikkal, hanem azoknak is, akik előre szeretnék látni a lehetséges
-          órarendjeiket. Célunk egy olyan eszköz létrehozása, amely megkönnyíti a hallgatók
           életét, csökkenti a stresszt és növeli a tanulmányi hatékonyságot. Az alkalmazás
           értesítéseket és emlékeztetőket küld a felhasználóknak a közelgő óráikról és fontos
           határidőkről.
         </Typography>
-      )}
+      </Collapse>
+
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <Button variant="contained" onClick={handleToggle}>
           {expanded ? 'Bezárás' : 'Rólunk'}
