@@ -85,10 +85,10 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
 
   const renderNavLinks = () => (
     <>
-      <NavbarButton onClick={() => navigate("/")} active={location.pathname === "/"}>
+      <NavbarButton onClick={() => navigate("/")} active={location.pathname === "/" ? true : undefined}>
         Főoldal
       </NavbarButton>
-      <NavbarButton onClick={() => navigate("/schedule")} active={location.pathname === "/schedule"}>
+      <NavbarButton onClick={() => navigate("/schedule")} active={location.pathname === "/schedule" ? true : undefined}>
         Órarend generálás
       </NavbarButton>
     </>
@@ -131,7 +131,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
         )}
 
         <IconButton color="inherit" onClick={handleGearMenuClick} sx={{ color: theme.palette.primary.main }}>
-          <AnimatedGear animateForward={animateForward} animateBackward={animateBackward} />
+          <AnimatedGear />
         </IconButton>
         <CustomDropdown anchorEl={gearAnchorEl} open={Boolean(gearAnchorEl)} onClose={handleGearMenuClose}>
           <MenuItem>

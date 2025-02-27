@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { colors, darkColors } from './styles/colors';
 import { useDarkMode } from './hooks/useDarkMode';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
@@ -21,7 +21,18 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import { useMediaQuery } from '@mui/material';
 
 function App() {
+  // Wrap the inner app in AuthProvider
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
+
+// Child component that uses useAuth
+function AppContent() {
   const [isDarkMode, setIsDarkMode] = useDarkMode();
+  const { refreshTokens } = useAuth();
   const theme = createTheme({
     palette: {
       primary: { main: isDarkMode ? darkColors.primary : colors.primary },
@@ -39,28 +50,30 @@ function App() {
 
   useEffect(() => {
     document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
-  }, [isDarkMode]);
+    const savedRefreshToken = localStorage.getItem('refreshToken');
+    if (savedRefreshToken) {
+      refreshTokens();
+    }
+  }, [isDarkMode, refreshTokens]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <Router>
-          <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} isMobile={isMobile} />
-          <Routes>
-            <Route path="/" element={<Home isMobile={isMobile} />} />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
-            <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
-            <Route path="/edit" element={<ProtectedRoute element={<UserEdit />} />} />
-            <Route path="/about" element={<About />} /> {/* Add this line */}
-            <Route path="*" element={<ErrorPage />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-          </Routes>
-        </Router>
-      </AuthProvider>
+      <Router>
+        <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} isMobile={isMobile} />
+        <Routes>
+          <Route path="/" element={<Home isMobile={isMobile} />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
+          <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
+          <Route path="/edit" element={<ProtectedRoute element={<UserEdit />} />} />
+          <Route path="/about" element={<About />} /> {/* Add this line */}
+          <Route path="*" element={<ErrorPage />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }

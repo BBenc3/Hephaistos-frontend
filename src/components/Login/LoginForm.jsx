@@ -27,7 +27,13 @@ const LoginForm = ({ setNotification }) => {
       await login({ email, password, stayLoggedIn }); // Pass credentials to login function
       navigate('/profile');
     } catch (error) {
-      setNotification({ open: true, message: 'Hibás email vagy jelszó!', severity: 'error' });
+      let errorMsg = 'Hibás email vagy jelszó!';
+
+      if (error?.response?.data) {
+        errorMsg = error.response.data;
+      }
+
+      setNotification({ open: true, message: errorMsg, severity: 'error' });
       setFailedAttempts(failedAttempts + 1);
     } finally {
       setLoading(false);

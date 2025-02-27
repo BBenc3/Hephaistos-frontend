@@ -17,8 +17,8 @@ const InfoCard = ({ title, description, sx }) => {
     overflow: "hidden",
     height: "auto",
     ...sx,
-    borderRadius: 2, // Garantáltan nincs rés
-    padding: 0, // Eltünteti az esetleges extra helyet
+    borderRadius: 1,
+    padding: 0, // Nem lesz extra rés
   }}
 >
   <Card
@@ -27,12 +27,13 @@ const InfoCard = ({ title, description, sx }) => {
       height: "100%",
       display: "flex",
       flexDirection: "column",
-      borderRadius: 0, // Eltávolítja a sarkokat
-      margin: 0, // Megszünteti a pici rést
-      padding: 0, // Eltávolít minden belső paddinget
-      boxShadow: "none", // Árnyékok okozhatnak vizuális eltérést
+      borderRadius: 0, // A Paper kezeli a borderRadius-t!
+      margin: 0,
+      padding: 0,
+      boxShadow: "none",
     }}
   >
+    {/* HEADER - Teljesen egybeolvad */}
     <Box
       sx={{
         backgroundColor: theme.palette.primary.main,
@@ -42,14 +43,16 @@ const InfoCard = ({ title, description, sx }) => {
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
-        margin: 0, // Ne legyen különálló
-        borderRadius: 0, // Eltávolít minden esetleges sarkosítást
+        height: "auto",
+        borderRadius: 0, // Nincs külön kerekítés
       }}
     >
       <Typography id={`${title}-heading`} variant="h5" component="div">
         {title}
       </Typography>
     </Box>
+
+    {/* TARTALOM */}
     <CardContent
       sx={{
         flexGrow: 1,
@@ -63,6 +66,8 @@ const InfoCard = ({ title, description, sx }) => {
         {description}
       </Typography>
     </CardContent>
+
+    {/* GOMBOK */}
     <CardActions
       sx={{
         display: "flex",

@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await axios.post('https://localhost:5001/api/auth/login', credentials, {
-        withCredentials: true, // Add this line to include cookies in the request
+        withCredentials: true,
       });
       const accessToken = response.data.token;
       localStorage.setItem('accessToken', accessToken);
