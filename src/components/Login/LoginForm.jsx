@@ -12,6 +12,7 @@ const LoginForm = ({ setNotification }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
   const theme = useTheme();
@@ -23,7 +24,7 @@ const LoginForm = ({ setNotification }) => {
     }
     setLoading(true);
     try {
-      await login({ email, password }); // Pass credentials to login function
+      await login({ email, password, stayLoggedIn }); // Pass credentials to login function
       navigate('/profile');
     } catch (error) {
       setNotification({ open: true, message: 'Hibás email vagy jelszó!', severity: 'error' });
@@ -78,7 +79,17 @@ const LoginForm = ({ setNotification }) => {
             },
           }}
         />
-          <ForgotPasswordButton navigate={navigate} failedAttempts={failedAttempts} />
+        <Box>
+          <label>
+            <input
+              type="checkbox"
+              checked={stayLoggedIn}
+              onChange={(e) => setStayLoggedIn(e.target.checked)}
+            />
+            Maradjak bejelentkezve
+          </label>
+        </Box>
+        <ForgotPasswordButton navigate={navigate} failedAttempts={failedAttempts} />
         <Button
           variant="contained"
           sx={{

@@ -41,6 +41,11 @@ export const AuthProvider = ({ children }) => {
       const accessToken = response.data.token;
       localStorage.setItem('accessToken', accessToken);
 
+      const refreshToken = response.data.refreshToken;
+      if (credentials.stayLoggedIn && refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+
       const userResponse = await axios.get('https://localhost:5001/api/users/me', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });

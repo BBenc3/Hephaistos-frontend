@@ -16,7 +16,8 @@ const InfoCard = ({ title, description, sx }) => {
         borderStyle: "solid",
         overflow: "hidden",
         height: 'auto', // Ensure the height adjusts to content
-        ...sx // Allow custom styles from props
+        ...sx, // Allow custom styles from props
+        borderRadius: theme.spacing(1.5),
       }}
     >
       <Card sx={{ backgroundColor: "inherit", height: '100%', display: 'flex', flexDirection: 'column' }}>
