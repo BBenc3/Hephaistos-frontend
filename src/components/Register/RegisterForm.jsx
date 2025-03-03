@@ -61,6 +61,12 @@ const RegisterForm = ({ setNotification }) => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleNextStep();
+    }
+  };
+
   return (
     <>
     <Box
@@ -99,6 +105,7 @@ const RegisterForm = ({ setNotification }) => {
           confirmPassword={confirmPassword}
           setConfirmPassword={setConfirmPassword}
           errorMessage={errorMessage}
+          onKeyPress={handleKeyPress} // Add this line
         />
         <Button
           variant="contained"

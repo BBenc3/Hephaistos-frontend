@@ -10,6 +10,7 @@ const LoginFormFields = ({
   setPassword,
   errorMessage,
   navigate, // Add navigate as a prop
+  onKeyPress, // Add onKeyPress as a prop
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
@@ -23,6 +24,7 @@ const LoginFormFields = ({
         margin="normal"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onKeyPress={onKeyPress} // Add this line
         color="primary"
         sx={{
           backgroundColor: theme.palette.mode === 'dark' && !email ? 'white' : 'inherit',
@@ -50,6 +52,7 @@ const LoginFormFields = ({
         type={showPassword ? 'text' : 'password'}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        onKeyPress={onKeyPress} // Add this line
         color="primary"
         sx={{
           backgroundColor: theme.palette.mode === 'dark' && !password ? 'white' : 'inherit',

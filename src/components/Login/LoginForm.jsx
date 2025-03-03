@@ -40,6 +40,12 @@ const LoginForm = ({ setNotification }) => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleLoginSubmit();
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -63,6 +69,7 @@ const LoginForm = ({ setNotification }) => {
           setPassword={setPassword}
           errorMessage={errorMessage}
           navigate={navigate}
+          onKeyPress={handleKeyPress} // Add this line
           sx={{
             '& .MuiInputBase-root': {
               backgroundColor: theme.palette.background.paper,
