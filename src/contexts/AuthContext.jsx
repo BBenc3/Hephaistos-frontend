@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -32,6 +32,24 @@ const authReducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!accessToken && !refreshToken) {
+      dispatch({ type: 'LOGOUT' });
+    } else {
+      axios.get('https://localhost:5001/api/users/me', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+        .then((res) => {
+          dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
+        })
+        .catch(() => {
+          dispatch({ type: 'LOGOUT' });
+        });
+    }
+  }, []);
 
   const login = async (credentials) => {
     try {
