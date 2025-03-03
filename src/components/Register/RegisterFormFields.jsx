@@ -29,7 +29,7 @@ const RegisterFormFields = ({
     <>
       <Box sx={{ display: 'flex', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
         <TextField
-          label="Teljes név"
+          label="Felhasználó név"
           variant="outlined"
           fullWidth
           value={username}
