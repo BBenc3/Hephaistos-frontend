@@ -4,10 +4,12 @@ import { useAuth } from "../contexts/AuthContext"; // Ensure this path is correc
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CustomDropdown from "./CustomDropdown";
+import { useNavigate } from 'react-router-dom';
 
 const UserProfileDropdown = ({ anchorEl, onMenuClick, onMenuClose, user }) => {
   const { logout } = useAuth();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const handleLogoutClick = () => {
     logout();
@@ -44,8 +46,7 @@ const UserProfileDropdown = ({ anchorEl, onMenuClick, onMenuClose, user }) => {
       </IconButton>
 
       <CustomDropdown anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onMenuClose}>
-        <MenuItem onClick={onMenuClose}>Felhasználói profil</MenuItem>
-        <MenuItem onClick={onMenuClose}>Profilbeállítások</MenuItem>
+        <MenuItem onClick={() => { navigate('/profile'); onMenuClose(); }}>Felhasználói profil</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Kijelentkezés</MenuItem>
       </CustomDropdown>
     </Box>
