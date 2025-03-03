@@ -44,7 +44,6 @@ const LoginForm = ({ setNotification }) => {
     <Box
       sx={{
         backgroundColor: theme.palette.background.default,
-        width: '40%', // Updated width
         borderRadius: '12px',
         boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
         textAlign: 'center',
