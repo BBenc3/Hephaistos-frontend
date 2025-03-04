@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '@mui/material/styles';
@@ -16,6 +16,7 @@ const LoginForm = ({ setNotification }) => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLoginSubmit = async () => {
     if (!email || !password) {
@@ -50,14 +51,15 @@ const LoginForm = ({ setNotification }) => {
     <Box
       sx={{
         backgroundColor: theme.palette.background.default,
-        borderRadius: '12px',
-        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
+        borderRadius: isMobile ? 'none' : '12px',
+        boxShadow: isMobile ? 'none' : '0px 4px 20px rgba(0, 0, 0, 0.3)',
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
+        mt: isMobile ? 0 : 2,
       }}
     >
-      <Box sx={{ flexGrow: 1, padding: '3%' }}>
+      <Box sx={{padding: isMobile? 0 : '3%'}}>
         <img src='/logo.png' alt="Logo" style={{ width: '100px', marginBottom: '10px' }} />
         <Typography variant="h4" gutterBottom>
           Bejelentkezés
@@ -124,7 +126,7 @@ const LoginForm = ({ setNotification }) => {
             padding: 2,
             borderRadius: '8px',
             textAlign: 'center',
-            boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
+            boxShadow: isMobile ? 'none' : '0px -3px 10px rgba(0, 0, 0, 0.2)',
             marginTop: 2,
           }}
         >
@@ -133,7 +135,7 @@ const LoginForm = ({ setNotification }) => {
             <Typography
               component="span"
               sx={{ color: theme.palette.primary.main, fontWeight: 'bold', cursor: 'pointer' }}
-              onClick={() => navigate ('/register')}
+              onClick={() => navigate('/register')}
             >
               Regisztrálj
             </Typography>

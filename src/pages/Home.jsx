@@ -15,11 +15,11 @@ const Home = ({ isMobile }) => {
   };
 
   return (
-    <Container sx={{ mt: 4, [theme.breakpoints.down('sm')]: { mt: 2, padding: '10px', height:'200vh' } }}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', mt: '20vh' }}>
+    <Container sx={{ mt: 15 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
         <HeroSection />
       </Box>
-      <Box sx={{ height: '30vh' }} /> {/* Add more padding here */}
+      <Box sx={{ mt: 20 }} /> {/* Add more padding here */}
       <Typography variant="h4" component="h2" sx={{ textAlign: 'center', mb: 4 }}>
         Funkciók
       </Typography>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
@@ -12,6 +12,7 @@ const Login = () => {
   const { isLoggedIn, login, error } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'warning' });
 
   const handleNotificationClose = () => {
@@ -23,7 +24,6 @@ const Login = () => {
       navigate('/profile');
     }
   }, [isLoggedIn, navigate]);
-
 
   useEffect(() => {
     if (error) {
@@ -72,10 +72,7 @@ const Login = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 2,
-        [theme.breakpoints.down('sm')]: {
-          padding: '10px',
-        },
+        justifyContent: 'center',
       }}
     >
       <LoginForm handleLogin={login} setNotification={setNotification} />

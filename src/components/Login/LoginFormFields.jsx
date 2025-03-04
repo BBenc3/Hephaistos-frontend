@@ -26,23 +26,7 @@ const LoginFormFields = ({
         onChange={(e) => setEmail(e.target.value)}
         onKeyPress={onKeyPress} // Add this line
         color="primary"
-        sx={{
-          backgroundColor: theme.palette.mode === 'dark' && !email ? 'white' : 'inherit',
-          '& .MuiInputBase-input': {
-            color: theme.palette.mode === 'dark' && !email ? 'white' : 'inherit',
-          },
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
-            },
-            '&:hover fieldset': {
-              borderColor: theme.palette.primary.main,
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: theme.palette.primary.main,
-            },
-          },
-        }}
+
       />
       <TextField
         label="Jelszó"
@@ -54,23 +38,7 @@ const LoginFormFields = ({
         onChange={(e) => setPassword(e.target.value)}
         onKeyPress={onKeyPress} // Add this line
         color="primary"
-        sx={{
-          backgroundColor: theme.palette.mode === 'dark' && !password ? 'white' : 'inherit',
-          '& .MuiInputBase-input': {
-            color: theme.palette.mode === 'dark' && !password ? 'white' : 'inherit',
-          },
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
-            },
-            '&:hover fieldset': {
-              borderColor: theme.palette.primary.main,
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: theme.palette.primary.main,
-            },
-          },
-        }}
+
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

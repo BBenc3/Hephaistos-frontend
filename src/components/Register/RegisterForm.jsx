@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import RegisterFormFields from './RegisterFormFields';
-import RegisterStepper from './RegisterStepper';
+import { InstallMobile } from '@mui/icons-material';
 
 const RegisterForm = ({ setNotification }) => {
   const [email, setEmail] = useState('');
@@ -14,6 +14,7 @@ const RegisterForm = ({ setNotification }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleNextStep = async () => {
     if (!email || !username || !password || !confirmPassword) {
@@ -69,74 +70,69 @@ const RegisterForm = ({ setNotification }) => {
 
   return (
     <>
-    <Box
-      sx={
-        {
+      <Box
+        sx={{
           backgroundColor: theme.palette.background.default,
           width: '100%',
           borderRadius: '12px',
-          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
+          boxShadow: isMobile ? null : '0px 4px 20px rgba(0, 0, 0, 0.3)',
           textAlign: 'center',
           display: 'flex',
-          flexDirection: 'column',
-        }
-      }
-    >
-
-      <Box
-        sx={{
-
-          padding: '3%',
-          [theme.breakpoints.down('sm')]: {
-            width: '90%',
-            padding: '5%',
-          },
+          flexDirection: 'column'
         }}
       >
-        <img src="/logo.png" alt="Logo" style={{ width: 120, height: 120, margin: '0 auto 16px' }} />
-        <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Adatok megadása</Typography>
-        <RegisterFormFields
-          email={email}
-          setEmail={setEmail}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-          confirmPassword={confirmPassword}
-          setConfirmPassword={setConfirmPassword}
-          errorMessage={errorMessage}
-          onKeyPress={handleKeyPress} // Add this line
-        />
-        <Button
-          variant="contained"
-          fullWidth
-          sx={{ mt: 2, backgroundColor: theme.palette.primary.main, marginTop: 5, width: '40%', margin: '3% auto', '&:hover': { backgroundColor: theme.palette.primary.dark }, borderRadius: 2 }}
-          onClick={handleNextStep}
+        <Box
+          sx={{
+            padding: '3%',
+            [theme.breakpoints.down('sm')]: {
+              width: '100%',
+              padding: '5%',
+            },
+          }}
         >
-          Tovább
-        </Button>
-        <RegisterStepper activeStep={1}/>
-      </Box>
-<Box
-        sx={{
-          backgroundColor: 'secondary.main',
-          padding: 2,
-          borderRadius: '8px',
-          textAlign: 'center',
-          boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
-        }}
-      >
-        <Typography variant="body2">
-          Már van fiókod?{' '}
-          <Typography
-            component="span"
-            sx={{ color: 'primary.main', fontWeight: 'bold', cursor: 'pointer' }}
-            onClick={() => navigate('/login')}
+          <img src="/logo.png" alt="Logo" style={{ width: '120px', height: '120px', margin: '0 auto 16px' }} />
+          <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Adatok megadása</Typography>
+          <RegisterFormFields
+            email={email}
+            setEmail={setEmail}
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
+            errorMessage={errorMessage}
+            onKeyPress={handleKeyPress} // Add this line
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2, backgroundColor: theme.palette.primary.main, marginTop: 5, width: '40%', margin: '3% auto', '&:hover': { backgroundColor: theme.palette.primary.dark }, borderRadius: 2 }}
+            onClick={handleNextStep}
           >
-            Jelentkezz be!
+            Tovább
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: 'secondary.main',
+            padding: 2,
+            borderRadius: '8px',
+            textAlign: 'center',
+            boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
+          }}
+        >
+          <Typography variant="body2">
+            Már van fiókod?{' '}
+            <Typography
+              component="span"
+              sx={{ color: 'primary.main', fontWeight: 'bold', cursor: 'pointer' }}
+              onClick={() => navigate('/login')}
+            >
+              Jelentkezz be!
+            </Typography>
           </Typography>
-        </Typography>
-      </Box>
+        </Box>
       </Box>
     </>
   );

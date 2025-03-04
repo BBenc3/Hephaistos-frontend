@@ -68,6 +68,13 @@ const lightTheme = {
         },
       },
     },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: colors.background,
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         body: {
@@ -201,6 +208,7 @@ const darkTheme = {
     MuiDrawer: {
       styleOverrides: {
         paper: {
+          backgroundColor: darkColors.background,
           '@media (max-width:599.95px)': {
             display: 'flex',
             flexDirection: 'column',

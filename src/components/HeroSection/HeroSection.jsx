@@ -57,7 +57,7 @@ const HeroSection = () => {
 
       {/* Collapse komponens az animációhoz */}
       <Collapse in={expanded}>
-        <Typography variant="body2" sx={{ mt: 2 }}>
+        <Typography variant="body1" sx={{ mt: 2 }}>
           Ez az alkalmazás nemcsak azoknak a diákoknak nyújt megoldást, akik késésben vannak
           a tanulmányaikkal, hanem azoknak is, akik előre szeretnék látni a lehetséges
           életét, csökkenti a stresszt és növeli a tanulmányi hatékonyságot. Az alkalmazás

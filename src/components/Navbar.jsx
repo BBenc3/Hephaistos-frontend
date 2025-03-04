@@ -97,7 +97,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
   return (
     <AppBar position="static" sx={{ backgroundColor: `${theme.palette.background.default}CC` }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6" component="div" onClick={()=> navigate("/")} sx={{ flexGrow: 1, color: theme.palette.primary.main, fontSize: "24px", fontWeight: "bold", cursor: "pointer", userSelect: "none" }}>
+        <Typography variant="h6" component="div" onClick={() => navigate("/")} sx={{ flexGrow: 1, color: theme.palette.primary.main, fontSize: "24px", fontWeight: "bold", cursor: "pointer", userSelect: "none" }}>
           Hephaistos
         </Typography>
 
@@ -107,7 +107,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
               <MenuIcon />
             </IconButton>
 
-            <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
+            <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer} PaperProps={{ sx: { backgroundColor: theme.palette.background.default, color: theme.palette.text.primary } }}>
               <List>
                 <ListItem button onClick={() => { navigate("/"); toggleDrawer(); }}>
                   <ListItemText primary="Főoldal" />
@@ -115,6 +115,11 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
                 <ListItem button onClick={() => { navigate("/schedule"); toggleDrawer(); }}>
                   <ListItemText primary="Órarend generálás" />
                 </ListItem>
+                {!isLoggedIn && (
+                  <ListItem button onClick={() => { navigate("/login"); toggleDrawer(); }}>
+                    <ListItemText primary="Bejelentkezés" />
+                  </ListItem>
+                )}
               </List>
             </Drawer>
           </>
@@ -125,9 +130,11 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
         {isLoggedIn ? (
           <UserProfileDropdown anchorEl={profileAnchorEl} onMenuClick={handleProfileMenuClick} onMenuClose={handleProfileMenuClose} user={user} />
         ) : (
-          <CustomButton size="small" onClick={() => navigate("/login")}>
-            Bejelentkezés
-          </CustomButton>
+          !isMobile && (
+            <CustomButton size="small" onClick={() => navigate("/login")}>
+              Bejelentkezés
+            </CustomButton>
+          )
         )}
 
         <IconButton color="inherit" onClick={handleGearMenuClick} sx={{ color: theme.palette.primary.main }}>

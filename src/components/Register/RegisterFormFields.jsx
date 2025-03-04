@@ -63,26 +63,7 @@ const RegisterFormFields = ({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           color="primary"
-          sx={{
-            backgroundColor: theme.palette.mode === 'dark' && !email ? darkColors.background : 'inherit',
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
-              },
-              '&:hover fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-            },
-            '& .MuiInputBase-input': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-            '& .MuiInputLabel-root': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-          }}
+
         />
       </Box>
       <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
@@ -164,9 +145,8 @@ const RegisterFormFields = ({
         />
       </Box>
       {errorMessage && <Typography color="error" sx={{ mt: 2 }}>{errorMessage}</Typography>}
-
     </>
   );
 };
 
-export default RegisterFormFields
+export default RegisterFormFields;

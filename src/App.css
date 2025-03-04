@@ -90,6 +90,10 @@ img {
   #navbar .login-button {
     display: none;
   }
+  .MuiDrawer-paper {
+    background-color: var(--background-color); /* Adapt drawer background color */
+    color: var(--text-color); /* Adapt drawer text color */
+  }
   .side-drawer .login-button {
     display: block; /* Show the login button in side drawer for mobile */
     background-color: var(--primary-color);
