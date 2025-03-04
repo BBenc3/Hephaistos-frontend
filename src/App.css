@@ -62,9 +62,37 @@ html, body, #root {
     overflow-x: hidden; /* Disable horizontal scrolling */
 }
 
+html, body {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
 /* InfoCard styles */
 .info-card {
     background-color: var(--background-color);
     border: 1px solid var(--primary-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#navbar .login-button {
+  /* ...existing code... */
+}
+
+@media (max-width: 599px) {
+  #navbar .login-button {
+    display: none;
+  }
+  .side-drawer .login-button {
+    display: block; /* Show the login button in side drawer for mobile */
+    background-color: var(--primary-color);
+    /* ...any other custom styles... */
+  }
 }

@@ -68,6 +68,21 @@ const lightTheme = {
         },
       },
     },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          WebkitTouchCallout: 'none',
+          MozUserSelect: 'none',
+          MsUserSelect: 'none'
+        },
+        'img': {
+          WebkitUserDrag: 'none',
+          userDrag: 'none'
+        }
+      }
+    }
   },
 };
 
@@ -148,6 +163,7 @@ const darkTheme = {
           },
           '@media (maxWidth:599.95px)': {
             width: '100%',
+            display: 'none', // Hide default login button in navbar on mobile
           },
           marginTop: '20px',
         },
@@ -182,6 +198,32 @@ const darkTheme = {
         },
       },
     },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          '@media (max-width:599.95px)': {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+          },
+        },
+      },
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          WebkitTouchCallout: 'none',
+          MozUserSelect: 'none',
+          MsUserSelect: 'none'
+        },
+        'img': {
+          WebkitUserDrag: 'none',
+          userDrag: 'none'
+        }
+      }
+    }
   },
 };
 

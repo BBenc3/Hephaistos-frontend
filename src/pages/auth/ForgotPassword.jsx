@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Button from '../../components/Button';
 import { useTheme } from '@mui/material/styles';
+import { Box, Typography, TextField } from "@mui/material";
 
 const ForgotPassword = () => {
   const theme = useTheme();
@@ -29,36 +30,71 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div style={{ padding: '20px', [theme.breakpoints.down('sm')]: { padding: '10px' } }}>
-      {step === 1 && (
-        <>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email címed"
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          borderRadius: "12px",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)",
+          [theme.breakpoints.down('sm')]: { padding: '10px' }
+        }}
+      >
+        <Box sx={{ flexGrow: 1, padding: "3%", textAlign: "center" }}>
+          <img
+            src="/logo.png"
+            alt="Logo"
+            style={{ width: "100px", marginBottom: "10px" }}
           />
-          <Button onClick={handleSendOtp}>OTP kérése</Button>
-        </>
-      )}
-      {step === 2 && (
-        <>
-          <input
-            type="text"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            placeholder="OTP"
-          />
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Új jelszó"
-          />
-          <Button onClick={handleResetPassword}>Jelszó módosítása</Button>
-        </>
-      )}
-    </div>
+          <Typography variant="h4" gutterBottom>
+            Elfelejtett jelszó
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            add meg az emailcímed
+          </Typography>
+          {step === 1 && (
+            <>
+              <TextField
+                fullWidth
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email címed"
+                sx={{ marginBottom: "16px" }}
+              />
+              <Button onClick={handleSendOtp}>Jelszó helyreállítása</Button>
+            </>
+          )}
+          {step === 2 && (
+            <>
+              <TextField
+                fullWidth
+                label="Jelszó helyreállítása"
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                sx={{ marginBottom: "16px" }}
+              />
+              <TextField
+                fullWidth
+                label="Új jelszó"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                sx={{ marginBottom: "16px" }}
+              />
+              <Button onClick={handleResetPassword}>Jelszó módosítása</Button>
+            </>
+          )}
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
