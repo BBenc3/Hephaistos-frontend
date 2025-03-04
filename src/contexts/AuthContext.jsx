@@ -53,9 +53,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('https://localhost:5001/api/auth/login', credentials, {
-        withCredentials: true,
-      });
+      const response = await axios.post('https://localhost:5001/api/auth/login');
       const accessToken = response.data.token;
       localStorage.setItem('accessToken', accessToken);
 
@@ -108,7 +106,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('https://localhost:5001/api/auth/refresh-token', null, {
         headers: { refreshToken },
-        withCredentials: true,
       });
       const accessToken = response.data.token;
       localStorage.setItem('accessToken', accessToken);
