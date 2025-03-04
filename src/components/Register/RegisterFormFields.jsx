@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import { TextField, Box, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-
-const darkColors = {
-  background: '#333',
-  text: '#fff',
-};
 
 const RegisterFormFields = ({
   email,
@@ -23,129 +17,102 @@ const RegisterFormFields = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const theme = useTheme();
-  const navigate = useNavigate();
+
+  const inputStyles = {
+    width: { xs: '100%', md: '48%' },
+    marginBottom: 2,
+  };
 
   return (
-    <>
-      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
-        <TextField
-          label="Felhasználó név"
-          variant="outlined"
-          fullWidth
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          color="primary"
-          sx={{
-            backgroundColor: theme.palette.mode === 'dark' && !username ? darkColors.background : 'inherit',
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
-              },
-              '&:hover fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-            },
-            '& .MuiInputBase-input': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-            '& .MuiInputLabel-root': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-          }}
-        />
-        <TextField
-          label="E-mail"
-          variant="outlined"
-          fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          color="primary"
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        [theme.breakpoints.up('md')]: {
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+        },
+      }}
+    >
+      <TextField
+        label="Felhasználónév"
+        variant="outlined"
+        fullWidth
+        required
+        autoComplete="off"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        sx={inputStyles}
+      />
 
-        />
-      </Box>
-      <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
-        <TextField
-          label="Jelszó"
-          variant="outlined"
-          fullWidth
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          color="primary"
-          sx={{
-            backgroundColor: theme.palette.mode === 'dark' && !password ? darkColors.background : 'inherit',
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
-              },
-              '&:hover fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-            },
-            '& .MuiInputBase-input': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-            '& .MuiInputLabel-root': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <TextField
-          label="Jelszó ismét"
-          variant="outlined"
-          fullWidth
-          type={showConfirmPassword ? 'text' : 'password'}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          color="primary"
-          sx={{
-            backgroundColor: theme.palette.mode === 'dark' && !confirmPassword ? darkColors.background : 'inherit',
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: theme.palette.mode === 'dark' ? 'white' : 'black',
-              },
-              '&:hover fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: theme.palette.primary.main,
-              },
-            },
-            '& .MuiInputBase-input': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-            '& .MuiInputLabel-root': {
-              color: theme.palette.mode === 'dark' ? darkColors.text : 'inherit',
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
-      {errorMessage && <Typography color="error" sx={{ mt: 2 }}>{errorMessage}</Typography>}
-    </>
+      <TextField
+        label="E-mail"
+        type="email"
+        variant="outlined"
+        fullWidth
+        required
+        autoComplete="off"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        sx={inputStyles}
+      />
+
+      <TextField
+        label="Jelszó"
+        variant="outlined"
+        fullWidth
+        required
+        type={showPassword ? 'text' : 'password'}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        autoComplete="new-password"
+        sx={inputStyles}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label="Jelszó megjelenítése/elrejtése"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      <TextField
+        label="Jelszó ismét"
+        variant="outlined"
+        fullWidth
+        required
+        type={showConfirmPassword ? 'text' : 'password'}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        autoComplete="new-password"
+        sx={inputStyles}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label="Jelszó ismét megjelenítése/elrejtése"
+              >
+                {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      {errorMessage && (
+        <Typography color="error" sx={{ width: '100%', mt: 1 }}>
+          {errorMessage}
+        </Typography>
+      )}
+    </Box>
   );
 };
 

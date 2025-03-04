@@ -39,6 +39,7 @@ const Login = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          minHeight: '100%', // vh helyett
           padding: 2,
         }}
       >
@@ -52,11 +53,16 @@ const Login = () => {
             Már be vagy jelentkezve!
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Már be vagy jelentkezve, ha vissza szeretnél térni a főoldalra, kattints az alábbi gombra.
+            Ha vissza szeretnél térni a főoldalra, kattints az alábbi gombra.
           </Typography>
           <Button
             variant="contained"
-            sx={{ backgroundColor: blue[500], color: '#fff', '&:hover': { backgroundColor: blue[700] } }}
+            sx={{
+              backgroundColor: blue[500],
+              color: '#fff',
+              '&:hover': { backgroundColor: blue[700] },
+              mt: 2,
+            }}
             onClick={() => navigate('/')}
           >
             Vissza a főoldalra
@@ -72,10 +78,15 @@ const Login = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        mt: 2
       }}
     >
-      <LoginForm handleLogin={login} setNotification={setNotification} />
+      <Box sx={{ flexGrow: 1 }}>
+        <LoginForm handleLogin={login} setNotification={setNotification} />
+      </Box>
+
+      {/* Alsó értesítés/gombok mobilos nézethez */}
       <Notification
         open={notification.open}
         message={notification.message}

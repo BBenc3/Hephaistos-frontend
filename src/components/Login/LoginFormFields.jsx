@@ -9,8 +9,8 @@ const LoginFormFields = ({
   password,
   setPassword,
   errorMessage,
-  navigate, // Add navigate as a prop
-  onKeyPress, // Add onKeyPress as a prop
+  navigate,
+  onKeyDown,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
@@ -24,9 +24,9 @@ const LoginFormFields = ({
         margin="normal"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        onKeyPress={onKeyPress} // Add this line
+        onKeyDown={onKeyDown}
+        required
         color="primary"
-
       />
       <TextField
         label="Jelszó"
@@ -36,9 +36,9 @@ const LoginFormFields = ({
         type={showPassword ? 'text' : 'password'}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        onKeyPress={onKeyPress} // Add this line
+        onKeyDown={onKeyDown}
         color="primary"
-
+        required
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -50,7 +50,7 @@ const LoginFormFields = ({
         }}
       />
       {errorMessage && (
-        <Typography color="error" sx={{ marginTop: 2 }}>
+        <Typography color="error" sx={{ mt: 2 }}>
           {errorMessage}
         </Typography>
       )}

@@ -14,39 +14,25 @@ const Register = () => {
     setNotification({ ...notification, open: false });
   };
 
-
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 2,
-        width: '100%',
-        [theme.breakpoints.down('sm')]: {
-          padding: '10px',
-        },
+        justifyContent: 'space-between',
+        mt: 2,
       }}
     >
-      <Box
-        sx={{
-          width: '100%',
-          maxWidth: '60%',
-          [theme.breakpoints.down('sm')]: {
-            maxWidth: '100%',
-          },
-        }}
-      >
+      <Box sx={{ flexGrow: 1, width: '100%', [theme.breakpoints.up('md')]: { width: '50%' } }}>
         <RegisterForm setNotification={setNotification} />
-
-        <Notification
-          open={notification.open}
-          message={notification.message}
-          severity={notification.severity}
-          onClose={handleNotificationClose}
-        />
       </Box>
+      <Notification
+        open={notification.open}
+        message={notification.message}
+        severity={notification.severity}
+        onClose={handleNotificationClose}
+      />
     </Box>
   );
 };
