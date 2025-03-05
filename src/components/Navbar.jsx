@@ -5,7 +5,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 import { Gear } from 'react-bootstrap-icons';
 import { keyframes } from '@mui/system';
-
 import CustomButton from "./Button";
 import UserProfileDropdown from "./UserProfileDropdown";
 import { useAuth } from "../contexts/AuthContext";
@@ -42,7 +41,7 @@ const rotateBackward = keyframes`
   }
 `;
 
-const AnimatedGear = styled(Gear)(({ theme, animateForward, animateBackward }) => ({
+const AnimatedGear = styled(Gear)(({ animateForward, animateBackward }) => ({
   animation: animateForward ? `${rotateForward} 0.5s linear` : animateBackward ? `${rotateBackward} 0.5s linear` : 'none',
   transform: animateForward ? 'rotate(45deg)' : animateBackward ? 'rotate(0deg)' : 'none',
 }));
