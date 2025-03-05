@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
+//hozzá kell adni egy függvényt amit majd az authcontextből fogunk meghívni
+//ez a függvény fogja a user adatait lekérni a backendről
 const useUserData = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,6 @@ const useUserData = () => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
-            withCredentials: true, // Add this line to include cookies in the request
           }
         );
         setUser(response.data);
