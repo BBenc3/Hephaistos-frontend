@@ -66,7 +66,7 @@ const HeroSection = () => {
         </Typography>
       </Collapse>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'right', mt: 2 }}>
         <Button variant="contained" onClick={handleToggle}>
           {expanded ? 'Bezárás' : 'Rólunk'}
         </Button>
