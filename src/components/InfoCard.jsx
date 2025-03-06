@@ -80,8 +80,8 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
             paddingBottom: theme.spacing(2),
           }}
         >
-          <Button size="small" sx={{ marginBottom: theme.spacing(1) }}>További információ</Button>
           <Button size="small" variant="contained" color="primary">Próbálja ki</Button>
+          <Button size="small" sx={{ marginBottom: theme.spacing(1) }}>További információ</Button>
         </CardActions>
       </Card>
     </Paper>

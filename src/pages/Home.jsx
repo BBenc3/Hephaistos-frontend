@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Container, Grid, Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Sliders, Clock, Calendar2EventFill } from 'react-bootstrap-icons';
+import { Sliders, Clock, Calendar4Event } from 'react-bootstrap-icons';
 import HeroSection from '../components/HeroSection/HeroSection';
 import InfoCard from '../components/InfoCard';
 
@@ -18,7 +18,7 @@ const Home = ({ isMobile }) => {
   const icons = {
     simple: Clock,
     advanced: Sliders,
-    custom: Calendar2EventFill,
+    custom: Calendar4Event,
   };
 
   return (

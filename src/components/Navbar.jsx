@@ -137,7 +137,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
         )}
 
         <IconButton color="inherit" onClick={handleGearMenuClick} sx={{ color: theme.palette.primary.main }}>
-          <AnimatedGear />
+          <AnimatedGear animateForward={animateForward} animateBackward={animateBackward} />
         </IconButton>
         <CustomDropdown anchorEl={gearAnchorEl} open={Boolean(gearAnchorEl)} onClose={handleGearMenuClose}>
           <MenuItem>
