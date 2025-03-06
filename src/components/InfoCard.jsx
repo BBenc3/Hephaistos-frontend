@@ -12,8 +12,8 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
       elevation={3}
       sx={{
         backgroundColor: theme.palette.background.default,
-        borderWidth: 5,
-        borderColor: theme.palette.primary.main,
+        borderWidth: 2, // Set border width to 2 pixels
+        borderColor: '#DEE2E6', // Set border color to #DEE2E6
         borderStyle: "solid",
         overflow: "hidden",
         height: "auto",
@@ -39,7 +39,7 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
           sx={{
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText,
-            padding: theme.spacing(2),
+            padding: theme.spacing(3), // Keep the size of the bar
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -48,9 +48,7 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
             borderRadius: 0, // Nincs külön kerekítés
           }}
         >
-          <Typography id={`${title}-heading`} variant="h5" component="div">
-            {title}
-          </Typography>
+          {/* Remove the text from the green bar */}
         </Box>
 
         {/* TARTALOM */}
@@ -65,7 +63,11 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
           }}
         >
           <Icon size={80} style={{ marginBottom: theme.spacing(1), color: iconColor }} /> {/* Render icon */}
-          <Typography variant="body2" sx={{ color: theme.palette.text.primary, textAlign: "justify" }}>
+          <Typography variant="body2" sx={{ color: theme.palette.text.primary, textAlign: "center", marginBottom: theme.spacing(1), fontSize: 18, fontWeight: 'bold' }}>
+            {title}
+          </Typography>
+          <Box sx={{ padding: theme.spacing(2) }} /> {/* Add padding between title and description */}
+          <Typography variant="body2" sx={{ color: theme.palette.text.primary, textAlign: "justify", fontStyle: 'italic' }}>
             {description}
           </Typography>
         </CardContent>
@@ -80,8 +82,8 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
             paddingBottom: theme.spacing(2),
           }}
         >
-          <Button size="small" variant="contained" color="primary">Próbálja ki</Button>
-          <Button size="small" sx={{ marginBottom: theme.spacing(1) }}>További információ</Button>
+          <Button size="small" variant="contained" sx={{ width: '150px', backgroundColor: '#1D8C8C' }}>Próbálja ki</Button> {/* Change button color */}
+          <Button size="small" sx={{ marginBottom: theme.spacing(1), fontSize: '0.68rem', fontStyle: 'italic', textTransform: 'none' }}>További információ</Button> {/* Make button smaller, italic, and not all uppercase */}
         </CardActions>
       </Card>
     </Paper>
