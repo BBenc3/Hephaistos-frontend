@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
+import Notification from '../components/Notification';
 
 const AuthContext = createContext();
 
 const initialState = {
-  user: null,
   isLoggedIn: false,
   error: null,
 };
@@ -14,7 +14,6 @@ const authReducer = (state, action) => {
     case 'LOGIN_SUCCESS':
       return {
         ...state,
-        user: action.payload,
         isLoggedIn: true,
         error: null,
       };
@@ -24,7 +23,10 @@ const authReducer = (state, action) => {
         error: action.payload,
       };
     case 'LOGOUT':
-      return initialState;
+      return {
+        ...state,
+        isLoggedIn: false,
+      }
     default:
       return state;
   }
@@ -35,36 +37,27 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('https://localhost:5001/api/auth/login');
-      const accessToken = response.data.accesstoken;
+      const response = await axios.post('https://localhost:5001/api/auth/login', credentials ,{
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+      const accessToken = response.data.accessToken;
       localStorage.setItem('accessToken', accessToken);
-
-      const refreshToken = response.data.refreshToken;
-      if (credentials.stayLoggedIn && refreshToken) {
-        localStorage.setItem('refreshToken', refreshToken);
-      }
-
-      const userResponse = await axios.get('https://localhost:5001/api/users/me', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      const user = userResponse.data;
-
-      dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-      console.log('User logged in:', user);
+      dispatch({ type: 'LOGIN_SUCCESS' });
     } catch (error) {
       dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
-      console.error('Login error:', error);
     }
   };
 
   const logout = () => {
+    localStorage.removeItem('accessToken');
     dispatch({ type: 'LOGOUT' });
   };
 
   const requestOtp = async (email) => {
     try {
       await axios.post('https://localhost:5001/api/auth/generate-otp', { email });
-      console.log('OTP requested successfully');
     } catch (error) {
       console.error('OTP request error:', error);
     }
@@ -73,14 +66,13 @@ export const AuthProvider = ({ children }) => {
   const verifyOtp = async (email, otp, newPassword) => {
     try {
       await axios.put('https://localhost:5001/api/auth/change-password-after-otp', { email, otp, newPassword });
-      console.log('Password changed successfully');
     } catch (error) {
       console.error('OTP verification error:', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp }}>
+    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp}}>
       {children}
     </AuthContext.Provider>
   );
