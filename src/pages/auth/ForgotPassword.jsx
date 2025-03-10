@@ -78,6 +78,7 @@ const ForgotPassword = () => {
                 label="Jelszó helyreállítása"
                 type="text"
                 value={otp}
+                autoComplete='one-time-code'
                 onChange={(e) => setOtp(e.target.value)}
                 sx={{ marginBottom: "16px" }}
               />

@@ -11,7 +11,8 @@ const RegisterForm = ({ setNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -27,6 +28,7 @@ const RegisterForm = ({ setNotification }) => {
       return;
     }
 
+    setLoading(true);
     try {
       await axios.post('https://localhost:5001/api/auth/register', {
         email,
@@ -35,30 +37,10 @@ const RegisterForm = ({ setNotification }) => {
       });
       navigate('/login');
     } catch (error) {
-      if (error.response && error.response.data) {
-        const { message, errors } = error.response.data;
-        if (errors && Array.isArray(errors)) {
-          const passwordErrorMessages = errors.map(err => {
-            switch (err.code) {
-              case 'PasswordRequiresNonAlphanumeric':
-                return 'A jelszónak tartalmaznia kell legalább egy nem alfanumerikus karaktert.';
-              case 'PasswordRequiresDigit':
-                return 'A jelszónak tartalmaznia kell legalább egy számjegyet (0-9).';
-              case 'PasswordRequiresUpper':
-                return 'A jelszónak tartalmaznia kell legalább egy nagybetűt (A-Z).';
-              default:
-                return err.description;
-            }
-          }).join(' ');
-          setNotification({ open: true, message: `A jelszó nem megfelelő: ${passwordErrorMessages}`, severity: 'warning' });
-        } else if (message && message.includes('Email already exists')) {
-          setNotification({ open: true, message: 'Az email cím már regisztrálva van!', severity: 'warning' });
-        } else {
-          setNotification({ open: true, message: 'Hiba a regisztráció során!', severity: 'error' });
-        }
-      } else {
-        setNotification({ open: true, message: 'Ismeretlen hiba történt!', severity: 'error' });
-      }
+      setNotification({ open: true, message: errorMsg, severity: 'error' });
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -72,26 +54,21 @@ const RegisterForm = ({ setNotification }) => {
     <>
       <Box
         sx={{
-          backgroundColor: theme.palette.background.default,
-          width: '100%',
-          borderRadius: '12px',
-          boxShadow: isMobile ? null : '0px 4px 20px rgba(0, 0, 0, 0.3)',
-          textAlign: 'center',
+          backgroundColor: isMobile ? 'none' : theme.palette.background.default,
+          borderRadius: isMobile ? 'none' : '12px',
+          boxShadow: isMobile ? 'none' : '0px 4px 20px rgba(0, 0, 0, 0.3)',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          justifyContent: 'space-between', // Felső és alsó tartalom elrendezése
+          width: isMobile ? '100%' : 'auto',
+          p: isMobile ? 0 : 2
         }}
       >
-        <Box
-          sx={{
-            padding: '3%',
-            [theme.breakpoints.down('sm')]: {
-              width: '100%',
-              padding: '5%',
-            },
-          }}
-        >
-          <img src="/logo.png" alt="Logo" style={{ width: '120px', height: '120px', margin: '0 auto 16px' }} />
-          <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Adatok megadása</Typography>
+        <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+          <img src='/logo.png' alt="Logo" style={{ width: '100px', marginBottom: '10px' }} />
+          <Typography variant="h4" gutterBottom>
+            Regisztráció
+          </Typography>
           <RegisterFormFields
             email={email}
             setEmail={setEmail}
@@ -101,37 +78,55 @@ const RegisterForm = ({ setNotification }) => {
             setPassword={setPassword}
             confirmPassword={confirmPassword}
             setConfirmPassword={setConfirmPassword}
-            errorMessage={errorMessage}
+            errorMessage={errorMsg}
             onKeyPress={handleKeyPress} // Add this line
           />
           <Button
             variant="contained"
-            fullWidth
-            sx={{ mt: 2, backgroundColor: theme.palette.primary.main, marginTop: 5, width: '40%', margin: '3% auto', '&:hover': { backgroundColor: theme.palette.primary.dark }, borderRadius: 2 }}
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.common.white,
+              '&:hover': { backgroundColor: theme.palette.primary.dark },
+              width: isMobile ? '50%' : '40%',
+              height: '50px',
+              marginTop: '1%',
+            }}
             onClick={handleNextStep}
+            disabled={loading}
           >
-            Tovább
+            {loading ? 'Regisztráció...' : 'Regisztráció'}
+
           </Button>
         </Box>
         <Box
           sx={{
-            backgroundColor: 'secondary.main',
-            padding: 2,
-            borderRadius: '8px',
-            textAlign: 'center',
-            boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
+            width: '100%',
+            position: isMobile ? 'absolute' : 'static',
+            bottom: isMobile ? 0 : 'auto',
+            left: 0,
           }}
         >
-          <Typography variant="body2">
-            Már van fiókod?{' '}
-            <Typography
-              component="span"
-              sx={{ color: 'primary.main', fontWeight: 'bold', cursor: 'pointer' }}
-              onClick={() => navigate('/login')}
-            >
-              Jelentkezz be!
+          <Box
+            sx={{
+              backgroundColor: theme.palette.secondary.main,
+              padding: 2,
+              borderRadius: '8px',
+              textAlign: 'center',
+              boxShadow: isMobile ? 'none' : '0px -3px 10px rgba(0, 0, 0, 0.2)',
+              marginTop: 2,
+            }}
+          >
+            <Typography variant="body2">
+              Már van fiókod?{' '}
+              <Typography
+                component="span"
+                sx={{ color: theme.palette.primary.main, fontWeight: 'bold', cursor: 'pointer' }}
+                onClick={() => navigate('/login')}
+              >
+                Jelentkezz be!
+              </Typography>
             </Typography>
-          </Typography>
+          </Box>
         </Box>
       </Box>
     </>

@@ -33,30 +33,10 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!accessToken && !refreshToken) {
-      dispatch({ type: 'LOGOUT' });
-    } else {
-      axios.get('https://localhost:5001/api/users/me', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
-        .then((res) => {
-          dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
-        })
-        .catch(() => {
-          dispatch({ type: 'LOGOUT' });
-        });
-    }
-  }, []);
-
   const login = async (credentials) => {
     try {
-      const response = await axios.post('https://localhost:5001/api/auth/login', credentials, {
-        withCredentials: true,
-      });
-      const accessToken = response.data.token;
+      const response = await axios.post('https://localhost:5001/api/auth/login');
+      const accessToken = response.data.accesstoken;
       localStorage.setItem('accessToken', accessToken);
 
       const refreshToken = response.data.refreshToken;
@@ -99,32 +79,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const refreshTokens = async (onSessionExpired) => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) {
-      onSessionExpired("A munkamenet lejárt");
-      return;
-    }
-    try {
-      const response = await axios.post('https://localhost:5001/api/auth/refresh-token', null, {
-        headers: { refreshToken },
-        withCredentials: true,
-      });
-      const accessToken = response.data.token;
-      localStorage.setItem('accessToken', accessToken);
-
-      // Példa tesztkérés, user adatok lekérése
-      const userResponse = await axios.get('https://localhost:5001/api/users/me', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      dispatch({ type: 'LOGIN_SUCCESS', payload: userResponse.data });
-    } catch (error) {
-      onSessionExpired("Munkamenet lejárt");
-    }
-  };
-
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp, refreshTokens }}>
+    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp }}>
       {children}
     </AuthContext.Provider>
   );
