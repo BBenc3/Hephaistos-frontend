@@ -1,32 +1,49 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, useMediaQuery } from '@mui/material';
+import { Box, Typography, Button, useMediaQuery, Stepper, Step, StepLabel, TextField, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import RegisterFormFields from './RegisterFormFields';
-import { InstallMobile } from '@mui/icons-material';
+
+const steps = ['Adatok megadása', 'Egyetem adatai', 'Elvégzett tárgyak'];
 
 const RegisterForm = ({ setNotification }) => {
+  const [activeStep, setActiveStep] = useState(0);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [university, setUniversity] = useState('');
+  const [faculty, setFaculty] = useState('');
+  const [enrollmentYear, setEnrollmentYear] = useState('');
+  const [studyStatus, setStudyStatus] = useState('');
+  const [subjectName, setSubjectName] = useState('');
+  const [subjectCode, setSubjectCode] = useState('');
+  const [subjectType, setSubjectType] = useState('');
+  const [completionYearSemester, setCompletionYearSemester] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleNextStep = async () => {
-    if (!email || !username || !password || !confirmPassword) {
+  const handleNext = () => {
+    if (activeStep === 0 && (!email || !username || !password || !confirmPassword)) {
       setNotification({ open: true, message: 'Minden mezőt ki kell tölteni!', severity: 'warning' });
       return;
     }
-
-    if (password !== confirmPassword) {
+    if (activeStep === 0 && password !== confirmPassword) {
       setNotification({ open: true, message: 'A jelszavak nem egyeznek!', severity: 'warning' });
       return;
     }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleRegister = async () => {
 
     setLoading(true);
     try {
@@ -34,6 +51,14 @@ const RegisterForm = ({ setNotification }) => {
         email,
         username,
         password,
+        university,
+        faculty,
+        enrollmentYear,
+        studyStatus,
+        subjectName,
+        subjectCode,
+        subjectType,
+        completionYearSemester,
       });
       navigate('/login');
     } catch (error) {
@@ -46,12 +71,23 @@ const RegisterForm = ({ setNotification }) => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      handleNextStep();
+      if (activeStep === steps.length - 1) {
+        handleRegister();
+      } else {
+        handleNext();
+      }
     }
   };
 
   return (
-    <>
+    <Box sx={{ width: '100%' }}>
+      <Stepper activeStep={activeStep} alternativeLabel>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
       <Box
         sx={{
           backgroundColor: isMobile ? 'none' : theme.palette.background.default,
