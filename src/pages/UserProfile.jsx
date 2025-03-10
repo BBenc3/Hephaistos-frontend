@@ -76,29 +76,31 @@ const UserProfile = () => {
         sx={{
           backgroundColor: '#DEE2E6',
           display: 'flex',
-          justifyContent: 'flex-start',
+          justifyContent: 'space-between',
           alignItems: 'center',
           padding: theme.spacing(2),
           marginBottom: theme.spacing(2),
-          flexDirection: 'column',
+          flexDirection: 'row',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar
             src={user.profilePicturePath || 'https://via.placeholder.com/150'}
             alt="Profile Picture"
-            sx={{ width: 100, height: 100, marginRight: theme.spacing(2) }}
+            sx={{ width: 100, height: 100, marginBottom: theme.spacing(1) }}
           />
           <Button variant="text" onClick={() => navigate('/change-profile-picture')}>
             Profilkép módosítása
           </Button>
         </Box>
-        <Typography variant="h4" gutterBottom>
-          Profil beállítások
-        </Typography>
-        <Typography sx={{ marginBottom: theme.spacing(2) }}>
-          Állítsd be személyes adatokat, értesítéseket és egyéb preferenciákat, hogy testre szabhasd a profilodat.
-        </Typography>
+        <Box sx={{ textAlign: 'center', margin: '0 auto' }}>
+          <Typography variant="h4" gutterBottom>
+            Profil beállítások
+          </Typography>
+          <Typography sx={{ marginBottom: theme.spacing(2) }}>
+            Állítsd be személyes adatokat, értesítéseket és egyéb preferenciákat, hogy testre szabhasd a profilodat.
+          </Typography>
+        </Box>
       </Box>
       <Typography variant="h5" gutterBottom>
         Felhasználói profil
@@ -123,104 +125,104 @@ const UserProfile = () => {
               {formError}
             </Typography>
           )}
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="Teljes név"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={`${firstName} ${lastName}`}
-                onChange={(e) => {
-                  const [first, last] = e.target.value.split(' ');
-                  setFirstName(first);
-                  setLastName(last);
-                }}
-              />
+          <Box
+            sx={{
+              border: '1px solid #00000033', // 20% opacity
+              borderRadius: '0%',
+              padding: theme.spacing(2),
+              width: '100%',
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Keresztnév"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Vezetéknév"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="E-mail cím megváltoztatása"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Jelszó megváltoztatása"
+                  variant="outlined"
+                  type="password"
+                  fullWidth
+                  margin="normal"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Minimum 8 karakter"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Jelszó megerősítése"
+                  variant="outlined"
+                  type="password"
+                  fullWidth
+                  margin="normal"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Jelszó mégegyszer"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Telefonszám hozzáadás"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+36"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Születési hely és idő hozzáadás"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={birthPlace}
+                  onChange={(e) => setBirthPlace(e.target.value)}
+                  placeholder="Év/hónap/nap"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Cím hozzáadás"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Válassz..."
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="E-mail cím megváltoztatása"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="Jelszó megváltoztatása"
-                variant="outlined"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimum 8 karakter"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="Jelszó megerősítése"
-                variant="outlined"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Jelszó mégegyszer"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="Telefonszám hozzáadás"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+36"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="Születési hely és idő hozzáadás"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={birthPlace}
-                onChange={(e) => setBirthPlace(e.target.value)}
-                placeholder="Év/hónap/nap"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="Cím hozzáadás"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Válassz..."
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                label="Felhasználói szerepkör"
-                variant="outlined"
-                select
-                fullWidth
-                margin="normal"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="Válassz..."
-              >
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="user">User</MenuItem>
-              </TextField>
-            </Grid>
-          </Grid>
+          </Box>
           <Button
             variant="contained"
             color="primary"
