@@ -13,24 +13,26 @@ import {
   useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import useUserData from '../hooks/useUserData';
 
 const UserProfile = () => {
-  const { user, loading, error, handleDeactivate, handleUpdate, isLoggedIn } = useUserData();
+  const { user, loading, error, handleDeactivate, isLoggedIn } = useUserData();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [firstName, setFirstName] = useState(user?.firstName || '');
-  const [lastName, setLastName] = useState(user?.lastName || '');
+  const [firstName, setFirstName] = useState(user?.userdata?.firstName || '');
+  const [lastName, setLastName] = useState(user?.userdata?.lastName || '');
   const [email, setEmail] = useState(user?.email || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone, setPhone] = useState(user?.phone || '+36');
-  const [birthPlace, setBirthPlace] = useState(user?.birthPlace || '');
-  const [birthDate, setBirthDate] = useState(user?.birthDate || '');
-  const [address, setAddress] = useState(user?.address || '');
+  const [phone, setPhone] = useState(user?.phoneNumber || '+36');
+  const [birthPlace, setBirthPlace] = useState(user?.userdata?.birthPlace || '');
+  const [birthDate, setBirthDate] = useState(user?.userdata?.birthDate || '');
+  const [address, setAddress] = useState(user?.userdata?.address || '');
   const [role, setRole] = useState(user?.role || '');
+  const [motherName, setMotherName] = useState(user?.userdata?.motherName || '');
   const [editMode, setEditMode] = useState(false);
   const [formError, setFormError] = useState('');
 
@@ -40,7 +42,18 @@ const UserProfile = () => {
 
   const handleSubmit = async () => {
     try {
-      await handleUpdate({ firstName, lastName, email, password, phone, birthPlace, birthDate, address, role });
+      await axios.put('https://localhost:5001/api/users/me', {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        birthPlace,
+        birthDate,
+        address,
+        role,
+        motherName,
+      });
       setEditMode(false);
     } catch (err) {
       setFormError('Hiba történt a módosítás során.');
@@ -212,6 +225,16 @@ const UserProfile = () => {
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <TextField
+                  label="Születési dátum"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
                   label="Cím hozzáadás"
                   variant="outlined"
                   fullWidth
@@ -220,6 +243,31 @@ const UserProfile = () => {
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Válassz..."
                 />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Anyja neve"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={motherName}
+                  onChange={(e) => setMotherName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Felhasználói szerepkör"
+                  variant="outlined"
+                  select
+                  fullWidth
+                  margin="normal"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  placeholder="Válassz..."
+                >
+                  <MenuItem value="admin">Admin</MenuItem>
+                  <MenuItem value="user">User</MenuItem>
+                </TextField>
               </Grid>
             </Grid>
           </Box>
