@@ -21,8 +21,7 @@ const RegisterForm = ({ setNotification }) => {
   const [subjectCode, setSubjectCode] = useState('');
   const [subjectType, setSubjectType] = useState('');
   const [completionYearSemester, setCompletionYearSemester] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -44,8 +43,6 @@ const RegisterForm = ({ setNotification }) => {
   };
 
   const handleRegister = async () => {
-
-    setLoading(true);
     try {
       await axios.post('https://localhost:5001/api/auth/register', {
         email,
@@ -95,77 +92,149 @@ const RegisterForm = ({ setNotification }) => {
           boxShadow: isMobile ? 'none' : '0px 4px 20px rgba(0, 0, 0, 0.3)',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between', // Felső és alsó tartalom elrendezése
-          width: isMobile ? '100%' : 'auto',
-          p: isMobile ? 0 : 2
+          padding: '3%',
+          [theme.breakpoints.down('sm')]: {
+            padding: '5%',
+          },
         }}
       >
-        <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
-          <img src='/logo.png' alt="Logo" style={{ width: '100px', marginBottom: '10px' }} />
-          <Typography variant="h4" gutterBottom>
-            Regisztráció
-          </Typography>
-          <RegisterFormFields
-            email={email}
-            setEmail={setEmail}
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
-            errorMessage={errorMsg}
-            onKeyPress={handleKeyPress} // Add this line
-          />
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.common.white,
-              '&:hover': { backgroundColor: theme.palette.primary.dark },
-              width: isMobile ? '50%' : '40%',
-              height: '50px',
-              marginTop: '1%',
-            }}
-            onClick={handleNextStep}
-            disabled={loading}
-          >
-            {loading ? 'Regisztráció...' : 'Regisztráció'}
-
+        {activeStep === 0 && (
+          <>
+            <img src="/logo.png" alt="Logo" style={{ width: '120px', height: '120px', margin: '0 auto 16px' }} />
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Adatok megadása</Typography>
+            <RegisterFormFields
+              email={email}
+              setEmail={setEmail}
+              username={username}
+              setUsername={setUsername}
+              password={password}
+              setPassword={setPassword}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              errorMessage={errorMessage}
+              onKeyPress={handleKeyPress}
+            />
+          </>
+        )}
+        {activeStep === 1 && (
+          <>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Egyetem adatai</Typography>
+            <TextField
+              label="Egyetem neve"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={university}
+              onChange={(e) => setUniversity(e.target.value)}
+            />
+            <TextField
+              label="Kar"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={faculty}
+              onChange={(e) => setFaculty(e.target.value)}
+            />
+            <TextField
+              label="Beiratkozás éve"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={enrollmentYear}
+              onChange={(e) => setEnrollmentYear(e.target.value)}
+            />
+            <TextField
+              label="Tanulmányi státusz"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={studyStatus}
+              onChange={(e) => setStudyStatus(e.target.value)}
+              select
+            >
+              <MenuItem value="Aktív">Aktív</MenuItem>
+              <MenuItem value="Passzív">Passzív</MenuItem>
+            </TextField>
+          </>
+        )}
+        {activeStep === 2 && (
+          <>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Elvégzett tárgyak</Typography>
+            <TextField
+              label="Tantárgy neve"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={subjectName}
+              onChange={(e) => setSubjectName(e.target.value)}
+            />
+            <TextField
+              label="Tantárgy kódja"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={subjectCode}
+              onChange={(e) => setSubjectCode(e.target.value)}
+            />
+            <TextField
+              label="Kötelező vagy választható tárgy"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={subjectType}
+              onChange={(e) => setSubjectType(e.target.value)}
+              select
+            >
+              <MenuItem value="Kötelező">Kötelező</MenuItem>
+              <MenuItem value="Választható">Választható</MenuItem>
+            </TextField>
+            <TextField
+              label="Év / Félév, amikor teljesítve lett"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={completionYearSemester}
+              onChange={(e) => setCompletionYearSemester(e.target.value)}
+            />
+          </>
+        )}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+          <Button disabled={activeStep === 0} onClick={handleBack}>
+            Vissza
           </Button>
-        </Box>
-        <Box
-          sx={{
-            width: '100%',
-            position: isMobile ? 'absolute' : 'static',
-            bottom: isMobile ? 0 : 'auto',
-            left: 0,
-          }}
-        >
-          <Box
-            sx={{
-              backgroundColor: theme.palette.secondary.main,
-              padding: 2,
-              borderRadius: '8px',
-              textAlign: 'center',
-              boxShadow: isMobile ? 'none' : '0px -3px 10px rgba(0, 0, 0, 0.2)',
-              marginTop: 2,
-            }}
-          >
-            <Typography variant="body2">
-              Már van fiókod?{' '}
-              <Typography
-                component="span"
-                sx={{ color: theme.palette.primary.main, fontWeight: 'bold', cursor: 'pointer' }}
-                onClick={() => navigate('/login')}
-              >
-                Jelentkezz be!
-              </Typography>
-            </Typography>
-          </Box>
+          {activeStep === steps.length - 1 ? (
+            <Button variant="contained" onClick={handleRegister}>
+              Regisztráció
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={handleNext}>
+              Tovább
+            </Button>
+          )}
         </Box>
       </Box>
-    </>
+      <Box
+        sx={{
+          backgroundColor: 'secondary.main',
+          padding: 2,
+          borderRadius: '8px',
+          textAlign: 'center',
+          boxShadow: '0px -3px 10px rgba(0, 0, 0, 0.2)',
+          marginTop: 2,
+        }}
+      >
+        <Typography variant="body2">
+          Már van fiókod?{' '}
+          <Typography
+            component="span"
+            sx={{ color: 'primary.main', fontWeight: 'bold', cursor: 'pointer' }}
+            onClick={() => navigate('/login')}
+          >
+            Jelentkezz be!
+          </Typography>
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 
