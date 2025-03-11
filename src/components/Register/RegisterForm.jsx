@@ -97,7 +97,7 @@ const RegisterForm = ({ setNotification }) => {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%' }} onKeyPress={handleKeyPress}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
@@ -148,6 +148,7 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={university}
               onChange={(e) => setUniversity(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
             <TextField
               label="Kar"
@@ -156,6 +157,7 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={faculty}
               onChange={(e) => setFaculty(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
             <TextField
               label="Beiratkozás éve"
@@ -164,6 +166,7 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={enrollmentYear}
               onChange={(e) => setEnrollmentYear(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
             <TextField
               label="Tanulmányi státusz"
@@ -173,6 +176,7 @@ const RegisterForm = ({ setNotification }) => {
               value={studyStatus}
               onChange={(e) => setStudyStatus(e.target.value)}
               select
+              onKeyPress={handleKeyPress}
             >
               <MenuItem value="Aktív">Aktív</MenuItem>
               <MenuItem value="Passzív">Passzív</MenuItem>
@@ -189,6 +193,7 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
             <TextField
               label="Tantárgy kódja"
@@ -197,6 +202,7 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={subjectCode}
               onChange={(e) => setSubjectCode(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
             <TextField
               label="Kötelező vagy választható tárgy"
@@ -206,6 +212,7 @@ const RegisterForm = ({ setNotification }) => {
               value={subjectType}
               onChange={(e) => setSubjectType(e.target.value)}
               select
+              onKeyPress={handleKeyPress}
             >
               <MenuItem value="Kötelező">Kötelező</MenuItem>
               <MenuItem value="Választható">Választható</MenuItem>
@@ -217,6 +224,7 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={completionYearSemester}
               onChange={(e) => setCompletionYearSemester(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
           </>
         )}

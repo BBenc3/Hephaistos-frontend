@@ -44,6 +44,12 @@ const ChangePasswordForm = () => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleChangePassword();
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -56,6 +62,7 @@ const ChangePasswordForm = () => {
         flexDirection: 'column',
         padding: '3%',
       }}
+      onKeyPress={handleKeyPress}
     >
       <Typography variant="h4" gutterBottom>
         Jelszó módosítása

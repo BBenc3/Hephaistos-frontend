@@ -22,10 +22,24 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async () => {
     try {
-      await axios.put('https://localhost:5001/api/auth/change-password-after-otp', { email, otp, newPassword });
+      const token = localStorage.getItem('accessToken');
+      await axios.put('https://localhost:5001/api/auth/change-password-after-otp', 
+        { email, otp, newPassword },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       console.log('Password changed successfully');
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      if (step === 1) {
+        handleSendOtp();
+      } else if (step === 2) {
+        handleResetPassword();
+      }
     }
   };
 
@@ -56,7 +70,7 @@ const ForgotPassword = () => {
             Elfelejtett jelszó
           </Typography>
           <Typography variant="body1" gutterBottom>
-            add meg az emailcímed
+            add meg az egyszeri hitelesítési kódod
           </Typography>
           {step === 1 && (
             <>
@@ -67,6 +81,7 @@ const ForgotPassword = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email címed"
                 sx={{ marginBottom: "16px" }}
+                onKeyPress={handleKeyPress}
               />
               <Button onClick={handleSendOtp}>Jelszó helyreállítása</Button>
             </>
@@ -75,12 +90,13 @@ const ForgotPassword = () => {
             <>
               <TextField
                 fullWidth
-                label="Jelszó helyreállítása"
+                label="Egyszeri hitelesítési kód"
                 type="text"
                 value={otp}
                 autoComplete='one-time-code'
                 onChange={(e) => setOtp(e.target.value)}
                 sx={{ marginBottom: "16px" }}
+                onKeyPress={handleKeyPress}
               />
               <TextField
                 fullWidth
@@ -89,6 +105,7 @@ const ForgotPassword = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 sx={{ marginBottom: "16px" }}
+                onKeyPress={handleKeyPress}
               />
               <Button onClick={handleResetPassword}>Jelszó módosítása</Button>
             </>
