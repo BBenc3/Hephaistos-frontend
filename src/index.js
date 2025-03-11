@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import theme from "./styles/theme"; // MUI theme importálása
 
 const Root = () => {
@@ -18,7 +18,6 @@ const Root = () => {
 
   return (
     <ThemeProvider theme={theme(isDarkMode ? "dark" : "light")}>
-      <CssBaseline /> {/* MUI alap stílusok (pl. háttér, betűszín) */}
       <App isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
     </ThemeProvider>
   );

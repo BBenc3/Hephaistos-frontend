@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import Slide from '@mui/material/Slide';
 import ErrorIcon from '@mui/icons-material/Error';
 import WarningIcon from '@mui/icons-material/Warning';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const Notification = ({ open, message, severity, onClose }) => {
   const theme = useTheme();
@@ -25,6 +26,8 @@ const Notification = ({ open, message, severity, onClose }) => {
         return <ErrorIcon />;
       case 'warning':
         return <WarningIcon />;
+      case 'successful':
+        return <CheckCircleIcon />;
       default:
         return null;
     }
