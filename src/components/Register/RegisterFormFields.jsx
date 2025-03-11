@@ -13,6 +13,7 @@ const RegisterFormFields = ({
   confirmPassword,
   setConfirmPassword,
   errorMessage,
+  onKeyPress,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -45,6 +46,7 @@ const RegisterFormFields = ({
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         sx={inputStyles}
+        onKeyPress={onKeyPress}
       />
 
       <TextField
@@ -57,6 +59,7 @@ const RegisterFormFields = ({
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         sx={inputStyles}
+        onKeyPress={onKeyPress}
       />
 
       <TextField
@@ -69,6 +72,7 @@ const RegisterFormFields = ({
         onChange={(e) => setPassword(e.target.value)}
         autoComplete="new-password"
         sx={inputStyles}
+        onKeyPress={onKeyPress}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -93,6 +97,7 @@ const RegisterFormFields = ({
         onChange={(e) => setConfirmPassword(e.target.value)}
         autoComplete="new-password"
         sx={inputStyles}
+        onKeyPress={onKeyPress}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
