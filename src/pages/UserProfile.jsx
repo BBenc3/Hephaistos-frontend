@@ -33,6 +33,12 @@ const UserProfile = () => {
   const [address, setAddress] = useState(user?.userdata?.address || '');
   const [role, setRole] = useState(user?.role || '');
   const [motherName, setMotherName] = useState(user?.userdata?.motherName || '');
+  const [university, setUniversity] = useState(user?.userdata?.university || '');
+  const [faculty, setFaculty] = useState(user?.userdata?.faculty || '');
+  const [studyStatus, setStudyStatus] = useState(user?.userdata?.studyStatus || '');
+  const [subjectName, setSubjectName] = useState(user?.userdata?.subjectName || '');
+  const [subjectCode, setSubjectCode] = useState(user?.userdata?.subjectCode || '');
+  const [subjectType, setSubjectType] = useState(user?.userdata?.subjectType || '');
   const [editMode, setEditMode] = useState(false);
   const [formError, setFormError] = useState('');
 
@@ -53,6 +59,12 @@ const UserProfile = () => {
         address,
         role,
         motherName,
+        university,
+        faculty,
+        studyStatus,
+        subjectName,
+        subjectCode,
+        subjectType,
       });
       setEditMode(false);
     } catch (err) {
@@ -267,6 +279,74 @@ const UserProfile = () => {
                 >
                   <MenuItem value="admin">Admin</MenuItem>
                   <MenuItem value="user">User</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Egyetem neve"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={university}
+                  onChange={(e) => setUniversity(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Kar"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={faculty}
+                  onChange={(e) => setFaculty(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Tanulmányi státusz"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={studyStatus}
+                  onChange={(e) => setStudyStatus(e.target.value)}
+                  select
+                >
+                  <MenuItem value="Aktív">Aktív</MenuItem>
+                  <MenuItem value="Passzív">Passzív</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Tantárgy neve"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={subjectName}
+                  onChange={(e) => setSubjectName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Tantárgy kódja"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={subjectCode}
+                  onChange={(e) => setSubjectCode(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Kötelező vagy választható tárgy"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={subjectType}
+                  onChange={(e) => setSubjectType(e.target.value)}
+                  select
+                >
+                  <MenuItem value="Kötelező">Kötelező</MenuItem>
+                  <MenuItem value="Választható">Választható</MenuItem>
                 </TextField>
               </Grid>
             </Grid>
