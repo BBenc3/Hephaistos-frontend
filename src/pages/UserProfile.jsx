@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   CircularProgress,
   Typography,
@@ -12,12 +12,46 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useUserData from '../hooks/useUserData';
+import axios from 'axios';
 
 const UserProfile = () => {
   const { user, loading, error, handleDeactivate } = useUserData();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      alert("No file selected");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await axios.post(
+        "https://localhost:5001/api/users/me/profile-picture",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+      alert("Profile picture uploaded successfully");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Error uploading file");
+    }
+  };
 
   if (loading) {
     return (
@@ -91,6 +125,12 @@ const UserProfile = () => {
         </Button>
         <Button variant="contained" color="error" onClick={handleDeactivate}>
           Profil Inaktiválása
+        </Button>
+      </Box>
+      <Box sx={{ marginTop: theme.spacing(3) }}>
+        <input type="file" onChange={handleFileChange} />
+        <Button variant="contained" onClick={handleFileUpload} sx={{ marginTop: theme.spacing(1) }}>
+          Profilkép feltöltése
         </Button>
       </Box>
       {error && (
