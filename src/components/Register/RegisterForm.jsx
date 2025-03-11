@@ -19,12 +19,10 @@ const RegisterForm = ({ setNotification }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [university, setUniversity] = useState('');
   const [faculty, setFaculty] = useState('');
-  const [enrollmentYear, setEnrollmentYear] = useState('');
   const [studyStatus, setStudyStatus] = useState('');
   const [subjectName, setSubjectName] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
   const [subjectType, setSubjectType] = useState('');
-  const [completionYearSemester, setCompletionYearSemester] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const theme = useTheme();
@@ -50,28 +48,21 @@ const RegisterForm = ({ setNotification }) => {
   };
 
   const handleRegister = async () => {
+    const payload = {
+      email,
+      username,
+      password,
+      university,
+      faculty,
+      studyStatus,
+      subjectName,
+      subjectCode,
+      subjectType,
+    };
+    console.log('Register payload:', payload); // Log the payload to see what is being sent
+
     try {
-      await axios.post('https://localhost:5001/api/auth/register', {
-        email,
-        username,
-        password,
-        university,
-        faculty,
-        enrollmentYear,
-        studyStatus,
-        subjectName,
-        subjectCode,
-        subjectType,
-        completionYearSemester,
-        university,
-        faculty,
-        enrollmentYear,
-        studyStatus,
-        subjectName,
-        subjectCode,
-        subjectType,
-        completionYearSemester,
-      });
+      await axios.post('https://localhost:5001/api/auth/register', payload);
       navigate('/login');
     } catch (error) {
       if (error.response && error.response.data) {
@@ -188,15 +179,6 @@ const RegisterForm = ({ setNotification }) => {
               onKeyPress={handleKeyPress}
             />
             <TextField
-              label="Beiratkozás éve"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={enrollmentYear}
-              onChange={(e) => setEnrollmentYear(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <TextField
               label="Tanulmányi státusz"
               variant="outlined"
               fullWidth
@@ -245,15 +227,6 @@ const RegisterForm = ({ setNotification }) => {
               <MenuItem value="Kötelező">Kötelező</MenuItem>
               <MenuItem value="Választható">Választható</MenuItem>
             </TextField>
-            <TextField
-              label="Év / Félév, amikor teljesítve lett"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={completionYearSemester}
-              onChange={(e) => setCompletionYearSemester(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
           </>
         )}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>

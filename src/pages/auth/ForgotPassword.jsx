@@ -22,10 +22,8 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
       await axios.put('https://localhost:5001/api/auth/change-password-after-otp', 
-        { email, otp, newPassword },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { email, otp, newPassword }
       );
       console.log('Password changed successfully');
     } catch (error) {
