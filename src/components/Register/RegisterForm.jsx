@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, useMediaQuery, Stepper, Step, StepLabel, TextField, MenuItem } from '@mui/material';
-import { Box, Typography, Button, useMediaQuery, Stepper, Step, StepLabel, TextField, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
@@ -8,10 +7,7 @@ import RegisterFormFields from './RegisterFormFields';
 
 const steps = ['Adatok megadása', 'Egyetem adatai', 'Elvégzett tárgyak'];
 
-const steps = ['Adatok megadása', 'Egyetem adatai', 'Elvégzett tárgyak'];
-
 const RegisterForm = ({ setNotification }) => {
-  const [activeStep, setActiveStep] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -30,12 +26,9 @@ const RegisterForm = ({ setNotification }) => {
 
   const handleNext = () => {
     if (activeStep === 0 && (!email || !username || !password || !confirmPassword)) {
-  const handleNext = () => {
-    if (activeStep === 0 && (!email || !username || !password || !confirmPassword)) {
       setNotification({ open: true, message: 'Minden mezőt ki kell tölteni!', severity: 'warning' });
       return;
     }
-    if (activeStep === 0 && password !== confirmPassword) {
     if (activeStep === 0 && password !== confirmPassword) {
       setNotification({ open: true, message: 'A jelszavak nem egyeznek!', severity: 'warning' });
       return;
