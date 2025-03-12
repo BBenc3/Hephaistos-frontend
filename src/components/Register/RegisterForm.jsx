@@ -116,14 +116,6 @@ const RegisterForm = ({ setNotification }) => {
           </Step>
         ))}
       </Stepper>
-    <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
       <Box
         sx={{
           backgroundColor: theme.palette.background.default,
