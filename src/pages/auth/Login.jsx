@@ -12,7 +12,6 @@ const Login = () => {
   const { isLoggedIn, login, error } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'warning' });
 
   const handleNotificationClose = () => {
@@ -85,8 +84,6 @@ const Login = () => {
       <Box sx={{ flexGrow: 1 }}>
         <LoginForm handleLogin={login} setNotification={setNotification} />
       </Box>
-
-      {/* Alsó értesítés/gombok mobilos nézethez */}
       <Notification
         open={notification.open}
         message={notification.message}

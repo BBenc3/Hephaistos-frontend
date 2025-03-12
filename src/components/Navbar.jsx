@@ -5,9 +5,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 import { Gear } from 'react-bootstrap-icons';
 import { keyframes } from '@mui/system';
+import useUserData from "../hooks/useUserData";
 import CustomButton from "./Button";
 import UserProfileDropdown from "./UserProfileDropdown";
-import { useAuth } from "../contexts/AuthContext";
 import CustomDropdown from "./CustomDropdown";
 import DarkModeToggle from './DarkModeToggle';
 
@@ -52,7 +52,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isLoggedIn, user } = useAuth();
+  const { user } = useUserData();
   const [gearAnchorEl, setGearAnchorEl] = useState(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [animateForward, setAnimateForward] = useState(false);
@@ -114,7 +114,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
                 <ListItem button onClick={() => { navigate("/schedule"); toggleDrawer(); }}>
                   <ListItemText primary="Órarend generálás" />
                 </ListItem>
-                {!isLoggedIn && (
+                {!user && (
                   <ListItem button onClick={() => { navigate("/login"); toggleDrawer(); }}>
                     <ListItemText primary="Bejelentkezés" />
                   </ListItem>
@@ -126,7 +126,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
           <div>{renderNavLinks()}</div>
         )}
 
-        {isLoggedIn ? (
+        {user ? (
           <UserProfileDropdown anchorEl={profileAnchorEl} onMenuClick={handleProfileMenuClick} onMenuClose={handleProfileMenuClose} user={user} />
         ) : (
           !isMobile && (

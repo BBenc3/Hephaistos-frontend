@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Notification from "../components/Notification";
 
 //hozzá kell adni egy függvényt amit majd az authcontextből fogunk meghívni
 //ez a függvény fogja a user adatait lekérni a backendről
@@ -10,8 +11,9 @@ const useUserData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isDeactivated, setIsDeactivated] = useState(false);
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const logout = useAuth().logout;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -33,8 +35,14 @@ const useUserData = () => {
       }
     };
 
-    fetchUserData();
-  }, []);
+     if (!isLoggedIn) {
+       setUser(null);
+     }
+
+    if (isLoggedIn) {
+      fetchUserData();
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -109,11 +117,11 @@ const useUserData = () => {
   return {
     user,
     loading,
-    error,
     isDeactivated,
     isLoggedIn,
     handleDeactivate,
     handleUpdate,
+    errorNotification: error ? <Notification message={error} severity="error" open={true} /> : null,
   };
 };
 

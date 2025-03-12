@@ -32,7 +32,6 @@ function App() {
 // Child component that uses useAuth
 function AppContent() {
   const [isDarkMode, setIsDarkMode] = useDarkMode();
-  const { refreshTokens } = useAuth();
   const [notification, setNotification] = React.useState({ open: false, message: '' });
   const theme = createTheme({
     palette: {
@@ -51,13 +50,7 @@ function AppContent() {
 
   useEffect(() => {
     document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
-    const savedRefreshToken = localStorage.getItem('refreshToken');
-    if (!savedRefreshToken) {
-      setNotification({ open: true, message: 'A munkamenet lejárt' });
-    } else {
-      refreshTokens((msg) => setNotification({ open: true, message: msg }));
-    }
-  }, [isDarkMode, refreshTokens]);
+  }, [isDarkMode]);
 
   return (
     <ThemeProvider theme={theme}>
