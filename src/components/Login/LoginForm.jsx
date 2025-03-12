@@ -28,6 +28,11 @@ const LoginForm = ({ setNotification }) => {
     setLoading(true);
     try {
       await login({ email, password, stayLoggedIn });
+      if (stayLoggedIn) {
+        localStorage.setItem('stayLoggedIn', 'true');
+      } else {
+        localStorage.removeItem('stayLoggedIn');
+      }
       navigate('/profile');
     } catch (error) {
       let errorMsg = 'Hibás email vagy jelszó!';
@@ -35,6 +40,7 @@ const LoginForm = ({ setNotification }) => {
         errorMsg = error.response.data;
       }
       setNotification({ open: true, message: errorMsg, severity: 'error' });
+      setFailedAttempts(failedAttempts + 1);
     } finally {
       setLoading(false);
     }
