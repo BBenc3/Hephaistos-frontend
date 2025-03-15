@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      CI: false
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -24,4 +26,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/"            # A projekt mappa
-          output_location: "dist"      # A build eredménye
+          output_location: "build"      # A build eredménye
