@@ -22,7 +22,6 @@ import { useMediaQuery } from '@mui/material';
 import Notification from './components/Notification';
 
 function App() {
-  // Wrap the inner app in AuthProvider
   return (
     <AuthProvider>
       <AppContent />
