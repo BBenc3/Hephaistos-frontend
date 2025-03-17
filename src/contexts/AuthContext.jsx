@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('https://localhost:5001/api/auth/login', credentials ,{
+      const response = await axios.post('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/auth/login', credentials ,{
           headers: {
             'Content-Type': 'application/json',
           }
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
 
   const requestOtp = async (email) => {
     try {
-      await axios.post('https://localhost:5001/api/auth/generate-otp', { email });
+      await axios.post('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/auth/generate-otp', { email });
     } catch (error) {
       console.error('OTP request error:', error);
     }
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyOtp = async (email, otp, newPassword) => {
     try {
-      await axios.put('https://localhost:5001/api/auth/change-password-after-otp', { email, otp, newPassword });
+      await axios.put('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/auth/change-password-after-otp', { email, otp, newPassword });
     } catch (error) {
       console.error('OTP verification error:', error);
     }

@@ -19,7 +19,7 @@ const useUserData = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "https://localhost:5001/api/users/me",
+          "https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/me",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -63,7 +63,7 @@ const useUserData = () => {
       const accessToken = localStorage.getItem("accessToken");
 
       const response = await axios.delete(
-        "https://localhost:5001/api/users/me",
+        "https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/me",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -94,7 +94,7 @@ const useUserData = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/api/users/me", {
+      const response = await fetch("https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/me", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -55,7 +55,7 @@ const UserProfile = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put('https://localhost:5001/api/users/me', {
+      await axios.put('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/me', {
         firstName,
         lastName,
         email,
@@ -93,7 +93,7 @@ const UserProfile = () => {
     formData.append('profilePicture', profilePicture);
 
     try {
-      await axios.post('https://localhost:5001/api/users/upload-profile-picture', formData, {
+      await axios.post('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/upload-profile-picture', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

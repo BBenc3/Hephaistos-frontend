@@ -29,7 +29,7 @@ const ChangePasswordForm = () => {
     try {
       const token = sessionStorage.getItem('accessToken');
       await axios.post(
-        'https://localhost:5001/change-password',
+        'https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/change-password',
         { oldPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );

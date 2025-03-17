@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
-import { Box, Typography, Button, useMediaQuery, Stepper, Step, StepLabel, TextField, MenuItem } from '@mui/material'; // Added Stepper, Step, StepLabel
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Button, useMediaQuery, Stepper, Step, StepLabel, TextField, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import RegisterFormFields from './RegisterFormFields';
 
 const steps = ['Adatok megadása', 'Egyetem adatai', 'Elvégzett tárgyak'];
-
-const initialUniversities = ['Egyetem 1', 'Egyetem 2', 'Egyetem 3', 'Egyetem 4'];
-const initialFaculties = ['Kar 1', 'Kar 2', 'Kar 3', 'Kar 4'];
 
 const RegisterForm = ({ setNotification }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -25,11 +22,23 @@ const RegisterForm = ({ setNotification }) => {
   const [subjectCode, setSubjectCode] = useState('');
   const [subjectType, setSubjectType] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [universities, setUniversities] = useState(initialUniversities);
-  const [faculties, setFaculties] = useState(initialFaculties);
+  const [universities, setUniversities] = useState([]);
+  const [faculties, setFaculties] = useState([]);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const universityResponse = await axios.get('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/universities');
+        setUniversities(universityResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleNext = () => {
     if (activeStep === 0 && (!email || !username || !password || !confirmPassword)) {
@@ -62,7 +71,7 @@ const RegisterForm = ({ setNotification }) => {
     console.log('Register payload:', payload); // Log the payload to see what is being sent
 
     try {
-      await axios.post('https://localhost:5001/api/auth/register', payload);
+      await axios.post('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/auth/register', payload);
       navigate('/login');
     } catch (error) {
       if (error.response && error.response.data) {
@@ -173,8 +182,8 @@ const RegisterForm = ({ setNotification }) => {
               select
               onKeyPress={handleKeyPress}
             >
-              {universities.map((uni) => (
-                <MenuItem key={uni} value={uni}>
+              {universities && universities.map((uni,index) => (
+                <MenuItem key={index} value={uni}>
                   {uni}
                 </MenuItem>
               ))}
@@ -206,7 +215,7 @@ const RegisterForm = ({ setNotification }) => {
               select
               onKeyPress={handleKeyPress}
             >
-              {faculties.map((fac) => (
+              {faculties && faculties.map((fac) => (
                 <MenuItem key={fac} value={fac}>
                   {fac}
                 </MenuItem>
