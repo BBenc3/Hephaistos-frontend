@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, useMediaQuery, Stepper, Step, StepLabel, TextField, MenuItem } from '@mui/material';
+import { Box, Typography, Button, useMediaQuery, Stepper, Step, StepLabel, TextField, MenuItem } from '@mui/material'; // Added Stepper, Step, StepLabel
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
@@ -7,8 +7,8 @@ import RegisterFormFields from './RegisterFormFields';
 
 const steps = ['Adatok megadása', 'Egyetem adatai', 'Elvégzett tárgyak'];
 
-const universities = ['Egyetem 1', 'Egyetem 2', 'Egyetem 3', 'Egyetem 4'];
-const faculties = ['Kar 1', 'Kar 2', 'Kar 3', 'Kar 4'];
+const initialUniversities = ['Egyetem 1', 'Egyetem 2', 'Egyetem 3', 'Egyetem 4'];
+const initialFaculties = ['Kar 1', 'Kar 2', 'Kar 3', 'Kar 4'];
 
 const RegisterForm = ({ setNotification }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -17,12 +17,16 @@ const RegisterForm = ({ setNotification }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [university, setUniversity] = useState('');
+  const [customUniversity, setCustomUniversity] = useState('');
   const [faculty, setFaculty] = useState('');
+  const [customFaculty, setCustomFaculty] = useState('');
   const [studyStatus, setStudyStatus] = useState('');
   const [subjectName, setSubjectName] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
   const [subjectType, setSubjectType] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [universities, setUniversities] = useState(initialUniversities);
+  const [faculties, setFaculties] = useState(initialFaculties);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -48,8 +52,8 @@ const RegisterForm = ({ setNotification }) => {
       email,
       username,
       password,
-      university,
-      faculty,
+      university: university === 'custom' ? customUniversity : university,
+      faculty: faculty === 'custom' ? customFaculty : faculty,
       studyStatus,
       subjectName,
       subjectCode,
@@ -95,6 +99,22 @@ const RegisterForm = ({ setNotification }) => {
       } else {
         handleNext();
       }
+    }
+  };
+
+  const handleAddUniversity = () => {
+    if (customUniversity && !universities.includes(customUniversity)) {
+      setUniversities([...universities, customUniversity]);
+      setUniversity(customUniversity);
+      setCustomUniversity('');
+    }
+  };
+
+  const handleAddFaculty = () => {
+    if (customFaculty && !faculties.includes(customFaculty)) {
+      setFaculties([...faculties, customFaculty]);
+      setFaculty(customFaculty);
+      setCustomFaculty('');
     }
   };
 
@@ -158,7 +178,24 @@ const RegisterForm = ({ setNotification }) => {
                   {uni}
                 </MenuItem>
               ))}
+              <MenuItem value="custom">Egyéb...</MenuItem>
             </TextField>
+            {university === 'custom' && (
+              <>
+                <TextField
+                  label="Add meg az egyetem nevét"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={customUniversity}
+                  onChange={(e) => setCustomUniversity(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <Button variant="contained" onClick={handleAddUniversity} sx={{ mt: 2 }}>
+                  Egyetem hozzáadása
+                </Button>
+              </>
+            )}
             <TextField
               label="Kar"
               variant="outlined"
@@ -174,7 +211,24 @@ const RegisterForm = ({ setNotification }) => {
                   {fac}
                 </MenuItem>
               ))}
+              <MenuItem value="custom">Egyéb...</MenuItem>
             </TextField>
+            {faculty === 'custom' && (
+              <>
+                <TextField
+                  label="Add meg a kar nevét"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={customFaculty}
+                  onChange={(e) => setCustomFaculty(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+                <Button variant="contained" onClick={handleAddFaculty} sx={{ mt: 2 }}>
+                  Kar hozzáadása
+                </Button>
+              </>
+            )}
             <TextField
               label="Tanulmányi státusz"
               variant="outlined"
