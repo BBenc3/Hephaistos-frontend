@@ -7,6 +7,9 @@ import RegisterFormFields from './RegisterFormFields';
 
 const steps = ['Adatok megadása', 'Egyetem adatai', 'Elvégzett tárgyak'];
 
+const universities = ['Egyetem 1', 'Egyetem 2', 'Egyetem 3', 'Egyetem 4'];
+const faculties = ['Kar 1', 'Kar 2', 'Kar 3', 'Kar 4'];
+
 const RegisterForm = ({ setNotification }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [email, setEmail] = useState('');
@@ -92,11 +95,6 @@ const RegisterForm = ({ setNotification }) => {
       } else {
         handleNext();
       }
-      if (activeStep === steps.length - 1) {
-        handleRegister();
-      } else {
-        handleNext();
-      }
     }
   };
 
@@ -152,8 +150,15 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={university}
               onChange={(e) => setUniversity(e.target.value)}
+              select
               onKeyPress={handleKeyPress}
-            />
+            >
+              {universities.map((uni) => (
+                <MenuItem key={uni} value={uni}>
+                  {uni}
+                </MenuItem>
+              ))}
+            </TextField>
             <TextField
               label="Kar"
               variant="outlined"
@@ -161,8 +166,15 @@ const RegisterForm = ({ setNotification }) => {
               margin="normal"
               value={faculty}
               onChange={(e) => setFaculty(e.target.value)}
+              select
               onKeyPress={handleKeyPress}
-            />
+            >
+              {faculties.map((fac) => (
+                <MenuItem key={fac} value={fac}>
+                  {fac}
+                </MenuItem>
+              ))}
+            </TextField>
             <TextField
               label="Tanulmányi státusz"
               variant="outlined"
