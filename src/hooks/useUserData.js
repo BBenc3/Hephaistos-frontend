@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Notification from "../components/Notification";
 
-//hozzá kell adni egy függvényt amit majd az authcontextből fogunk meghívni
-//ez a függvény fogja a user adatait lekérni a backendről
 const useUserData = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

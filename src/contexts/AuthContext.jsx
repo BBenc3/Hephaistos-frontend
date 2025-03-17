@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
 import Notification from '../components/Notification';
 
+//hiányzik a refreshtoken logika
 const AuthContext = createContext();
 
 const initialState = {
