@@ -4,8 +4,8 @@ import { styled } from "@mui/material/styles";
 
 const Button = styled(MuiButton)(({ theme, size = "medium", width, height, bgColor, textColor }) => {
   return {
-    backgroundColor: bgColor || theme.palette.primary.main, // Alapértelmezett a téma elsődleges színe
-    color: textColor || theme.palette.common.white, // Alapértelmezett fehér szín
+    backgroundColor: bgColor || theme.palette.primary.main,
+    color: textColor || theme.palette.common.white,
     textTransform: "none",
     fontWeight: theme.typography.fontWeightBold,
     transition: "background-color 0.3s ease, width 0.3s ease, height 0.3s ease",
