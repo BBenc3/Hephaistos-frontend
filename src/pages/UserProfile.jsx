@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CircularProgress,
   Typography,
@@ -15,12 +15,14 @@ import {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useUserData from '../hooks/useUserData';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 const UserProfile = () => {
   const { user, loading, error, handleDeactivate, isLoggedIn } = useUserData();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const [isDarkMode] = useDarkMode();
 
   const [firstName, setFirstName] = useState(user?.userdata?.firstName || '');
   const [lastName, setLastName] = useState(user?.userdata?.lastName || '');
@@ -41,6 +43,11 @@ const UserProfile = () => {
   const [subjectType, setSubjectType] = useState(user?.userdata?.subjectType || '');
   const [editMode, setEditMode] = useState(false);
   const [formError, setFormError] = useState('');
+  const [profilePicture, setProfilePicture] = useState(null);
+
+  useEffect(() => {
+    document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
+  }, [isDarkMode]);
 
   if (!isLoggedIn) {
     navigate('/login');
@@ -69,6 +76,32 @@ const UserProfile = () => {
       setEditMode(false);
     } catch (err) {
       setFormError('Hiba történt a módosítás során.');
+    }
+  };
+
+  const handleProfilePictureChange = (event) => {
+    setProfilePicture(event.target.files[0]);
+  };
+
+  const handleProfilePictureUpload = async () => {
+    if (!profilePicture) {
+      alert('Kérlek válassz egy képet!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('profilePicture', profilePicture);
+
+    try {
+      await axios.post('https://localhost:5001/api/users/upload-profile-picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('Profilkép sikeresen feltöltve!');
+      setProfilePicture(null);
+    } catch (err) {
+      alert('Hiba történt a profilkép feltöltése során.');
     }
   };
 
@@ -115,8 +148,12 @@ const UserProfile = () => {
             alt="Profile Picture"
             sx={{ width: 100, height: 100, marginBottom: theme.spacing(1) }}
           />
-          <Button variant="text" onClick={() => navigate('/change-profile-picture')}>
+          <Button variant="text" component="label">
             Profilkép módosítása
+            <input type="file" hidden onChange={handleProfilePictureChange} />
+          </Button>
+          <Button variant="contained" onClick={handleProfilePictureUpload}>
+            Feltöltés
           </Button>
         </Box>
         <Box sx={{ textAlign: 'center', margin: '0 auto' }}>

@@ -5,6 +5,7 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeProvider } from "@mui/material";
 import theme from "./styles/theme"; // MUI theme importálása
+import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
 
 const Root = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -18,7 +19,9 @@ const Root = () => {
 
   return (
     <ThemeProvider theme={theme(isDarkMode ? "dark" : "light")}>
-      <App isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      <ErrorBoundary>
+        <App isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      </ErrorBoundary>
     </ThemeProvider>
   );
 };

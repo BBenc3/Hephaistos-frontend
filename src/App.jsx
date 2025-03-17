@@ -60,6 +60,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home isMobile={isMobile} />} />
           <Route path="/schedule" element={<Schedule />} />
+          <Route path="/schedule2" element={<Schedule />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
