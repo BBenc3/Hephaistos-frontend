@@ -1,7 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import { colors, darkColors } from "./colors";
 
-
 const lightTheme = {
   palette: {
     primary: {

@@ -11,6 +11,7 @@ const LoginFormFields = ({
   errorMessage,
   navigate,
   onKeyDown,
+  onKeyPress,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
@@ -25,6 +26,7 @@ const LoginFormFields = ({
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         onKeyDown={onKeyDown}
+        onKeyPress={onKeyPress}
         required
         color="primary"
       />
@@ -37,6 +39,7 @@ const LoginFormFields = ({
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         onKeyDown={onKeyDown}
+        onKeyPress={onKeyPress}
         color="primary"
         required
         InputProps={{

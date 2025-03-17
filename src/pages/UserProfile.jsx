@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CircularProgress,
   Typography,
@@ -7,17 +7,103 @@ import {
   Button,
   Grid,
   Avatar,
+  TextField,
+  MenuItem,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import useUserData from '../hooks/useUserData';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 const UserProfile = () => {
-  const { user, loading, error, handleDeactivate } = useUserData();
+  const { user, loading, error, handleDeactivate, isLoggedIn } = useUserData();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const [isDarkMode] = useDarkMode();
+
+  const [firstName, setFirstName] = useState(user?.userdata?.firstName || '');
+  const [lastName, setLastName] = useState(user?.userdata?.lastName || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phone, setPhone] = useState(user?.phoneNumber || '+36');
+  const [birthPlace, setBirthPlace] = useState(user?.userdata?.birthPlace || '');
+  const [birthDate, setBirthDate] = useState(user?.userdata?.birthDate || '');
+  const [address, setAddress] = useState(user?.userdata?.address || '');
+  const [role, setRole] = useState(user?.role || '');
+  const [motherName, setMotherName] = useState(user?.userdata?.motherName || '');
+  const [university, setUniversity] = useState(user?.userdata?.university || '');
+  const [faculty, setFaculty] = useState(user?.userdata?.faculty || '');
+  const [studyStatus, setStudyStatus] = useState(user?.userdata?.studyStatus || '');
+  const [subjectName, setSubjectName] = useState(user?.userdata?.subjectName || '');
+  const [subjectCode, setSubjectCode] = useState(user?.userdata?.subjectCode || '');
+  const [subjectType, setSubjectType] = useState(user?.userdata?.subjectType || '');
+  const [editMode, setEditMode] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [profilePicture, setProfilePicture] = useState(null);
+
+  useEffect(() => {
+    document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
+  }, [isDarkMode]);
+
+  if (!isLoggedIn) {
+    navigate('/login');
+  }
+
+  const handleSubmit = async () => {
+    try {
+      await axios.put('https://localhost:5001/api/users/me', {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        birthPlace,
+        birthDate,
+        address,
+        role,
+        motherName,
+        university,
+        faculty,
+        studyStatus,
+        subjectName,
+        subjectCode,
+        subjectType,
+      });
+      setEditMode(false);
+    } catch (err) {
+      setFormError('Hiba történt a módosítás során.');
+    }
+  };
+
+  const handleProfilePictureChange = (event) => {
+    setProfilePicture(event.target.files[0]);
+  };
+
+  const handleProfilePictureUpload = async () => {
+    if (!profilePicture) {
+      alert('Kérlek válassz egy képet!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('profilePicture', profilePicture);
+
+    try {
+      await axios.post('https://localhost:5001/api/users/upload-profile-picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('Profilkép sikeresen feltöltve!');
+      setProfilePicture(null);
+    } catch (err) {
+      alert('Hiba történt a profilkép feltöltése során.');
+    }
+  };
 
   if (loading) {
     return (
@@ -45,59 +131,322 @@ const UserProfile = () => {
         [theme.breakpoints.down('sm')]: { padding: theme.spacing(2), marginTop: theme.spacing(2), width: '100%' },
       }}
     >
-      <Typography variant="h5" gutterBottom>
-        Felhasználói profil
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+      <Box
+        sx={{
+          backgroundColor: '#DEE2E6',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: theme.spacing(2),
+          marginBottom: theme.spacing(2),
+          flexDirection: 'row',
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar
             src={user.profilePicturePath || 'https://via.placeholder.com/150'}
             alt="Profile Picture"
-            sx={{ width: 100, height: 100, marginBottom: theme.spacing(2) }}
+            sx={{ width: 100, height: 100, marginBottom: theme.spacing(1) }}
           />
-          <Typography>
-            <strong>Felhasználó név:</strong> {user.username}
+          <Button variant="text" component="label">
+            Profilkép módosítása
+            <input type="file" hidden onChange={handleProfilePictureChange} />
+          </Button>
+          <Button variant="contained" onClick={handleProfilePictureUpload}>
+            Feltöltés
+          </Button>
+        </Box>
+        <Box sx={{ textAlign: 'center', margin: '0 auto' }}>
+          <Typography variant="h4" gutterBottom>
+            Profil beállítások
           </Typography>
-          <Typography>
-            <strong>Email:</strong> {user.email}
+          <Typography sx={{ marginBottom: theme.spacing(2) }}>
+            Állítsd be személyes adatokat, értesítéseket és egyéb preferenciákat, hogy testre szabhasd a profilodat.
           </Typography>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography>
-            <strong>Létrehozva:</strong> {new Date(user.createdAt).toLocaleDateString()}
-          </Typography>
-          <Typography>
-            <strong>Szerep:</strong> {user.role}
-          </Typography>
-          <Typography>
-            <strong>Aktív:</strong> {user.active ? 'Igen' : 'Nem'}
-          </Typography>
-        </Grid>
-      </Grid>
-
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: theme.spacing(3),
-          [theme.breakpoints.down('sm')]: { flexDirection: 'column', alignItems: 'flex-start' },
-        }}
-      >
-        <Button
-          variant="text"
-          onClick={() => navigate('/editprofile')}
-          sx={{ fontSize: '0.8rem', [theme.breakpoints.down('sm')]: { marginBottom: theme.spacing(2) } }}
-        >
-          Módosítás
-        </Button>
-        <Button variant="contained" color="error" onClick={handleDeactivate}>
-          Profil Inaktiválása
-        </Button>
+        </Box>
       </Box>
-      {error && (
-        <Typography color="error" sx={{ marginTop: theme.spacing(2) }}>
-          {error}
-        </Typography>
+      <Typography variant="h5" gutterBottom>
+        Felhasználói profil
+      </Typography>
+      {editMode ? (
+        <Box
+          sx={{
+            backgroundColor: 'white',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            [theme.breakpoints.down('sm')]: {
+              width: '100%',
+              padding: '5%',
+            },
+          }}
+        >
+          {formError && (
+            <Typography color="error" sx={{ marginBottom: 2 }}>
+              {formError}
+            </Typography>
+          )}
+          <Box
+            sx={{
+              border: '1px solid #00000033', // 20% opacity
+              borderRadius: '0%',
+              padding: theme.spacing(2),
+              width: '100%',
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Keresztnév"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Vezetéknév"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="E-mail cím megváltoztatása"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Jelszó megváltoztatása"
+                  variant="outlined"
+                  type="password"
+                  fullWidth
+                  margin="normal"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Minimum 8 karakter"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Jelszó megerősítése"
+                  variant="outlined"
+                  type="password"
+                  fullWidth
+                  margin="normal"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Jelszó mégegyszer"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Telefonszám hozzáadás"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+36"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Születési hely és idő hozzáadás"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={birthPlace}
+                  onChange={(e) => setBirthPlace(e.target.value)}
+                  placeholder="Év/hónap/nap"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Születési dátum"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Cím hozzáadás"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Válassz..."
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Anyja neve"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={motherName}
+                  onChange={(e) => setMotherName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Felhasználói szerepkör"
+                  variant="outlined"
+                  select
+                  fullWidth
+                  margin="normal"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  placeholder="Válassz..."
+                >
+                  <MenuItem value="admin">Admin</MenuItem>
+                  <MenuItem value="user">User</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Egyetem neve"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={university}
+                  onChange={(e) => setUniversity(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Kar"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={faculty}
+                  onChange={(e) => setFaculty(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Tanulmányi státusz"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={studyStatus}
+                  onChange={(e) => setStudyStatus(e.target.value)}
+                  select
+                >
+                  <MenuItem value="Aktív">Aktív</MenuItem>
+                  <MenuItem value="Passzív">Passzív</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Tantárgy neve"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={subjectName}
+                  onChange={(e) => setSubjectName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Tantárgy kódja"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={subjectCode}
+                  onChange={(e) => setSubjectCode(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <TextField
+                  label="Kötelező vagy választható tárgy"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={subjectType}
+                  onChange={(e) => setSubjectType(e.target.value)}
+                  select
+                >
+                  <MenuItem value="Kötelező">Kötelező</MenuItem>
+                  <MenuItem value="Választható">Választható</MenuItem>
+                </TextField>
+              </Grid>
+            </Grid>
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            sx={{ marginTop: 2 }}
+          >
+            Módosítás
+          </Button>
+        </Box>
+      ) : (
+        <>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography>
+                <strong>Felhasználó név:</strong> {user.username}
+              </Typography>
+              <Typography>
+                <strong>Email:</strong> {user.email}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography>
+                <strong>Létrehozva:</strong> {new Date(user.createdAt).toLocaleDateString()}
+              </Typography>
+              <Typography>
+                <strong>Szerep:</strong> {user.role}
+              </Typography>
+              <Typography>
+                <strong>Aktív:</strong> {user.active ? 'Igen' : 'Nem'}
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginTop: theme.spacing(3),
+              [theme.breakpoints.down('sm')]: { flexDirection: 'column', alignItems: 'flex-start' },
+            }}
+          >
+            <Button
+              variant="text"
+              onClick={() => setEditMode(true)}
+              sx={{ fontSize: '0.8rem', [theme.breakpoints.down('sm')]: { marginBottom: theme.spacing(2) } }}
+            >
+              Módosítás
+            </Button>
+            <Button variant="contained" color="error" onClick={handleDeactivate}>
+              Profil Inaktiválása
+            </Button>
+          </Box>
+          {error && (
+            <Typography color="error" sx={{ marginTop: theme.spacing(2) }}>
+              {error}
+            </Typography>
+          )}
+        </>
       )}
     </Paper>
   );

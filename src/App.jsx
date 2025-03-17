@@ -12,7 +12,6 @@ import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import About from './pages/About';
 import Profile from './pages/UserProfile';
-import UserEdit from './pages/UserEdit';
 import UserDelete from './pages/UserDelete';
 import Login from './pages/auth/Login';
 import ErrorPage from './components/Error/ErrorPage';
@@ -60,11 +59,11 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home isMobile={isMobile} />} />
           <Route path="/schedule" element={<Schedule />} />
+          <Route path="/schedule2" element={<Schedule />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
           <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
-          <Route path="/edit" element={<ProtectedRoute element={<UserEdit />} />} />
           <Route path="/about" element={<About />} /> {/* Add this line */}
           <Route path="*" element={<ErrorPage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />

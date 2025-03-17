@@ -41,7 +41,7 @@ const rotateBackward = keyframes`
   }
 `;
 
-const AnimatedGear = styled(Gear)(({ theme, animateForward, animateBackward }) => ({
+const AnimatedGear = styled(Gear)(({ animateForward, animateBackward }) => ({
   animation: animateForward ? `${rotateForward} 0.5s linear` : animateBackward ? `${rotateBackward} 0.5s linear` : 'none',
   transform: animateForward ? 'rotate(45deg)' : animateBackward ? 'rotate(0deg)' : 'none',
 }));
@@ -137,7 +137,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
         )}
 
         <IconButton color="inherit" onClick={handleGearMenuClick} sx={{ color: theme.palette.primary.main }}>
-          <AnimatedGear />
+          <AnimatedGear animateForward={animateForward} animateBackward={animateBackward} />
         </IconButton>
         <CustomDropdown anchorEl={gearAnchorEl} open={Boolean(gearAnchorEl)} onClose={handleGearMenuClose}>
           <MenuItem>
