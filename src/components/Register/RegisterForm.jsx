@@ -112,8 +112,8 @@ const RegisterForm = ({ setNotification }) => {
   };
 
   const handleAddUniversity = () => {
-    if (customUniversity && !universities.includes(customUniversity)) {
-      setUniversities([...universities, customUniversity]);
+    if (customUniversity && !universities.some(uni => uni.name === customUniversity)) {
+      setUniversities([...universities, { name: customUniversity }]);
       setUniversity(customUniversity);
       setCustomUniversity('');
     }
@@ -182,9 +182,9 @@ const RegisterForm = ({ setNotification }) => {
               select
               onKeyPress={handleKeyPress}
             >
-              {universities && universities.map((uni,index) => (
-                <MenuItem key={index} value={uni}>
-                  {uni}
+              {universities && universities.map((uni, index) => (
+                <MenuItem key={index} value={uni.name}>
+                  {uni.name}
                 </MenuItem>
               ))}
               <MenuItem value="custom">Egyéb...</MenuItem>
@@ -215,8 +215,8 @@ const RegisterForm = ({ setNotification }) => {
               select
               onKeyPress={handleKeyPress}
             >
-              {faculties && faculties.map((fac) => (
-                <MenuItem key={fac} value={fac}>
+              {faculties && faculties.map((fac, index) => (
+                <MenuItem key={index} value={fac}>
                   {fac}
                 </MenuItem>
               ))}
