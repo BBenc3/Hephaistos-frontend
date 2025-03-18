@@ -21,6 +21,7 @@ const RegisterForm = ({ setNotification }) => {
   const [subjectName, setSubjectName] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
   const [subjectType, setSubjectType] = useState('');
+  const [startYear, setStartYear] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [universities, setUniversities] = useState([]);
   const [faculties, setFaculties] = useState([]);
@@ -40,6 +41,15 @@ const RegisterForm = ({ setNotification }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (university && university !== 'custom') {
+      const selectedUniversity = universities.find(uni => uni.name === university);
+      setFaculties(selectedUniversity ? selectedUniversity.majors : []);
+    } else {
+      setFaculties([]);
+    }
+  }, [university, universities]);
+
   const handleNext = () => {
     if (activeStep === 0 && (!email || !username || !password || !confirmPassword)) {
       setNotification({ open: true, message: 'Minden mezőt ki kell tölteni!', severity: 'warning' });
@@ -58,15 +68,12 @@ const RegisterForm = ({ setNotification }) => {
 
   const handleRegister = async () => {
     const payload = {
-      email,
       username,
+      email,
       password,
-      university: university === 'custom' ? customUniversity : university,
-      faculty: faculty === 'custom' ? customFaculty : faculty,
-      studyStatus,
-      subjectName,
-      subjectCode,
-      subjectType,
+      startYear: parseInt(startYear, 10),
+      majorId: faculty === 'custom' ? 0 : faculties.find(fac => fac.name === faculty)?.id,
+      status: studyStatus,
     };
     console.log('Register payload:', payload); // Log the payload to see what is being sent
 
@@ -113,15 +120,15 @@ const RegisterForm = ({ setNotification }) => {
 
   const handleAddUniversity = () => {
     if (customUniversity && !universities.some(uni => uni.name === customUniversity)) {
-      setUniversities([...universities, { name: customUniversity }]);
+      setUniversities([...universities, { name: customUniversity, majors: [] }]);
       setUniversity(customUniversity);
       setCustomUniversity('');
     }
   };
 
   const handleAddFaculty = () => {
-    if (customFaculty && !faculties.includes(customFaculty)) {
-      setFaculties([...faculties, customFaculty]);
+    if (customFaculty && !faculties.some(fac => fac.name === customFaculty)) {
+      setFaculties([...faculties, { name: customFaculty }]);
       setFaculty(customFaculty);
       setCustomFaculty('');
     }
@@ -214,10 +221,11 @@ const RegisterForm = ({ setNotification }) => {
               onChange={(e) => setFaculty(e.target.value)}
               select
               onKeyPress={handleKeyPress}
+              disabled={!university || university === 'custom'}
             >
               {faculties && faculties.map((fac, index) => (
-                <MenuItem key={index} value={fac}>
-                  {fac}
+                <MenuItem key={index} value={fac.name}>
+                  {fac.name}
                 </MenuItem>
               ))}
               <MenuItem value="custom">Egyéb...</MenuItem>
@@ -251,6 +259,15 @@ const RegisterForm = ({ setNotification }) => {
               <MenuItem value="Aktív">Aktív</MenuItem>
               <MenuItem value="Passzív">Passzív</MenuItem>
             </TextField>
+            <TextField
+              label="Kezdési év"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={startYear}
+              onChange={(e) => setStartYear(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
           </>
         )}
         {activeStep === 2 && (
