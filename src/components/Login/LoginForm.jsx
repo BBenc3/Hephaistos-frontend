@@ -7,7 +7,7 @@ import LoginFormFields from './LoginFormFields';
 import ForgotPasswordButton from '../ForgotPasswordButton';
 
 const LoginForm = ({ setNotification }) => {
-  const [email, setEmail] = useState('');
+  const [usernameOrEmail, setusernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,14 +20,14 @@ const LoginForm = ({ setNotification }) => {
 
   const handleLoginSubmit = async () => {
 
-    if (!email || !password) {
+    if (!usernameOrEmail || !password) {
       setNotification({ open: true, message: 'Minden mezőt ki kell tölteni!', severity: 'warning' });
       return;
     }
 
     setLoading(true);
     try {
-      await login({ email, password, stayLoggedIn });
+      await login({ usernameOrEmail, password, stayLoggedIn });
       if (stayLoggedIn) {
         localStorage.setItem('stayLoggedIn', 'true');
       } else {
@@ -35,7 +35,7 @@ const LoginForm = ({ setNotification }) => {
       }
       navigate('/profile');
     } catch (error) {
-      let errorMsg = 'Hibás email vagy jelszó!';
+      let errorMsg = 'Hibás Felhasználónév vagy jelszó!';
       if (error?.response?.data) {
         errorMsg = error.response.data;
       }
@@ -71,8 +71,8 @@ const LoginForm = ({ setNotification }) => {
           Bejelentkezés
         </Typography>
         <LoginFormFields
-          email={email}
-          setEmail={setEmail}
+          usernameOrEmail={usernameOrEmail}
+          setusernameOrEmail={setusernameOrEmail}
           password={password}
           setPassword={setPassword}
           errorMessage={errorMessage}

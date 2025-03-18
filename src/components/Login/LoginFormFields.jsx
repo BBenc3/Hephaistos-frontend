@@ -4,8 +4,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
 const LoginFormFields = ({
-  email,
-  setEmail,
+  usernameOrEmail,
+  setusernameOrEmail,
   password,
   setPassword,
   errorMessage,
@@ -19,12 +19,12 @@ const LoginFormFields = ({
   return (
     <>
       <TextField
-        label="Email"
+        label="Felhasználónév vagy Email"
         variant="outlined"
         fullWidth
         margin="normal"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={usernameOrEmail}
+        onChange={(e) => setusernameOrEmail(e.target.value)}
         onKeyDown={onKeyDown}
         onKeyPress={onKeyPress}
         required

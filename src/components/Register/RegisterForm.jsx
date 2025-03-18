@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import RegisterFormFields from './RegisterFormFields';
 
-const steps = ['Adatok megadása', 'Egyetem adatai', 'Elvégzett tárgyak'];
+const steps = ['Adatok megadása', 'Egyetem adatai'];
 
 const RegisterForm = ({ setNotification }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -18,9 +18,6 @@ const RegisterForm = ({ setNotification }) => {
   const [faculty, setFaculty] = useState('');
   const [customFaculty, setCustomFaculty] = useState('');
   const [studyStatus, setStudyStatus] = useState('');
-  const [subjectName, setSubjectName] = useState('');
-  const [subjectCode, setSubjectCode] = useState('');
-  const [subjectType, setSubjectType] = useState('');
   const [startYear, setStartYear] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [universities, setUniversities] = useState([]);
@@ -268,42 +265,6 @@ const RegisterForm = ({ setNotification }) => {
               onChange={(e) => setStartYear(e.target.value)}
               onKeyPress={handleKeyPress}
             />
-          </>
-        )}
-        {activeStep === 2 && (
-          <>
-            <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, marginBottom: 3 }}>Elvégzett tárgyak</Typography>
-            <TextField
-              label="Tantárgy neve"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={subjectName}
-              onChange={(e) => setSubjectName(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <TextField
-              label="Tantárgy kódja"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={subjectCode}
-              onChange={(e) => setSubjectCode(e.target.value)}
-              onKeyPress={handleKeyPress}
-            />
-            <TextField
-              label="Kötelező vagy választható tárgy"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={subjectType}
-              onChange={(e) => setSubjectType(e.target.value)}
-              select
-              onKeyPress={handleKeyPress}
-            >
-              <MenuItem value="Kötelező">Kötelező</MenuItem>
-              <MenuItem value="Választható">Választható</MenuItem>
-            </TextField>
           </>
         )}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
