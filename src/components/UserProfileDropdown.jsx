@@ -16,7 +16,7 @@ const UserProfileDropdown = ({ anchorEl, onMenuClick, onMenuClose, user }) => {
     onMenuClose();
   };
 
-  const displayAvatar = user?.profilePicturePath || "https://via.placeholder.com/40"; // Use profile picture if available
+  const displayAvatar = `http://files.hephaistos.nhely.hu/ProjectHephaistos/ProfilePictures/${user.profilePicturePath}` || "https://via.placeholder.com/40"; // Use profile picture if available
   const displayName = user?.username || "Felhasználó név"; // Use username if available
 
   return (

@@ -57,20 +57,10 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      fetchFtpImages();
     } else {
       navigate('/login');
     }
   }, [isLoggedIn, navigate]);
-
-  const fetchFtpImages = async () => {
-    try {
-      const response = await axios.get('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/Ftp/list');
-      setFtpImages(response.data); // assuming response.data contains an array of image file names
-    } catch (err) {
-      console.error('Error fetching FTP images', err);
-    }
-  };
 
   const handleProfilePictureChange = (imagePath) => {
     setSelectedProfilePicture(imagePath);
@@ -119,6 +109,8 @@ const UserProfile = () => {
     );
   }
 
+  const displayAvatar = `http://files.hephaistos.nhely.hu/ProjectHephaistos/ProfilePictures/${user.profilePicturePath}` || "https://via.placeholder.com/40";
+
   return (
     <Paper
       elevation={3}
@@ -142,7 +134,7 @@ const UserProfile = () => {
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar
-            src={selectedProfilePicture || 'ftp://Hephaistos@ftp.nethely.hu/default.png'}
+            src={selectedProfilePicture || displayAvatar}
             alt="Profile Picture"
             sx={{ width: 100, height: 100, marginBottom: theme.spacing(1) }}
           />
@@ -158,7 +150,7 @@ const UserProfile = () => {
             {ftpImages.map((image) => (
               <ListItem button key={image} onClick={() => handleProfilePictureChange(image)}>
                 <ListItemAvatar>
-                  <Avatar src={`ftp://Hephaistos@ftp.nethely.hu/${image}`} />
+                  <Avatar src={`http://files.hephaistos.nhely.hu/ProjectHephaistos/ProfilePictures/Users/${image}`} />
                 </ListItemAvatar>
                 <ListItemText primary={image} />
               </ListItem>
