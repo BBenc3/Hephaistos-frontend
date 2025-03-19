@@ -19,7 +19,6 @@ const LoginForm = ({ setNotification }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLoginSubmit = async () => {
-
     if (!usernameOrEmail || !password) {
       setNotification({ open: true, message: 'Minden mezőt ki kell tölteni!', severity: 'warning' });
       return;
@@ -35,9 +34,9 @@ const LoginForm = ({ setNotification }) => {
       }
       navigate('/profile');
     } catch (error) {
-      let errorMsg = 'Hibás Felhasználónév vagy jelszó!';
+      let errorMsg = 'Hibás felhasználónév vagy jelszó!';
       if (error?.response?.data) {
-        errorMsg = error.response.data;
+        errorMsg = error.response.data.message || errorMsg;
       }
       setNotification({ open: true, message: errorMsg, severity: 'error' });
       setFailedAttempts(failedAttempts + 1);
@@ -55,14 +54,14 @@ const LoginForm = ({ setNotification }) => {
   return (
     <Box
       sx={{
-        backgroundColor: isMobile? 'none' : theme.palette.background.default,
+        backgroundColor: isMobile ? 'none' : theme.palette.background.default,
         borderRadius: isMobile ? 'none' : '12px',
         boxShadow: isMobile ? 'none' : '0px 4px 20px rgba(0, 0, 0, 0.3)',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between', // Felső és alsó tartalom elrendezése
+        justifyContent: 'space-between',
         width: isMobile ? '100%' : 'auto',
-        p: isMobile? 0 : 2
+        p: isMobile ? 0 : 2
       }}
     >
       <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
@@ -96,7 +95,7 @@ const LoginForm = ({ setNotification }) => {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
             '&:hover': { backgroundColor: theme.palette.primary.dark },
-            width: isMobile? '50%' : '40%',
+            width: isMobile ? '50%' : '40%',
             height: '50px',
             marginTop: '1%',
           }}
@@ -108,7 +107,6 @@ const LoginForm = ({ setNotification }) => {
         <ForgotPasswordButton navigate={navigate} failedAttempts={failedAttempts} />
       </Box>
 
-      {/* Alsó rész - "Nincs fiókod?" szekció (mobilon az aljára igazítva) */}
       <Box
         sx={{
           width: '100%',

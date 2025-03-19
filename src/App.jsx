@@ -17,6 +17,7 @@ import Login from './pages/auth/Login';
 import ErrorPage from './components/Error/ErrorPage';
 import Register from './pages/auth/Register/Register';
 import ForgotPassword from './pages/auth/ForgotPassword';
+import TestPage from './pages/testpage'; // Import TestPage
 import { useMediaQuery } from '@mui/material';
 import Notification from './components/Notification';
 
@@ -66,6 +67,7 @@ function AppContent() {
           <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
           <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
           <Route path="/about" element={<About />} /> {/* Add this line */}
+          <Route path="/testpage" element={<TestPage />} /> {/* Add this line */}
           <Route path="*" element={<ErrorPage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
         </Routes>

@@ -19,7 +19,7 @@ const useUserData = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/me",
+          "https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/User/me",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -63,7 +63,7 @@ const useUserData = () => {
       const accessToken = localStorage.getItem("accessToken");
 
       const response = await axios.delete(
-        "https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/me",
+        "https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/User/me",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -94,7 +94,7 @@ const useUserData = () => {
     }
 
     try {
-      const response = await fetch("https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/me", {
+      const response = await fetch("https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/User/completedSubjects", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -114,6 +114,29 @@ const useUserData = () => {
     }
   };
 
+  const handleProfilePictureUpload = async (formData) => {
+    try {
+      const response = await axios.put(
+        "https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/User/uploadProfilePicture",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Profilkép sikeresen feltöltve!");
+      } else {
+        throw new Error("Hiba történt a profilkép feltöltése során");
+      }
+    } catch (error) {
+      alert("Hálózati hiba:", error);
+    }
+  };
+
   return {
     user,
     loading,
@@ -121,6 +144,7 @@ const useUserData = () => {
     isLoggedIn,
     handleDeactivate,
     handleUpdate,
+    handleProfilePictureUpload,
     errorNotification: error ? <Notification message={error} severity="error" open={true} /> : null,
   };
 };

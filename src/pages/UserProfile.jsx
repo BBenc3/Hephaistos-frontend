@@ -11,6 +11,10 @@ import {
   MenuItem,
   useMediaQuery,
   useTheme,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -18,7 +22,7 @@ import useUserData from '../hooks/useUserData';
 import { useDarkMode } from '../hooks/useDarkMode';
 
 const UserProfile = () => {
-  const { user, loading, error, handleDeactivate, isLoggedIn } = useUserData();
+  const { user, loading, error, handleDeactivate, isLoggedIn, handleProfilePictureUpload } = useUserData();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -44,14 +48,33 @@ const UserProfile = () => {
   const [editMode, setEditMode] = useState(false);
   const [formError, setFormError] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
+  const [ftpImages, setFtpImages] = useState([]);
+  const [selectedProfilePicture, setSelectedProfilePicture] = useState(user?.profilePicturePath || 'ftp://Hephaistos@ftp.nethely.hu/default.png');
 
   useEffect(() => {
     document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
   }, [isDarkMode]);
 
-  if (!isLoggedIn) {
-    navigate('/login');
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchFtpImages();
+    } else {
+      navigate('/login');
+    }
+  }, [isLoggedIn, navigate]);
+
+  const fetchFtpImages = async () => {
+    try {
+      const response = await axios.get('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/Ftp/list');
+      setFtpImages(response.data); // assuming response.data contains an array of image file names
+    } catch (err) {
+      console.error('Error fetching FTP images', err);
+    }
+  };
+
+  const handleProfilePictureChange = (imagePath) => {
+    setSelectedProfilePicture(imagePath);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -72,36 +95,11 @@ const UserProfile = () => {
         subjectName,
         subjectCode,
         subjectType,
+        profilePicture: selectedProfilePicture,
       });
       setEditMode(false);
     } catch (err) {
       setFormError('Hiba történt a módosítás során.');
-    }
-  };
-
-  const handleProfilePictureChange = (event) => {
-    setProfilePicture(event.target.files[0]);
-  };
-
-  const handleProfilePictureUpload = async () => {
-    if (!profilePicture) {
-      alert('Kérlek válassz egy képet!');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('profilePicture', profilePicture);
-
-    try {
-      await axios.post('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/upload-profile-picture', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      alert('Profilkép sikeresen feltöltve!');
-      setProfilePicture(null);
-    } catch (err) {
-      alert('Hiba történt a profilkép feltöltése során.');
     }
   };
 
@@ -144,7 +142,7 @@ const UserProfile = () => {
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar
-            src={user.profilePicturePath || 'https://via.placeholder.com/150'}
+            src={selectedProfilePicture || 'ftp://Hephaistos@ftp.nethely.hu/default.png'}
             alt="Profile Picture"
             sx={{ width: 100, height: 100, marginBottom: theme.spacing(1) }}
           />
@@ -155,6 +153,17 @@ const UserProfile = () => {
           <Button variant="contained" onClick={handleProfilePictureUpload}>
             Feltöltés
           </Button>
+          <Typography sx={{ marginTop: theme.spacing(2) }}>Válassz előre feltötltöttképet:</Typography>
+          <List>
+            {ftpImages.map((image) => (
+              <ListItem button key={image} onClick={() => handleProfilePictureChange(image)}>
+                <ListItemAvatar>
+                  <Avatar src={`ftp://Hephaistos@ftp.nethely.hu/${image}`} />
+                </ListItemAvatar>
+                <ListItemText primary={image} />
+              </ListItem>
+            ))}
+          </List>
         </Box>
         <Box sx={{ textAlign: 'center', margin: '0 auto' }}>
           <Typography variant="h4" gutterBottom>

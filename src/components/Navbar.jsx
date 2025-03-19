@@ -90,6 +90,9 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
       <NavbarButton onClick={() => navigate("/schedule")} active={location.pathname === "/schedule" ? true : undefined}>
         Órarend generálás
       </NavbarButton>
+      <NavbarButton onClick={() => navigate("/testpage")} active={location.pathname === "/testpage" ? true : undefined}>
+        Teszt oldal
+      </NavbarButton>
     </>
   );
 
@@ -113,6 +116,9 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
                 </ListItem>
                 <ListItem button onClick={() => { navigate("/schedule"); toggleDrawer(); }}>
                   <ListItemText primary="Órarend generálás" />
+                </ListItem>
+                <ListItem button onClick={() => { navigate("/testpage"); toggleDrawer(); }}>
+                  <ListItemText primary="Teszt oldal" />
                 </ListItem>
                 {!user && (
                   <ListItem button onClick={() => { navigate("/login"); toggleDrawer(); }}>

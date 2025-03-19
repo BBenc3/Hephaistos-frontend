@@ -20,7 +20,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/profile');
+      navigate('/testpage'); // Redirect to TestPage after login
     }
   }, [isLoggedIn, navigate]);
 
@@ -38,7 +38,7 @@ const Login = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100%', // vh helyett
+          minHeight: '100%',
           padding: 2,
         }}
       >
