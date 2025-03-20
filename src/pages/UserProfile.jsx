@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Grid,
-  Avatar,
   TextField,
   MenuItem,
   useMediaQuery,
@@ -20,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useUserData from '../hooks/useUserData';
 import { useDarkMode } from '../hooks/useDarkMode';
+import UserProfilePicture from '../components/UserProfilePicture';
 
 const UserProfile = () => {
   const { user, loading, error, handleDeactivate, isLoggedIn, handleProfilePictureUpload } = useUserData();
@@ -109,8 +109,6 @@ const UserProfile = () => {
     );
   }
 
-  const displayAvatar = `http://files.hephaistos.nhely.hu/ProjectHephaistos/ProfilePictures/${user.profilePicturePath}` || "https://via.placeholder.com/40";
-
   return (
     <Paper
       elevation={3}
@@ -132,31 +130,12 @@ const UserProfile = () => {
           flexDirection: 'row',
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Avatar
-            src={selectedProfilePicture || displayAvatar}
-            alt="Profile Picture"
-            sx={{ width: 100, height: 100, marginBottom: theme.spacing(1) }}
-          />
-          <Button variant="text" component="label">
-            Profilkép módosítása
-            <input type="file" hidden onChange={handleProfilePictureChange} />
-          </Button>
-          <Button variant="contained" onClick={handleProfilePictureUpload}>
-            Feltöltés
-          </Button>
-          <Typography sx={{ marginTop: theme.spacing(2) }}>Válassz előre feltötltöttképet:</Typography>
-          <List>
-            {ftpImages.map((image) => (
-              <ListItem button key={image} onClick={() => handleProfilePictureChange(image)}>
-                <ListItemAvatar>
-                  <Avatar src={`http://files.hephaistos.nhely.hu/ProjectHephaistos/ProfilePictures/Users/${image}`} />
-                </ListItemAvatar>
-                <ListItemText primary={image} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        <UserProfilePicture
+          selectedProfilePicture={selectedProfilePicture}
+          handleProfilePictureChange={handleProfilePictureChange}
+          handleProfilePictureUpload={handleProfilePictureUpload}
+          ftpImages={ftpImages}
+        />
         <Box sx={{ textAlign: 'center', margin: '0 auto' }}>
           <Typography variant="h4" gutterBottom>
             Profil beállítások
@@ -413,9 +392,6 @@ const UserProfile = () => {
             <Grid item xs={12} sm={6}>
               <Typography>
                 <strong>Létrehozva:</strong> {new Date(user.createdAt).toLocaleDateString()}
-              </Typography>
-              <Typography>
-                <strong>Szerep:</strong> {user.role}
               </Typography>
               <Typography>
                 <strong>Aktív:</strong> {user.active ? 'Igen' : 'Nem'}
