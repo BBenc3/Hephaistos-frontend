@@ -1,63 +1,38 @@
-import React from 'react';
-import { Box, Typography, Card, CardContent, Link, Avatar, Grid, TextField, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Card, CardContent, Link, Avatar, Grid, TextField, Table, TableBody, TableCell, TableHead, TableRow, Paper, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useUserData from '../hooks/useUserData';
-import Carousel from 'react-material-ui-carousel';
 
 const TestPage = () => {
   const theme = useTheme();
   const { user } = useUserData();
   const userName = user?.username || "Felhasználó"; // Fetch the user's name dynamically
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState({ title: '', description: '' });
+
   const getGreeting = () => {
     const currentHour = new Date().getHours();
     if (currentHour < 12) {
-      // Morning: 00:00 - 11:59
+      // reggel: 00:00 - 11:59
       return "Jó reggelt";
     } else if (currentHour < 18) {
-      // Afternoon: 12:00 - 17:59
+      // delutan: 12:00 - 17:59
       return "Jó napot";
     } else {
-      // Evening: 18:00 - 23:59
+      // este: 18:00 - 23:59
       return "Jó estét";
     }
   };
 
-  const educationInfo = [
-    {
-      title: "Oktatással kapcsolatos információ (1)",
-      description: "Az oktatási rendszerünk folyamatosan fejlődik, hogy a legjobb tanulási élményt nyújtsa.",
-      link: "#"
-    },
-    {
-      title: "Oktatással kapcsolatos információ (2)",
-      description: "Új kurzusok és tananyagok érhetők el a platformunkon.",
-      link: "#"
-    },
-    {
-      title: "Oktatással kapcsolatos információ (3)",
-      description: "Vegyél részt interaktív webináriumainkon és workshopjainkon.",
-      link: "#"
-    }
-  ];
+  const handleInfoClick = (title, description) => {
+    setDialogContent({ title, description });
+    setOpenDialog(true);
+  };
 
-  const appInfo = [
-    {
-      title: "Karbantartás várható (1)",
-      description: "2025. Január 31-én karbantartás várható az alkalmazásban. A karbantartás során az alkalmazás nem lesz elérhető.",
-      link: "#"
-    },
-    {
-      title: "Új funkciók (2)",
-      description: "Az alkalmazás új funkciókkal bővült, amelyek még kényelmesebbé teszik a használatot.",
-      link: "#"
-    },
-    {
-      title: "Felhasználói visszajelzések (3)",
-      description: "Köszönjük a visszajelzéseket! Folyamatosan dolgozunk az alkalmazás fejlesztésén.",
-      link: "#"
-    }
-  ];
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <Box sx={{ backgroundColor: '#F5F5DC', minHeight: '100vh', padding: 2 }}>
@@ -72,48 +47,98 @@ const TestPage = () => {
         <Typography variant="h6" sx={{ mb: 1 }}>
           Általános információk
         </Typography>
-        <Carousel>
-          {educationInfo.map((info, index) => (
-            <Card key={index} sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
-                <Typography variant="subtitle1">{info.title}</Typography>
+                <Typography variant="subtitle1">Oktatással kapcsolatos információ</Typography>
                 <Typography variant="body2">Információ</Typography>
                 <Typography variant="body2" sx={{ mb: 1 }}>
-                  {info.description}
+                  Az oktatási rendszerünk folyamatosan fejlődik, hogy a legjobb tanulási élményt nyújtsa.
                 </Typography>
-                <Link href={info.link} underline="hover">
-                  Ugrás
+                <Link href="#" underline="hover" onClick={() => handleInfoClick('Oktatással kapcsolatos információ', 'Az oktatási rendszerünk folyamatosan fejlődik, hogy a legjobb tanulási élményt nyújtsa. Részletesebben: Az új tantervek és módszertanok bevezetésével célunk, hogy minden diák számára elérhetővé tegyük a legmodernebb oktatási eszközöket és technikákat. A tanárok folyamatos képzése és a digitális tananyagok fejlesztése is hozzájárul ahhoz, hogy a tanulás élménye még hatékonyabb és élvezetesebb legyen.')}>                  További információ
                 </Link>
               </CardContent>
             </Card>
-          ))}
-        </Carousel>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+              <CardContent>
+                <Typography variant="subtitle1">Oktatással kapcsolatos információ </Typography>
+                <Typography variant="body2">Információ</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  Új kurzusok és tananyagok érhetők el a platformunkon.
+                </Typography>
+                <Link href="#" underline="hover" onClick={() => handleInfoClick('Oktatással kapcsolatos információ', 'Új kurzusok és tananyagok érhetők el a platformunkon. Részletesebben: Az új kurzusok között megtalálhatók a legújabb technológiai trendekkel kapcsolatos képzések, valamint a klasszikus tudományterületek mélyebb megértését célzó tananyagok is. A tananyagok interaktív elemekkel és gyakorlati példákkal gazdagodtak, hogy a tanulás még élvezetesebb és hatékonyabb legyen.')}>                  További információ
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+              <CardContent>
+                <Typography variant="subtitle1">Oktatással kapcsolatos információ</Typography>
+                <Typography variant="body2">Információ</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  Vegyél részt interaktív webináriumainkon és workshopjainkon.
+                </Typography>
+                <Link href="#" underline="hover" onClick={() => handleInfoClick('Oktatással kapcsolatos információ', 'Vegyél részt interaktív webináriumainkon és workshopjainkon. Részletesebben: Az interaktív webináriumok és workshopok lehetőséget biztosítanak arra, hogy közvetlenül kérdezhess szakértőktől, és valós időben kapj választ kérdéseidre. A gyakorlati foglalkozások során pedig kipróbálhatod a tanultakat, és azonnali visszajelzést kaphatsz.')}>                  További információ
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Box>
 
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6" sx={{ mb: 1 }}>
           Alkalmazással kapcsolatos információk
         </Typography>
-        <Carousel>
-          {appInfo.map((info, index) => (
-            <Card key={index} sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
-                <Typography variant="subtitle1">{info.title}</Typography>
+                <Typography variant="subtitle1">Karbantartás várható</Typography>
                 <Typography variant="body2">Információ</Typography>
                 <Typography variant="body2" sx={{ mb: 1 }}>
-                  {info.description}
+                  2025. Január 31-én karbantartás várható az alkalmazásban. A karbantartás során az alkalmazás nem lesz elérhető.
                 </Typography>
-                <Link href={info.link} underline="hover">
-                  Ugrás
+                <Link href="#" underline="hover" onClick={() => handleInfoClick('Karbantartás várható', '2025. Január 31-én karbantartás várható az alkalmazásban. A karbantartás során az alkalmazás nem lesz elérhető. Részletesebben: A karbantartás célja, hogy javítsuk az alkalmazás teljesítményét és biztonságát. Az új frissítések és javítások bevezetésével biztosítjuk, hogy az alkalmazás zökkenőmentesen működjön, és megfeleljen a legújabb biztonsági előírásoknak.')}>                  További információTovábbi információ
                 </Link>
               </CardContent>
             </Card>
-          ))}
-        </Carousel>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+              <CardContent>
+                <Typography variant="subtitle1">Új funkciók</Typography>
+                <Typography variant="body2">Információ</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  Az alkalmazás új funkciókkal bővült, amelyek még kényelmesebbé teszik a használatot.
+                </Typography>
+                <Link href="#" underline="hover" onClick={() => handleInfoClick('Új funkciók', 'Az alkalmazás új funkciókkal bővült, amelyek még kényelmesebbé teszik a használatot. Részletesebben: Az új funkciók között megtalálhatók a személyre szabható értesítések, a fejlett keresési lehetőségek, valamint a közösségi funkciók, amelyek lehetővé teszik a felhasználók közötti interakciót és együttműködést.')}>                  További információ
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+              <CardContent>
+                <Typography variant="subtitle1">Dark Mode Megérkezett</Typography>
+                <Typography variant="body2">Információ</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  A Dark Mode megérkezett! Mostantól választhatsz a világos és sötét téma között, hogy a szemedet kímélve használd az alkalmazást.
+                </Typography>
+                <Link href="#" underline="hover" onClick={() => handleInfoClick('Dark Mode Megérkezett', 'A Dark Mode megérkezett! Mostantól választhatsz a világos és sötét téma között, hogy a szemedet kímélve használd az alkalmazást. Részletesebben: A sötét mód nemcsak esztétikus, hanem segít csökkenteni a szemfáradtságot is, különösen gyenge fényviszonyok mellett. Próbáld ki az új funkciót a beállítások menüben, és válaszd ki a számodra legkényelmesebb megjelenítési módot.')}>                  További információ
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Box>
 
       <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12}>
           <Paper sx={{ borderRadius: 2, boxShadow: 2, p: 1, backgroundColor: '#FFFFFF' }}>
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
               Eddig generált órarendek
@@ -127,11 +152,9 @@ const TestPage = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell>Exam Name</TableCell>
-                  <TableCell>Subject</TableCell>
-                  <TableCell>Grade</TableCell>
-                  <TableCell>Percent</TableCell>
-                  <TableCell>Date</TableCell>
+                  <TableCell>Vizsga neve</TableCell>
+                  <TableCell>Tantárgy</TableCell>
+                  <TableCell>Dátum</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -139,30 +162,14 @@ const TestPage = () => {
                 {[1, 2, 3].map((row) => (
                   <TableRow key={row}>
                     <TableCell>{row}</TableCell>
-                    <TableCell>Exam {row}</TableCell>
-                    <TableCell>Subject {row}</TableCell>
-                    <TableCell>A</TableCell>
-                    <TableCell>95%</TableCell>
+                    <TableCell>Vizsga {row}</TableCell>
+                    <TableCell>Tantárgy {row}</TableCell>
                     <TableCell>2025-01-31</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Card sx={{ borderRadius: 2, boxShadow: 2, p: 1, backgroundColor: '#FFFFFF' }}>
-            <CardContent>
-              <Typography variant="subtitle1">Információ</Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                Ez egy leírás a kártyához. Tartalmazhat rövid információkat.
-              </Typography>
-              <Link href="#" underline="hover">
-                Ugrás
-              </Link>
-            </CardContent>
-          </Card>
         </Grid>
 
         <Grid item xs={12} md={4}>
@@ -182,11 +189,18 @@ const TestPage = () => {
         </Grid>
       </Grid>
 
-      <Box sx={{ backgroundColor: '#E0E0E0', padding: 2, mt: 2 }}>
-        <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          Additional information or footer content can go here.
-        </Typography>
-      </Box>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>{dialogContent.title}</DialogTitle>
+        <DialogContent>
+          <Typography>{dialogContent.description}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Bezárás
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
