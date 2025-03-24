@@ -33,7 +33,7 @@ const UserProfile = () => {
   const [email, setEmail] = useState(user?.email || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone, setPhone] = useState(user?.phoneNumber || '+36');
+  const [phone, setPhone] = useState(user?.phoneNumber || '');
   const [birthPlace, setBirthPlace] = useState(user?.userdata?.birthPlace || '');
   const [birthDate, setBirthDate] = useState(user?.userdata?.birthDate || '');
   const [address, setAddress] = useState(user?.userdata?.address || '');

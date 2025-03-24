@@ -2,17 +2,68 @@ import React from 'react';
 import { Box, Typography, Card, CardContent, Link, Avatar, Grid, TextField, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useUserData from '../hooks/useUserData';
+import Carousel from 'react-material-ui-carousel';
 
 const TestPage = () => {
   const theme = useTheme();
   const { user } = useUserData();
   const userName = user?.username || "Felhasználó"; // Fetch the user's name dynamically
 
+  const getGreeting = () => {
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      // Morning: 00:00 - 11:59
+      return "Jó reggelt";
+    } else if (currentHour < 18) {
+      // Afternoon: 12:00 - 17:59
+      return "Jó napot";
+    } else {
+      // Evening: 18:00 - 23:59
+      return "Jó estét";
+    }
+  };
+
+  const educationInfo = [
+    {
+      title: "Oktatással kapcsolatos információ (1)",
+      description: "Az oktatási rendszerünk folyamatosan fejlődik, hogy a legjobb tanulási élményt nyújtsa.",
+      link: "#"
+    },
+    {
+      title: "Oktatással kapcsolatos információ (2)",
+      description: "Új kurzusok és tananyagok érhetők el a platformunkon.",
+      link: "#"
+    },
+    {
+      title: "Oktatással kapcsolatos információ (3)",
+      description: "Vegyél részt interaktív webináriumainkon és workshopjainkon.",
+      link: "#"
+    }
+  ];
+
+  const appInfo = [
+    {
+      title: "Karbantartás várható (1)",
+      description: "2025. Január 31-én karbantartás várható az alkalmazásban. A karbantartás során az alkalmazás nem lesz elérhető.",
+      link: "#"
+    },
+    {
+      title: "Új funkciók (2)",
+      description: "Az alkalmazás új funkciókkal bővült, amelyek még kényelmesebbé teszik a használatot.",
+      link: "#"
+    },
+    {
+      title: "Felhasználói visszajelzések (3)",
+      description: "Köszönjük a visszajelzéseket! Folyamatosan dolgozunk az alkalmazás fejlesztésén.",
+      link: "#"
+    }
+  ];
+
   return (
     <Box sx={{ backgroundColor: '#F5F5DC', minHeight: '100vh', padding: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-          Szia, {userName}! Örülünk, hogy újra itt vagy!
+          {getGreeting()}, {userName}! Örülünk, hogy újra itt vagy!
         </Typography>
         <Avatar src="/path/to/profile.jpg" alt="Profile Picture" sx={{ width: 50, height: 50 }} />
       </Box>
@@ -21,24 +72,44 @@ const TestPage = () => {
         <Typography variant="h6" sx={{ mb: 1 }}>
           Általános információk
         </Typography>
-        <Grid container spacing={2}>
-          {[1, 2, 3].map((item) => (
-            <Grid item xs={12} sm={4} key={item}>
-              <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
-                <CardContent>
-                  <Typography variant="subtitle1">Oktatással kapcsolatos információ ({item})</Typography>
-                  <Typography variant="body2">Teszt kinézet</Typography>
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    Ez egy leírás a kártyához. Tartalmazhat rövid információkat.
-                  </Typography>
-                  <Link href="#" underline="hover">
-                    Ugrás
-                  </Link>
-                </CardContent>
-              </Card>
-            </Grid>
+        <Carousel>
+          {educationInfo.map((info, index) => (
+            <Card key={index} sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+              <CardContent>
+                <Typography variant="subtitle1">{info.title}</Typography>
+                <Typography variant="body2">Információ</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  {info.description}
+                </Typography>
+                <Link href={info.link} underline="hover">
+                  Ugrás
+                </Link>
+              </CardContent>
+            </Card>
           ))}
-        </Grid>
+        </Carousel>
+      </Box>
+
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          Alkalmazással kapcsolatos információk
+        </Typography>
+        <Carousel>
+          {appInfo.map((info, index) => (
+            <Card key={index} sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
+              <CardContent>
+                <Typography variant="subtitle1">{info.title}</Typography>
+                <Typography variant="body2">Információ</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  {info.description}
+                </Typography>
+                <Link href={info.link} underline="hover">
+                  Ugrás
+                </Link>
+              </CardContent>
+            </Card>
+          ))}
+        </Carousel>
       </Box>
 
       <Grid container spacing={2}>
@@ -83,7 +154,7 @@ const TestPage = () => {
         <Grid item xs={12} md={4}>
           <Card sx={{ borderRadius: 2, boxShadow: 2, p: 1, backgroundColor: '#FFFFFF' }}>
             <CardContent>
-              <Typography variant="subtitle1">Teszt kinézet</Typography>
+              <Typography variant="subtitle1">Információ</Typography>
               <Typography variant="body2" sx={{ mb: 1 }}>
                 Ez egy leírás a kártyához. Tartalmazhat rövid információkat.
               </Typography>
