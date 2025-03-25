@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, Grid, Box, Typography } from '@mui/material';
+import { Container, Grid, Box, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Sliders, Clock, Calendar4Event } from 'react-bootstrap-icons';
 import HeroSection from '../components/HeroSection/HeroSection';
@@ -21,6 +21,18 @@ const Home = ({ isMobile }) => {
     custom: Calendar4Event,
   };
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState({ title: '', description: '' });
+
+  const handleOpenDialog = (title, description) => {
+    setDialogContent({ title, description });
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   return (
     <Container sx={{ mt: 15 }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
@@ -39,6 +51,7 @@ const Home = ({ isMobile }) => {
             theme={theme}
             icon={icons.simple} // Pass icon prop correctly
             sx={{ height: '100%' }} // Ensure equal height
+            onClick={() => handleOpenDialog("Gyors és Egyszerű", descriptions.simple)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -49,6 +62,7 @@ const Home = ({ isMobile }) => {
             theme={theme}
             icon={icons.advanced} // Pass icon prop correctly
             sx={{ height: '100%' }} // Ensure equal height
+            onClick={() => handleOpenDialog("Személyre szabott órarend", descriptions.advanced)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -59,9 +73,22 @@ const Home = ({ isMobile }) => {
             theme={theme}
             icon={icons.custom} // Pass icon prop correctly
             sx={{ height: '100%' }} // Ensure equal height
+            onClick={() => handleOpenDialog("Intelligens időbeosztás", descriptions.custom)}
           />
         </Grid>
       </Grid>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>{dialogContent.title}</DialogTitle>
+        <DialogContent>
+          <Typography>{dialogContent.description}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Bezárás
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

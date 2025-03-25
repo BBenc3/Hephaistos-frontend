@@ -39,20 +39,19 @@ body.custom-scrollbar::-webkit-scrollbar-track {
 }
 
 body.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-thumb-color); /* Color of the scrollbar thumb */
-    background-color: var(--scrollbar-thumb-color); /* Color of the scrollbar thumb */
+    background-color: #166B6B; /* Change scrollbar thumb color */
     border-radius: 20px; /* Rounded corners for the scrollbar thumb */
     border: 3px solid var(--scrollbar-track-color); /* Adds padding around the thumb */
 }
 
 body.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: var(--text-color); /* Darker color when hovering over the scrollbar thumb */
+    background-color: #166B6B; /* Change hover color to match */
 }
 
 /* Custom scrollbar styles for Firefox */
 body.custom-scrollbar {
     scrollbar-width: none; /* Hide scrollbar */
-    scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); /* Thumb and track colors */
+    scrollbar-color: #166B6B var(--scrollbar-track-color); /* Change thumb color */
 }
 
 /* Apply styles to the entire application */
