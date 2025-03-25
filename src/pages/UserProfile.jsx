@@ -6,23 +6,19 @@ import {
   Box,
   Button,
   Grid,
+  Avatar,
   TextField,
   MenuItem,
   useMediaQuery,
   useTheme,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useUserData from '../hooks/useUserData';
 import { useDarkMode } from '../hooks/useDarkMode';
-import UserProfilePicture from '../components/UserProfilePicture';
 
 const UserProfile = () => {
-  const { user, loading, error, handleDeactivate, isLoggedIn, handleProfilePictureUpload } = useUserData();
+  const { user, loading, error, handleDeactivate, isLoggedIn } = useUserData();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -33,7 +29,7 @@ const UserProfile = () => {
   const [email, setEmail] = useState(user?.email || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone, setPhone] = useState(user?.phoneNumber || '');
+  const [phone, setPhone] = useState(user?.phoneNumber || '+36');
   const [birthPlace, setBirthPlace] = useState(user?.userdata?.birthPlace || '');
   const [birthDate, setBirthDate] = useState(user?.userdata?.birthDate || '');
   const [address, setAddress] = useState(user?.userdata?.address || '');
@@ -48,23 +44,14 @@ const UserProfile = () => {
   const [editMode, setEditMode] = useState(false);
   const [formError, setFormError] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
-  const [ftpImages, setFtpImages] = useState([]);
-  const [selectedProfilePicture, setSelectedProfilePicture] = useState(user?.profilePicturePath || 'ftp://Hephaistos@ftp.nethely.hu/default.png');
 
   useEffect(() => {
     document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
   }, [isDarkMode]);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-    } else {
-      navigate('/login');
-    }
-  }, [isLoggedIn, navigate]);
-
-  const handleProfilePictureChange = (imagePath) => {
-    setSelectedProfilePicture(imagePath);
-  };
+  if (!isLoggedIn) {
+    navigate('/login');
+  }
 
   const handleSubmit = async () => {
     try {
@@ -85,11 +72,36 @@ const UserProfile = () => {
         subjectName,
         subjectCode,
         subjectType,
-        profilePicture: selectedProfilePicture,
       });
       setEditMode(false);
     } catch (err) {
       setFormError('Hiba történt a módosítás során.');
+    }
+  };
+
+  const handleProfilePictureChange = (event) => {
+    setProfilePicture(event.target.files[0]);
+  };
+
+  const handleProfilePictureUpload = async () => {
+    if (!profilePicture) {
+      alert('Kérlek válassz egy képet!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('profilePicture', profilePicture);
+
+    try {
+      await axios.post('https://hephaistos-backend-c6c5ewhraedvgzex.germanywestcentral-01.azurewebsites.net/api/users/upload-profile-picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('Profilkép sikeresen feltöltve!');
+      setProfilePicture(null);
+    } catch (err) {
+      alert('Hiba történt a profilkép feltöltése során.');
     }
   };
 
@@ -130,12 +142,20 @@ const UserProfile = () => {
           flexDirection: 'row',
         }}
       >
-        <UserProfilePicture
-          selectedProfilePicture={selectedProfilePicture}
-          handleProfilePictureChange={handleProfilePictureChange}
-          handleProfilePictureUpload={handleProfilePictureUpload}
-          ftpImages={ftpImages}
-        />
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Avatar
+            src={user.profilePicturePath || 'https://via.placeholder.com/150'}
+            alt="Profile Picture"
+            sx={{ width: 100, height: 100, marginBottom: theme.spacing(1) }}
+          />
+          <Button variant="text" component="label">
+            Profilkép módosítása
+            <input type="file" hidden onChange={handleProfilePictureChange} />
+          </Button>
+          <Button variant="contained" onClick={handleProfilePictureUpload}>
+            Feltöltés
+          </Button>
+        </Box>
         <Box sx={{ textAlign: 'center', margin: '0 auto' }}>
           <Typography variant="h4" gutterBottom>
             Profil beállítások
@@ -392,6 +412,9 @@ const UserProfile = () => {
             <Grid item xs={12} sm={6}>
               <Typography>
                 <strong>Létrehozva:</strong> {new Date(user.createdAt).toLocaleDateString()}
+              </Typography>
+              <Typography>
+                <strong>Szerep:</strong> {user.role}
               </Typography>
               <Typography>
                 <strong>Aktív:</strong> {user.active ? 'Igen' : 'Nem'}
