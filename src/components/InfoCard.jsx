@@ -1,10 +1,25 @@
-import React from "react";
-import { Card, CardContent, CardActions, Typography, Button, Paper, Box } from "@mui/material";
+import React, { useState } from "react";
+import { Card, CardContent, CardActions, Typography, Button, Paper, Box, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 const InfoCard = ({ title, description, sx, icon: Icon }) => {
   const theme = useTheme();
   const iconColor = theme.palette.mode === 'dark' ? '#FFFFFF' : '#000000'; // Set icon color based on theme mode
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const additionalInfo = {
+    "Gyors és Egyszerű": "A Hephaistos segítségével gyorsan és egyszerűen generálhatsz órarendet. Csak add meg a szükséges adatokat, és a rendszer automatikusan elkészíti a legoptimálisabb időbeosztást.",
+    "Személyre szabott órarend": "A Hephaistos lehetővé teszi, hogy saját preferenciáid alapján állítsd össze az órarendedet. Válaszd ki a kurzusaidat, időpontjaidat és szabadidődet, és a rendszer alkalmazkodik az igényeidhez.",
+    "Intelligens időbeosztás": "A Hephaistos intelligens algoritmusai segítenek a lehető legjobb időbeosztást megtalálni. Az algoritmus figyelembe veszi a kurzusok időpontjait, a szabadidődet és egyéb preferenciáidat, hogy minden kurzusod kényelmesen beleférjen a napirendedbe."
+  };
 
   return (
     <Paper
@@ -83,9 +98,21 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
           }}
         >
           <Button size="small" variant="contained" sx={{ width: '150px', backgroundColor: '#1D8C8C' }}>Próbálja ki</Button> {/* Change button color */}
-          <Button size="small" sx={{ marginBottom: theme.spacing(1), fontSize: '0.68rem', fontStyle: 'italic', textTransform: 'none' }}>További információ</Button> {/* Make button smaller, italic, and not all uppercase */}
+          <Button size="small" sx={{ marginBottom: theme.spacing(1), fontSize: '0.68rem', fontStyle: 'italic', textTransform: 'none' }} onClick={handleOpenDialog}>További információ</Button> {/* Make button smaller, italic, and not all uppercase */}
         </CardActions>
       </Card>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogContent>
+          <Typography>{additionalInfo[title]}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Bezárás
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };
