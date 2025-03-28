@@ -1,51 +1,79 @@
-import React from 'react';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Alert from '@mui/material/Alert';
-import useUserData from '../hooks/useUserData';
-import { useTheme } from '@mui/material/styles';
+import React from "react";
+import { Box, Typography, Card, CardContent, Button, Alert, Divider, List, ListItem, ListItemText } from "@mui/material";
+import { Home, Lock, Security } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import useUserData from "../hooks/useUserData";
 
-const DeactivateProfile = () => {
+const UserDelete = () => {
   const theme = useTheme();
-  const { isDeactivated, error, handleDeactivate } = useUserData();
+  const { isDeactivated, error, handleDeactivate, handleDelete } = useUserData();
 
   return (
-    <Card
-      style={{
-        maxWidth: 400,
-        margin: '20px auto',
-        padding: '16px',
-        [theme.breakpoints.down('sm')]: {
-          width: '100%',
-          padding: '16px',
-        },
-      }}
-    >
-      <CardContent style={{ textAlign: 'center' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>Profil Inaktiválása</h2>
-        {isDeactivated ? (
-          <Alert severity="success">A profilod sikeresen inaktiválva lett.</Alert>
-        ) : (
-          <>
-            <p style={{ marginBottom: '16px' }}>Biztosan inaktiválni szeretnéd a profilod?</p>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleDeactivate}
-            >
-              Profil Inaktiválása
-            </Button>
-          </>
-        )}
-        {error && (
-          <Alert severity="error" style={{ marginTop: '16px' }}>
-            {error}
-          </Alert>
-        )}
-      </CardContent>
-    </Card>
+    <Box display="flex" flexDirection="row" p={3}>
+      {/* Sidebar */}
+      <Box width={250} bgcolor="#f5f5f5" p={2} borderRadius={2}>
+        <Typography variant="h6" mb={2}>Dávid Szegedi</Typography>
+        <Typography variant="body2" color="textSecondary">zhyte01@outlook.hu</Typography>
+        <List>
+          <ListItem button component={Link} to="/profile">
+            <Home sx={{ mr: 2, color: "inherit" }} /> 
+            <ListItemText primary="Fiók" sx={{ color: "text.primary" }} />
+          </ListItem>
+          <ListItem button>
+            <Lock sx={{ mr: 2, color: "inherit" }} /> 
+            <ListItemText primary="Az Ön adatai" sx={{ color: "text.primary" }} />
+          </ListItem>
+          <ListItem button component={Link} to="/security-and-privacy">
+            <Security sx={{ mr: 2, color: "inherit" }} /> 
+            <ListItemText primary="Biztonság és adatvédelem" sx={{ color: "text.primary" }} />
+          </ListItem>
+        </List>
+      </Box>
+
+      {/* Main Content */}
+      <Box flex={1} pl={3}>
+        <Card sx={{ maxWidth: 800, width: "100%", margin: "0 auto", mt: 3 }}>
+          <CardContent>
+            <Typography variant="h6" mb={2}>
+              Profil Inaktiválása vagy Törlése
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            {isDeactivated ? (
+              <Alert severity="success">A profilod sikeresen inaktiválva lett.</Alert>
+            ) : (
+              <>
+                <Typography variant="body1" color="textSecondary" mb={3}>
+                  Válasszon az alábbi lehetőségek közül:
+                </Typography>
+                <Box display="flex" flexDirection="column" gap={2}>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleDeactivate}
+                  >
+                    Profil Inaktiválása
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={handleDelete}
+                  >
+                    Profil végleges törlése
+                  </Button>
+                </Box>
+              </>
+            )}
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error}
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      </Box>
+    </Box>
   );
 };
 
-export default DeactivateProfile;
+export default UserDelete;
