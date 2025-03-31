@@ -95,11 +95,11 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
       <NavbarButton onClick={() => navigate("/")} active={location.pathname === "/" ? true : undefined}>
         {language === 'hu' ? 'Főoldal' : 'Home'}
       </NavbarButton>
+      <NavbarButton onClick={() => navigate("/testpage")} active={location.pathname === "/testpage" ? true : undefined}>
+        {language === 'hu' ? 'Kezdőlap' : 'Kezdőlap'}
+      </NavbarButton>
       <NavbarButton onClick={() => navigate("/schedule")} active={location.pathname === "/schedule" ? true : undefined}>
         {language === 'hu' ? 'Órarend generálás' : 'Schedule'}
-      </NavbarButton>
-      <NavbarButton onClick={() => navigate("/testpage")} active={location.pathname === "/testpage" ? true : undefined}>
-        {language === 'hu' ? 'Teszt oldal' : 'Test Page'}
       </NavbarButton>
     </>
   );
@@ -125,9 +125,6 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
                 <ListItem button onClick={() => { navigate("/schedule"); toggleDrawer(); }}>
                   <ListItemText primary={language === 'hu' ? 'Órarend generálás' : 'Schedule'} />
                 </ListItem>
-                <ListItem button onClick={() => { navigate("/testpage"); toggleDrawer(); }}>
-                  <ListItemText primary={language === 'hu' ? 'Teszt oldal' : 'Test Page'} />
-                </ListItem>
                 {!user && (
                   <ListItem button onClick={() => { navigate("/login"); toggleDrawer(); }}>
                     <ListItemText primary={language === 'hu' ? 'Bejelentkezés' : 'Login'} />
@@ -149,13 +146,6 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
             </CustomButton>
           )
         )}
-
-        <Box>
-          <Typography variant="body1">
-            {currentUser?.name || "Felhasználó"} {/* Display the user's name */}
-          </Typography>
-        </Box>
-
         <IconButton color="inherit" onClick={handleGearMenuClick} sx={{ color: theme.palette.primary.main }}>
           <AnimatedGear animateForward={animateForward} animateBackward={animateBackward} />
         </IconButton>

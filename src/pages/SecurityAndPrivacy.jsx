@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Box, Typography, Card, CardContent, Divider, List, ListItem, ListItemText, Button } from "@mui/material";
 import { Home, Lock, Security, Key } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext"; // Import the AuthContext
 import ChangePasswordDialog from "../components/ChangePasswordDialog";
 
 const SecurityAndPrivacy = () => {
+  const { currentUser } = useAuth(); // Get the current user from AuthContext
   const [isChangePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false);
 
   const handleChangePasswordDialogOpen = () => setChangePasswordDialogOpen(true);
@@ -14,16 +16,12 @@ const SecurityAndPrivacy = () => {
     <Box display="flex" flexDirection="row" p={3}>
       {/* Sidebar */}
       <Box width={250} bgcolor="#f5f5f5" p={2} borderRadius={2}>
-        <Typography variant="h6" mb={2}>Dávid Szegedi</Typography>
-        <Typography variant="body2" color="textSecondary">zhyte01@outlook.hu</Typography>
+        <Typography variant="h6" mb={2}>{currentUser?.name || "Felhasználó"}</Typography>
+        <Typography variant="body2" color="textSecondary">{currentUser?.email || "Nincs e-mail"}</Typography>
         <List>
           <ListItem button component={Link} to="/profile">
             <Home sx={{ mr: 2, color: "inherit" }} /> 
             <ListItemText primary="Fiók" sx={{ color: "text.primary" }} />
-          </ListItem>
-          <ListItem button>
-            <Lock sx={{ mr: 2, color: "inherit" }} /> 
-            <ListItemText primary="Az Ön adatai" sx={{ color: "text.primary" }} />
           </ListItem>
           <ListItem button selected>
             <Security sx={{ mr: 2, color: "inherit" }} /> 

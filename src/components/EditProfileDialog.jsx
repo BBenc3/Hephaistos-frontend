@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, MenuItem, TextField, Box } from "@mui/material";
 
 const EditProfileDialog = ({ open, onClose }) => {
-  const [birthYear, setBirthYear] = useState("2001");
-  const [birthMonth, setBirthMonth] = useState("november");
-  const [birthDay, setBirthDay] = useState("9");
+  const [birthYear, setBirthYear] = useState("2019");
+  const [birthMonth, setBirthMonth] = useState("szemptember");
+  const [birthDay, setBirthDay] = useState("30");
   const [country, setCountry] = useState("Magyarország");
 
   const isSaveDisabled = true; // Save button is inactive

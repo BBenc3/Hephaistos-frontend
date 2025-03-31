@@ -32,21 +32,37 @@ const ProfilePage = () => {
             <Home sx={{ mr: 2, color: "inherit" }} /> 
             <ListItemText primary="Fiók" sx={{ color: "text.primary" }} />
           </ListItem>
-          <ListItem button selected>
-            <Lock sx={{ mr: 2, color: "inherit" }} /> 
-            <ListItemText primary="Az Ön adatai" sx={{ color: "primary.main" }} />
-          </ListItem>
           <ListItem button component={Link} to="/security-and-privacy">
             <Security sx={{ mr: 2, color: "inherit" }} /> 
             <ListItemText primary="Biztonság és adatvédelem" sx={{ color: "text.primary" }} />
           </ListItem>
+          <ListItem button component={Link} to="/completed-subjects">
+            <Lock sx={{ mr: 2, color: "inherit" }} /> 
+            <ListItemText primary="Teljesített tárgyak" sx={{ color: "text.primary" }} />
+          </ListItem>
         </List>
+        <Divider sx={{ my: 2 }} />
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mb: 1 }}
+          onClick={() => alert("Mentés gomb megnyomva!")}
+        >
+          Mentés
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          fullWidth
+          onClick={() => alert("Exportálás gomb megnyomva!")}
+        >
+          Exportálás
+        </Button>
       </Box>
       
       {/* Profile Content */}
       <Box flex={1} pl={3}>
-        <Typography variant="h5" mb={2}>Az Ön adatai</Typography>
-
         <Card sx={{ maxWidth: 1200, width: "100%", mt: 3 }}>
           <CardContent>
             <Box display="flex" alignItems="center">

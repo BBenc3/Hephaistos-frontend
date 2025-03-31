@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Card, CardContent, Link, Avatar, Grid, TextField, Table, TableBody, TableCell, TableHead, TableRow, Paper, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useUserData from '../hooks/useUserData';
+import InfoPanel from "../components/InfoPanel"; // Import the InfoPanel component
 
 const TestPage = () => {
   const theme = useTheme();
@@ -35,9 +36,10 @@ const TestPage = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#F5F5DC', minHeight: '100vh', padding: 2 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+    <Box sx={{ backgroundColor: '#F5F5DC', minHeight: '100vh', padding: { xs: 1, sm: 2 } }}>
+      <InfoPanel /> {/* Add the InfoPanel at the top of the page */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: { xs: 'center', sm: 'left' } }}>
           {getGreeting()}, {userName}! Örülünk, hogy újra itt vagy!
         </Typography> 
       </Box>
@@ -47,7 +49,7 @@ const TestPage = () => {
           Általános információk
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
                 <Typography variant="subtitle1">Oktatással kapcsolatos információ</Typography>
@@ -60,7 +62,7 @@ const TestPage = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
                 <Typography variant="subtitle1">Oktatással kapcsolatos információ </Typography>
@@ -73,7 +75,7 @@ const TestPage = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
                 <Typography variant="subtitle1">Oktatással kapcsolatos információ</Typography>
@@ -94,7 +96,7 @@ const TestPage = () => {
           Alkalmazással kapcsolatos információk
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
                 <Typography variant="subtitle1">Karbantartás várható</Typography>
@@ -107,7 +109,7 @@ const TestPage = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
                 <Typography variant="subtitle1">Új funkciók</Typography>
@@ -120,7 +122,7 @@ const TestPage = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ borderRadius: 2, boxShadow: 2, backgroundColor: '#FFFFFF' }}>
               <CardContent>
                 <Typography variant="subtitle1">Dark Mode Megérkezett</Typography>
@@ -142,7 +144,7 @@ const TestPage = () => {
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
               Eddig generált órarendek
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1, mb: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
               <TextField label="Vizsga" variant="outlined" fullWidth size="small" />
               <TextField label="Tantárgy" variant="outlined" fullWidth size="small" />
               <TextField label="Dátum" variant="outlined" fullWidth size="small" />
