@@ -6,36 +6,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { useDarkMode } from './hooks/useDarkMode';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
-import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
-import About from './pages/About';
-import Profile from './pages/UserProfile';
-import UserDelete from './pages/UserDelete';
-import Login from './pages/auth/Login';
-import ErrorPage from './components/Error/ErrorPage';
-import Register from './pages/auth/Register/Register';
-import ForgotPassword from './pages/auth/ForgotPassword';
+import Login from './pages/Login';
+import ErrorPage from '../src/pages/Error/ErrorPage';
+import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 import { useMediaQuery } from '@mui/material';
 import Notification from './components/Notification';
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import { useDarkMode } from "./hooks/useDarkMode";
-import { AuthProvider } from "./contexts/AuthContext";
-import Navbar from "./components/Navbar";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Home from "./pages/Home";
-import Schedule from "./pages/Schedule";
-import Login from "./pages/Login";
-import ErrorPage from "./pages/Error/ErrorPage";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import { useMediaQuery } from "@mui/material";
-import Notification from "./components/Notification";
-import generateTheme from "./styles/theme"; // Importáljuk a theme.js-t
-import ProfilePage from "./pages/Profile";
+import ProfilePage from './pages/Profile';
+import { generateTheme } from "./styles/theme"; // Import the theme generation function
 
 function App() {
   return (
@@ -52,10 +32,6 @@ function AppContent() {
   const theme = generateTheme(isDarkMode ? "dark" : "light"); // Téma generálása
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  useEffect(() => {
-    document.body.className = isDarkMode ? "dark-mode" : "light-mode"; // Frissítjük a body class-t
-  }, [isDarkMode]);
 
   return (
     <ThemeProvider theme={theme}>
