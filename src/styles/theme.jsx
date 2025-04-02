@@ -1,71 +1,64 @@
-import { createTheme } from "@mui/material/styles";
-import { lightColors, darkColors } from "./colors";
+import { createTheme } from '@mui/material/styles';
 
-// Téma létrehozása a darkMode állapot alapján
-const generateTheme = (mode) => {
-  return createTheme({
-    palette: {
-      mode: mode,
-      primary: { main: mode === "dark" ? darkColors.primary : lightColors.primary },
-      secondary: { main: mode === "dark" ? darkColors.secondary : lightColors.secondary },
-      background: { default: mode === "dark" ? darkColors.background : lightColors.background },
-      text: { primary: mode === "dark" ? darkColors.text : lightColors.text },
-      error: { main: mode === "dark" ? darkColors.error : lightColors.error },
-      warning: { main: mode === "dark" ? darkColors.warning : lightColors.warning },
-      info: { main: mode === "dark" ? darkColors.info : lightColors.info },
-      success: { main: mode === "dark" ? darkColors.success : lightColors.success },
-    },
-    components: {
-      MuiCssBaseline: {
-        styleOverrides: {
-          body: {
-            backgroundColor: mode === "dark" ? darkColors.background : lightColors.background,
-            color: mode === "dark" ? darkColors.text : lightColors.text,
-            height: "100vh",
-            width: "100vw",
-            margin: 0,
-            padding: 0,
-            overflowX: "hidden",
-            userSelect: "none",
-            WebkitUserSelect: "none",
-            WebkitTouchCallout: "none",
-            MozUserSelect: "none",
-            MsUserSelect: "none",
-          },
-          "::-webkit-scrollbar": {
-            width: "8px",
-          },
-          "::-webkit-scrollbar-track": {
-            backgroundColor: mode === "dark" ? darkColors.scrollbarTrack : lightColors.scrollbarTrack,
-          },
-          "::-webkit-scrollbar-thumb": {
-            backgroundColor: mode === "dark" ? darkColors.scrollbarThumb : lightColors.scrollbarThumb,
-            borderRadius: "20px",
-            border: `3px solid ${mode === "dark" ? darkColors.scrollbarTrack : lightColors.scrollbarTrack}`,
-          },
-          "::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: mode === "dark" ? darkColors.text : lightColors.text,
-          },
-          img: {
-            WebkitUserDrag: "none",
-            userDrag: "none",
+// Colors definition (unused colors are commented out for future use)
+const colors = {
+  primary: "#166B6B", // main color used for buttons and text
+  secondary: "#FFFFFF", // secondary background color, e.g., for hover states
+  background: "#F5F5F5", // general background color for components like AppBar
+  text: "#004C4C", // general text color
+  accent: "#FF5722", // an accent color (if needed)
+  // error: "#f44336", // error color (unused, reserved for future use)
+  // warning: "#ff9800", // warning color (unused, reserved for future use)
+  // info: "#2196f3", // info color (unused, reserved for future use)
+  // success: "#4caf50", // success color (unused, reserved for future use)
+  paper: "#FFFFFF", // paper background color for light mode
+  secondaryText: "#666666", // secondary text color for light mode
+  loginButton: "#166B6B", // login button color for light mode
+};
+
+// LIGHT THEME CONFIGURATION
+const lightThemeConfig = {
+  palette: {
+    mode: 'light',
+    primary: { main: colors.primary },
+    secondary: { main: colors.secondary },
+    background: { default: colors.background },
+    text: { primary: colors.text, secondary: colors.secondaryText },
+  },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': { borderColor: colors.primary },        // Light theme: green border
+            '&:hover fieldset': { borderColor: colors.accent },     // Hover: accent (orange)
+            '&.Mui-focused fieldset': { borderColor: colors.primary },// Focus state
           },
         },
       },
-      MuiTextField: {
-        styleOverrides: {
-          root: {
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: mode === "dark" ? darkColors.text : lightColors.primary,
-              },
-              "&:hover fieldset": {
-                borderColor: mode === "dark" ? darkColors.accent : lightColors.accent,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: mode === "dark" ? darkColors.text : lightColors.primary,
-              },
-            },
+    },
+  },
+};
+
+const lightTheme = createTheme(lightThemeConfig);
+
+// DARK THEME: derived from lightTheme via augmentColor() for primary and secondary colors
+const darkThemeConfig = {
+  palette: {
+    mode: 'dark',
+    primary: lightTheme.palette.augmentColor({ color: { main: colors.primary } }),
+    secondary: lightTheme.palette.augmentColor({ color: { main: colors.secondary } }),
+    background: { default: "#303030" },
+    text: { primary: "#E0E0E0", secondary: "#BBBBBB" },
+  },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': { borderColor: "#E0E0E0" },            // Dark theme: light gray border
+            '&:hover fieldset': { borderColor: colors.accent },    // Hover: same accent color
+            '&.Mui-focused fieldset': { borderColor: "#E0E0E0" },    // Focus state
           },
         },
       },
@@ -73,4 +66,9 @@ const generateTheme = (mode) => {
   });
 };
 
-export default generateTheme;
+const darkTheme = createTheme(darkThemeConfig);
+
+// Export a theme function which returns the dark or light theme based on the mode parameter
+const theme = (mode) => (mode === 'dark' ? darkTheme : lightTheme);
+
+export default theme;
