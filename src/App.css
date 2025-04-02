@@ -1,102 +1,19 @@
-body {
-    background-color: var(--background-color);
-    background-image: url('../public/Background.png'); /* Path assuming the image is in public folder */
-    background-size: cover; /* Ensures it covers the entire screen */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents tiling */
-    height: 100vh; /* Ensures full viewport height */
-    width: 100vw; /* Ensures full viewport width */
-    margin: 0;
-    padding: 0;
-    color: var(--text-color); /* Apply text color from theme */
-}
-
-/* Light mode styles */
-body.light-mode {
-    --background-color: #F5F5F5; /* Light mode background color */
-    --text-color: #004C4C; /* Light mode text color */
-    --scrollbar-track-color: #E0E0E0; /* Light mode scrollbar track color */
-    --scrollbar-thumb-color: #B0B0B0; /* Light mode scrollbar thumb color */
-    --primary-color: #166B6B; /* Light mode primary color */
-}
-
-/* Dark mode styles */
-body.dark-mode {
-    --background-color: #303030; /* Dark mode background color */
-    --text-color: #E0E0E0; /* Dark mode text color */
-    --scrollbar-track-color: #505050; /* Dark mode scrollbar track color */
-    --scrollbar-thumb-color: #707070; /* Dark mode scrollbar thumb color */
-    --primary-color: #1E8E8E; /* Dark mode primary color */
-}
-
-/* Custom scrollbar styles for WebKit browsers (Chrome, Safari) */
-body.custom-scrollbar::-webkit-scrollbar {
-    width: 8px; /* Set width for the scrollbar */
-}
-
-body.custom-scrollbar::-webkit-scrollbar-track {
-    background: var(--scrollbar-track-color); /* Background of the scrollbar track */
-}
-
-body.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-thumb-color); /* Color of the scrollbar thumb */
-    background-color: var(--scrollbar-thumb-color); /* Color of the scrollbar thumb */
-    border-radius: 20px; /* Rounded corners for the scrollbar thumb */
-    border: 3px solid var(--scrollbar-track-color); /* Adds padding around the thumb */
-}
-
-body.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: var(--text-color); /* Darker color when hovering over the scrollbar thumb */
-}
-
-/* Custom scrollbar styles for Firefox */
-body.custom-scrollbar {
-    scrollbar-width: none; /* Hide scrollbar */
-    scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); /* Thumb and track colors */
-}
-
-/* Apply styles to the entire application */
-html, body, #root {
+#root {
     height: 100%;
     width: 100%;
-    overflow-x: hidden; /* Disable horizontal scrolling */
-}
-
-html, body {
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-img {
-    -webkit-user-drag: none;
-    user-drag: none;
-}
-
-/* InfoCard styles */
-.info-card {
-    background-color: var(--background-color);
-    border: 1px solid var(--primary-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#navbar .login-button {
-  /* ...existing code... */
 }
 
 @media (max-width: 599px) {
-  #navbar .login-button {
-    display: none;
-  }
-  .MuiDrawer-paper {
-    background-color: var(--background-color); /* Adapt drawer background color */
-    color: var(--text-color); /* Adapt drawer text color */
-  }
-  .side-drawer .login-button {
-    display: block; /* Show the login button in side drawer for mobile */
-    background-color: var(--primary-color);
-    /* ...any other custom styles... */
-  }
+    #navbar .login-button {
+        display: none;
+    }
+
+    .MuiDrawer-paper {
+        background-color: inherit;
+        color: inherit;
+    }
+
+    .side-drawer .login-button {
+        display: block;
+    }
 }

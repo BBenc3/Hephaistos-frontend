@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import RegisterForm from '../../../components/Register/RegisterForm';
-import Notification from '../../../components/Notification';
+import RegisterForm from '../components/RegisterForm';
+import Notification from '../components/Notification';
 import { useTheme } from '@mui/material/styles';
 
 const Register = () => {

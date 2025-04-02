@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Button from '../../components/Button';
+import Button from '../components/Button';
 import { useTheme } from '@mui/material/styles';
 import { Box, Typography, TextField } from "@mui/material";
 
@@ -22,7 +22,7 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async () => {
     try {
-      await axios.put('https://localhost:5001/api/auth/change-password-after-otp', 
+      await axios.put('https://localhost:5001/api/auth/change-password-after-otp',
         { email, otp, newPassword }
       );
       console.log('Password changed successfully');

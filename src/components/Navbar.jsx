@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useTheme, useMediaQuery, AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, MenuItem, Menu } from "@mui/material";
+import { useTheme, useMediaQuery, AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 import { Gear } from 'react-bootstrap-icons';
 import { keyframes } from '@mui/system';
-import useUserData from "../hooks/useUserData";
+import useUserData from "../hooks/useUserData"; // Import useUserData hook
 import CustomButton from "./Button";
-import UserProfileDropdown from "./UserProfileDropdown";
+import UserProfileDropdown from "./UserProfileDropdown"; // Import UserProfileDropdown
 import CustomDropdown from "./CustomDropdown";
 import DarkModeToggle from './DarkModeToggle';
 
@@ -52,7 +52,7 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { user } = useUserData();
+  const { user } = useUserData();  // Use user data from the hook
   const [gearAnchorEl, setGearAnchorEl] = useState(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [animateForward, setAnimateForward] = useState(false);
@@ -96,7 +96,19 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
   return (
     <AppBar position="static" sx={{ backgroundColor: `${theme.palette.background.default}CC` }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6" component="div" onClick={() => navigate("/")} sx={{ flexGrow: 1, color: theme.palette.primary.main, fontSize: "24px", fontWeight: "bold", cursor: "pointer", userSelect: "none" }}>
+        <Typography
+          variant="h6"
+          component="div"
+          onClick={() => navigate("/")}
+          sx={{
+            flexGrow: 1,
+            color: theme.palette.primary.main,
+            fontSize: "24px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+        >
           Hephaistos
         </Typography>
 
@@ -127,7 +139,12 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
         )}
 
         {user ? (
-          <UserProfileDropdown anchorEl={profileAnchorEl} onMenuClick={handleProfileMenuClick} onMenuClose={handleProfileMenuClose} user={user} />
+          <UserProfileDropdown
+            anchorEl={profileAnchorEl}
+            onMenuClick={handleProfileMenuClick}
+            onMenuClose={handleProfileMenuClose}
+            user={user}
+          />
         ) : (
           !isMobile && (
             <CustomButton size="small" onClick={() => navigate("/login")}>

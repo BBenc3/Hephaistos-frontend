@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import axios from 'axios';
-import Notification from '../components/Notification';
+import React, { createContext, useContext, useReducer, useEffect } from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "/auth"; // Az API URL frissítése
 
 const initialState = {
   isLoggedIn: false,
@@ -11,22 +12,12 @@ const initialState = {
 
 const authReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN_SUCCESS':
-      return {
-        ...state,
-        isLoggedIn: true,
-        error: null,
-      };
-    case 'LOGIN_FAILURE':
-      return {
-        ...state,
-        error: action.payload,
-      };
-    case 'LOGOUT':
-      return {
-        ...state,
-        isLoggedIn: false,
-      }
+    case "LOGIN_SUCCESS":
+      return { ...state, isLoggedIn: true, error: null };
+    case "LOGIN_FAILURE":
+      return { ...state, error: action.payload };
+    case "LOGOUT":
+      return { ...state, isLoggedIn: false, error: null };
     default:
       return state;
   }
@@ -35,44 +26,61 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      dispatch({ type: "LOGIN_SUCCESS" });
+    }
+  }, []);
+
   const login = async (credentials) => {
     try {
-      const response = await axios.post('https://localhost:5001/api/auth/login', credentials ,{
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
+      const response = await axios.post(`${API_BASE_URL}/login`, credentials, {
+        headers: { "Content-Type": "application/json" },
+      });
+
       const accessToken = response.data.accessToken;
-      localStorage.setItem('accessToken', accessToken);
-      dispatch({ type: 'LOGIN_SUCCESS' });
+      localStorage.setItem("accessToken", accessToken);
+      dispatch({ type: "LOGIN_SUCCESS" });
     } catch (error) {
-      dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
+      console.error("Login error:", error);  // Hibakezelés finomítása
+      const errorMessage = error.response?.data?.message || "Hibás bejelentkezési adatok.";
+      dispatch({
+        type: "LOGIN_FAILURE",
+        payload: errorMessage,
+      });
+      throw new Error(errorMessage);  // További hibaátadás
     }
   };
 
+
   const logout = () => {
-    localStorage.removeItem('accessToken');
-    dispatch({ type: 'LOGOUT' });
+    localStorage.removeItem("accessToken");
+    dispatch({ type: "LOGOUT" });
   };
 
   const requestOtp = async (email) => {
     try {
-      await axios.post('https://localhost:5001/api/auth/generate-otp', { email });
+      await axios.post(`${API_BASE_URL}/auth/generate-otp`, { email });
     } catch (error) {
-      console.error('OTP request error:', error);
+      console.error("OTP request error:", error);
     }
   };
 
   const verifyOtp = async (email, otp, newPassword) => {
     try {
-      await axios.put('https://localhost:5001/api/auth/change-password-after-otp', { email, otp, newPassword });
+      await axios.put(`${API_BASE_URL}/auth/change-password-after-otp`, {
+        email,
+        otp,
+        newPassword,
+      });
     } catch (error) {
-      console.error('OTP verification error:', error);
+      console.error("OTP verification error:", error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp}}>
+    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp }}>
       {children}
     </AuthContext.Provider>
   );
@@ -81,7 +89,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

@@ -1,0 +1,118 @@
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Full viewport height */
+}
+
+.error-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  /* Make the box responsive */
+  max-width: 1200px;
+  /* Limit width on large screens */
+  padding: 20px;
+}
+
+.error-image-box {
+  margin-left: 40px;
+  /* Space between text and image */
+  position: relative;
+  width: 50%;
+  /* Make the image box responsive */
+  max-width: 500px;
+}
+
+.error-text-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 50%;
+  /* Make text box responsive */
+}
+
+.error-title {
+  font-weight: bold;
+  color: #808080;
+  margin-bottom: 8px;
+}
+
+.error-subtitle {
+  font-weight: normal;
+  color: #565F73;
+  margin-bottom: 8px;
+}
+
+.error-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 200px;
+  /* Limit button width */
+}
+
+.error-code {
+  font-size: 3rem;
+  font-weight: bold;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #808080;
+}
+
+.error-image {
+  width: 100%;
+  height: auto;
+  /* Maintain aspect ratio */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .error-box {
+    flex-direction: column;
+    /* Stack text and image vertically */
+    align-items: center;
+  }
+
+  .error-image-box {
+    margin-left: 0;
+    /* Remove left margin on mobile */
+    margin-top: 20px;
+    /* Add space above the image */
+    width: 80%;
+    /* Make image box smaller on mobile */
+  }
+
+  .error-text-box {
+    align-items: center;
+    /* Center text on mobile */
+    width: 80%;
+    /* Make text box smaller on mobile */
+  }
+
+  .error-code {
+    font-size: 2rem;
+    /* Reduce font size of error code on mobile */
+  }
+
+  .error-title {
+    font-size: 1.5rem;
+    /* Adjust title font size */
+  }
+
+  .error-subtitle {
+    font-size: 1rem;
+    /* Adjust subtitle font size */
+  }
+
+  .error-button {
+    width: 100%;
+  }
+}

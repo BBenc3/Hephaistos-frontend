@@ -1,24 +1,21 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { colors, darkColors } from './styles/colors';
-import { useDarkMode } from './hooks/useDarkMode';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Navbar from './components/Navbar';
-import ProtectedRoute from './components/ProtectedRoute';
-import Home from './pages/Home';
-import Schedule from './pages/Schedule';
-import About from './pages/About';
-import Profile from './pages/UserProfile';
-import UserDelete from './pages/UserDelete';
-import Login from './pages/auth/Login';
-import ErrorPage from './components/Error/ErrorPage';
-import Register from './pages/auth/Register/Register';
-import ForgotPassword from './pages/auth/ForgotPassword';
-import { useMediaQuery } from '@mui/material';
-import Notification from './components/Notification';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { useDarkMode } from "./hooks/useDarkMode";
+import { AuthProvider } from "./contexts/AuthContext";
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
+import Schedule from "./pages/Schedule";
+import Login from "./pages/Login";
+import ErrorPage from "./pages/Error/ErrorPage";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import { useMediaQuery } from "@mui/material";
+import Notification from "./components/Notification";
+import generateTheme from "./styles/theme"; // Importáljuk a theme.js-t
+import ProfilePage from "./pages/Profile";
 
 function App() {
   return (
@@ -28,27 +25,16 @@ function App() {
   );
 }
 
-// Child component that uses useAuth
 function AppContent() {
-  const [isDarkMode, setIsDarkMode] = useDarkMode();
-  const [notification, setNotification] = React.useState({ open: false, message: '' });
-  const theme = createTheme({
-    palette: {
-      primary: { main: isDarkMode ? darkColors.primary : colors.primary },
-      secondary: { main: isDarkMode ? darkColors.secondary : colors.secondary },
-      background: { default: isDarkMode ? darkColors.background : colors.background },
-      text: { primary: isDarkMode ? darkColors.text : colors.text },
-      error: { main: isDarkMode ? darkColors.error : colors.error },
-      warning: { main: isDarkMode ? darkColors.warning : colors.warning },
-      info: { main: isDarkMode ? darkColors.info : colors.info },
-      success: { main: isDarkMode ? darkColors.success : colors.success },
-    },
-  });
+  const [isDarkMode, setIsDarkMode] = useDarkMode(); // Téma mód állapot
+  const [notification, setNotification] = React.useState({ open: false, message: "" });
 
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = generateTheme(isDarkMode ? "dark" : "light"); // Téma generálása
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
+    document.body.className = isDarkMode ? "dark-mode" : "light-mode"; // Frissítjük a body class-t
   }, [isDarkMode]);
 
   return (
@@ -59,14 +45,11 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home isMobile={isMobile} />} />
           <Route path="/schedule" element={<Schedule />} />
-          <Route path="/schedule2" element={<Schedule />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/userdelete" element={<ProtectedRoute element={<UserDelete />} />} />
-          <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
-          <Route path="/about" element={<About />} /> {/* Add this line */}
-          <Route path="*" element={<ErrorPage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/profile" element={<ProfilePage/>} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
       {notification.open && (
@@ -74,7 +57,7 @@ function AppContent() {
           open={notification.open}
           message={notification.message}
           severity="warning"
-          onClose={() => setNotification({ open: false, message: '' })}
+          onClose={() => setNotification({ open: false, message: "" })}
         />
       )}
     </ThemeProvider>
