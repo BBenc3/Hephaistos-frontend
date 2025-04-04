@@ -6,7 +6,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import WarningIcon from '@mui/icons-material/Warning';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-const Notification = ({ open, message, severity, onClose }) => {
+const Notification = ({ open, message, severity, onClose, ownerState, ...otherProps }) => {
   const theme = useTheme();
 
   const getBackgroundColor = () => {
@@ -43,6 +43,7 @@ const Notification = ({ open, message, severity, onClose }) => {
       autoHideDuration={6000}
       onClose={onClose}
       TransitionComponent={TransitionUp}
+      {...otherProps}
     >
       <Alert
         onClose={onClose}
@@ -52,6 +53,7 @@ const Notification = ({ open, message, severity, onClose }) => {
           backgroundColor: getBackgroundColor(),
           color: theme.palette.common.white,
         }}
+        {...otherProps}
       >
         {getIcon()}
         {message}

@@ -3,7 +3,8 @@ import axios from "axios";
 
 const AuthContext = createContext();
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "/auth"; // Az API URL frissítése
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "/auth";
+const USER_API_URL = process.env.REACT_APP_API_BASE_URL + "/user";
 
 const initialState = {
   isLoggedIn: false,
@@ -43,16 +44,15 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("accessToken", accessToken);
       dispatch({ type: "LOGIN_SUCCESS" });
     } catch (error) {
-      console.error("Login error:", error);  // Hibakezelés finomítása
+      console.error("Login error:", error);
       const errorMessage = error.response?.data?.message || "Hibás bejelentkezési adatok.";
       dispatch({
         type: "LOGIN_FAILURE",
         payload: errorMessage,
       });
-      throw new Error(errorMessage);  // További hibaátadás
+      throw new Error(errorMessage);
     }
   };
-
 
   const logout = () => {
     localStorage.removeItem("accessToken");
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
 
   const requestOtp = async (email) => {
     try {
-      await axios.post(`${API_BASE_URL}/auth/generate-otp`, { email });
+      await axios.post(`${API_BASE_URL}/generate-otp`, { email });
     } catch (error) {
       console.error("OTP request error:", error);
     }
@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyOtp = async (email, otp, newPassword) => {
     try {
-      await axios.put(`${API_BASE_URL}/auth/change-password-after-otp`, {
+      await axios.put(`${API_BASE_URL}/change-password-after-otp`, {
         email,
         otp,
         newPassword,
@@ -79,8 +79,31 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateCompletedSubjects = async (completedSubjectIds) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      await axios.put(
+        `${USER_API_URL}/completedSubjects`,
+        { completedSubjectIds },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error("Error updating completed subjects:", err);
+      throw err;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, requestOtp, verifyOtp }}>
+    <AuthContext.Provider
+      value={{
+        ...state,
+        login,
+        logout,
+        requestOtp,
+        verifyOtp,
+        updateCompletedSubjects,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
