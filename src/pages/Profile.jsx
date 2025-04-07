@@ -1,252 +1,234 @@
-import React, { useEffect, useState } from "react";
-import { Container, Typography, Avatar, Grid, List, ListItem, ListItemText, Button, CircularProgress, Select, MenuItem, FormControl, InputLabel, TextField, Box, Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import useUserData from "../hooks/useUserData";
-import Notification from "../components/Notification";
-import { useAuth } from "../contexts/AuthContext";
-import axios from "axios";
+import React, { useState } from 'react';
+import {
+    Box, Typography, Card, Grid, useTheme, TextField, Button
+} from '@mui/material';
+import { useAuth } from '../contexts/AuthContext';
+import useUserData from '../hooks/useUserData';
 
 const ProfilePage = () => {
-    const { user, loading, errorNotification, handleDeactivate, fetchAvailableSubjects, updateCompletedSubjects } = useUserData();
+    const theme = useTheme();
     const { isLoggedIn } = useAuth();
-    const navigate = useNavigate();
-    const [notification, setNotification] = useState({ open: false, message: "", severity: "error" });
-    const [availableSubjects, setAvailableSubjects] = useState([]);
-    const [selectedSubjects, setSelectedSubjects] = useState([]);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [savedPictures, setSavedPictures] = useState([]); // List of filenames from FTP
-    const [showSavedPictures, setShowSavedPictures] = useState(false);
-
-    const handleNotificationClose = () => {
-        setNotification((prev) => ({ ...prev, open: false }));
-    };
-
-    useEffect(() => {
-        if (!loading && !isLoggedIn) {
-            navigate("/login");
-        }
-    }, [user, isLoggedIn, loading, navigate]);
-
-    useEffect(() => {
-        if (user) {
-            fetchAvailableSubjects().then((data) => {
-                setAvailableSubjects(Array.isArray(data) ? data : []);
-                if (user.completedSubjects && Array.isArray(user.completedSubjects)) {
-                    setSelectedSubjects(user.completedSubjects.map((subj) => subj.SubjectId));
-                } else {
-                    setSelectedSubjects([]);
-                }
-            });
-        }
-    }, [user, fetchAvailableSubjects]);
-
-    const handleSubjectChange = (event) => {
-        setSelectedSubjects(event.target.value);
-    };
-
-    const handleUpdateSubjects = async () => {
-        try {
-            await updateCompletedSubjects(selectedSubjects);
-            setNotification({ open: true, message: "Completed subjects updated.", severity: "success" });
-        } catch (error) {
-            setNotification({ open: true, message: "Error updating subjects.", severity: "error" });
-        }
-    };
-
-    const handleFileChange = (event) => {
-        if (event.target.files && event.target.files.length > 0) {
-            setSelectedFile(event.target.files[0]);
-        }
-    };
-
-    const handleUploadPicture = async () => {
-        if (!selectedFile) return;
-        const token = localStorage.getItem("accessToken");
-        const formData = new FormData();
-        formData.append("file", selectedFile);
-        try {
-            const response = await axios.put(
-                `${process.env.REACT_APP_API_BASE_URL}/user/uploadProfilePicture`,
-                formData,
-                { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
-            );
-            setNotification({ open: true, message: "Profile picture updated.", severity: "success" });
-        } catch (err) {
-            console.error("Error uploading profile picture:", err);
-            setNotification({ open: true, message: "Error uploading profile picture.", severity: "error" });
-        }
-    };
-
-    const handleLoadSavedPictures = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/ftp/list-all`);
-            setSavedPictures(response.data);
-            setShowSavedPictures(true);
-        } catch (err) {
-            console.error("Error loading saved pictures:", err);
-            setNotification({ open: true, message: "Error loading saved pictures.", severity: "error" });
-        }
-    };
-
-    const handleSelectSavedPicture = async (pictureName) => {
-        const token = localStorage.getItem("accessToken");
-        try {
-            await axios.put(
-                `${process.env.REACT_APP_API_BASE_URL}/user/changeProfilePicture`,
-                { profilePicturePath: pictureName },
-                { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
-            );
-            setNotification({ open: true, message: "Profile picture updated.", severity: "success" });
-        } catch (err) {
-            console.error("Error updating profile picture:", err);
-            setNotification({ open: true, message: "Error updating profile picture.", severity: "error" });
-        }
-    };
+    const { user, loading, error, updateUserData, handleDeactivate } = useUserData();
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState(null);
+    const [updateError, setUpdateError] = useState(null);
+    const [updating, setUpdating] = useState(false);
 
     if (loading) {
         return (
-            <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: "100vh" }}>
-                <CircularProgress />
-            </Grid>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Typography variant="h6">Loading...</Typography>
+            </Box>
         );
     }
 
-    if (errorNotification) {
-        return errorNotification;
+    if (error) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Typography variant="h6" color="error">{error}</Typography>
+            </Box>
+        );
     }
 
-    const profileBaseUrl = process.env.REACT_APP_PROFILE_PICTURE_BASE_URL;
-    const displayAvatar = user?.profilePicturePath
-        ? `${profileBaseUrl}ProfilePictures/${user?.profilePicturePath}`
-        : "https://via.placeholder.com/150";
+    if (!isLoggedIn) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Typography variant="h6">Please log in to view your profile.</Typography>
+            </Box>
+        );
+    }
 
-    const completedSubjectsText = Array.isArray(user?.completedSubjects) && user.completedSubjects.length > 0
-        ? user.completedSubjects.map((subject) => subject.Name).join(", ")
-        : "Nincs befejezett tantárgy.";
+    // Add this check before rendering user fields
+    if (!user) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Typography variant="h6">Loading user data...</Typography>
+            </Box>
+        );
+    }
+
+    // Profilkép URL összeállítása
+    const profilePictureUrl = user?.profilePicturePath
+        ? process.env.REACT_APP_PROFILE_PICTURE_BASE_URL + "ProfilePictures/" + user.profilePicturePath
+        : null;
+
+    // Szerkesztési módba lépés: minden mezőt előtöltünk; mivel a GET válaszban csak majorName érhető el,
+    // a MajorId értékét manuálisan kell megadni, ezért üresen hagyjuk.
+    const handleEdit = () => {
+        setEditData({
+            username: user?.username,
+            Email: user?.email,
+            StartYear: user?.startYear,
+            University: user?.university, // new field for University
+            Role: user?.Role || "",
+            Note: user?.Note || "",
+            Active: user?.Active !== undefined ? user.Active : false,
+            Status: user?.Status || "",
+            MajorId: "", // Itt kell majd a megfelelő major id-t megadni
+        });
+        setIsEditing(true);
+    };
+
+    // Input mezők változásának kezelése
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditData({
+            ...editData,
+            [name]: value,
+        });
+    };
+
+    // Frissítés mentése (axios hívás a useUserData-ban)
+    const handleSave = async () => {
+        setUpdating(true);
+        setUpdateError(null);
+        const success = await updateUserData(editData);
+        if (success) {
+            setIsEditing(false);
+        } else {
+            setUpdateError("Hiba történt az adatok frissítése során.");
+        }
+        setUpdating(false);
+    };
+
+    // Szerkesztés megszakítása
+    const handleCancel = () => {
+        setIsEditing(false);
+        setEditData(null);
+        setUpdateError(null);
+    };
 
     return (
-        <Container sx={{ p: { xs: 2, sm: 4 } }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
-                <Avatar
-                    src={displayAvatar}
-                    alt={user?.username}
-                    sx={{ width: { xs: 100, sm: 150 }, height: { xs: 100, sm: 150 }, mb: 2 }}
-                />
-                <Typography variant="h5" component="h1" sx={{ textAlign: 'center' }}>
-                    {user?.username}
-                </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                    {user?.email}
-                </Typography>
-            </Box>
-            <Grid container spacing={3} justifyContent="center">
-                <Grid item xs={12} sm={8} md={6}>
-                    <List>
-                        <ListItem>
-                            <ListItemText primary="Start Year" secondary={user?.startYear} />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText primary="Major" secondary={user?.majorName} />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText primary="University" secondary={user?.university} />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText primary="Completed Subjects" secondary={completedSubjectsText} />
-                        </ListItem>
-                    </List>
-                </Grid>
-                {/* New section for available subjects */}
-                <Grid item xs={12} sm={8} md={6}>
-                    <Typography variant="h6">Elérhető tárgyak</Typography>
-                    {availableSubjects && availableSubjects.length > 0 ? (
-                        <List>
-                            {availableSubjects.map((subj) => (
-                                <ListItem key={subj.Id}>
-                                    <ListItemText primary={`${subj.Name} – ${subj.MajorName} / ${subj.UniversityName}`} />
-                                </ListItem>
-                            ))}
-                        </List>
-                    ) : (
-                        <Typography variant="body2">Nincsenek elérhető tárgyak.</Typography>
-                    )}
-                </Grid>
-                <Grid item xs={12} sm={8} md={6}>
-                    <FormControl fullWidth>
-                        <InputLabel id="completed-subjects-label">Completed Subjects</InputLabel>
-                        <Select
-                            labelId="completed-subjects-label"
-                            multiple
-                            value={Array.isArray(selectedSubjects) ? selectedSubjects : []}
-                            label="Completed Subjects"
-                            onChange={handleSubjectChange}
-                        >
-                            {(Array.isArray(availableSubjects) ? availableSubjects : []).map((subj) => (
-                                <MenuItem key={subj.Id} value={subj.Id}>
-                                    {subj.Name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={8} md={6}>
-                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="center">
-                        <Button variant="contained" onClick={handleUpdateSubjects}>
-                            Update Completed Subjects
-                        </Button>
-                    </Stack>
-                </Grid>
-                <Grid item xs={12} sm={8} md={6}>
-                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
-                        <TextField
-                            type="file"
-                            onChange={handleFileChange}
-                            fullWidth
-                            sx={{ maxWidth: { sm: '60%' } }}
-                        />
-                        <Button variant="contained" onClick={handleUploadPicture}>
-                            Upload Profile Picture
-                        </Button>
-                    </Stack>
-                </Grid>
-                <Grid item xs={12} sm={8} md={6}>
-                    <Button variant="contained" color="primary" fullWidth onClick={handleDeactivate}>
-                        Deactivate Profile
-                    </Button>
-                </Grid>
-                <Grid item xs={12} sm={8} md={6}>
-                    <Button variant="outlined" fullWidth onClick={handleLoadSavedPictures}>
-                        Select Saved Profile Picture
-                    </Button>
-                </Grid>
-                {showSavedPictures && savedPictures.length > 0 && (
-                    <Grid item xs={12} sm={8} md={6}>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center', mt: 2 }}>
-                            {savedPictures.map((pic) => {
-                                const picUrl = `${process.env.REACT_APP_PROFILE_PICTURE_BASE_URL}ProfilePictures/${pic}`;
-                                return (
+        <Box sx={{ p: 4, backgroundColor: theme.palette.background.default, minHeight: '100vh' }}>
+            <Grid container justifyContent="center">
+                <Grid item xs={12} md={10} lg={8}>
+                    <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2 }}>
+                            {/* Profilkép */}
+                            {profilePictureUrl && (
+                                <Box sx={{ flexShrink: 0, mr: 3 }}>
                                     <Box
-                                        key={pic}
                                         component="img"
-                                        src={picUrl}
-                                        alt={pic}
-                                        sx={{ width: 70, height: 70, cursor: 'pointer', borderRadius: 1, border: '1px solid #ccc' }}
-                                        onClick={() => handleSelectSavedPicture(pic)}
+                                        src={profilePictureUrl}
+                                        alt={`${user?.username || ""} Profile Picture`}
+                                        sx={{
+                                            width: 120,
+                                            height: 120,
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            border: `3px solid ${theme.palette.primary.main}`,
+                                            boxShadow: 2,
+                                        }}
                                     />
-                                );
-                            })}
+                                </Box>
+                            )}
+                            {/* Felhasználói adatok (szerkesztési mód vs. statikus mód) */}
+                            <Box sx={{ flex: 1 }}>
+                                {isEditing ? (
+                                    <>
+                                        <TextField
+                                            fullWidth
+                                            label="Felhasználónév"
+                                            name="username"
+                                            value={editData.username}
+                                            onChange={handleChange}
+                                            margin="dense"
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            label="Email"
+                                            name="Email"
+                                            value={editData.Email}
+                                            onChange={handleChange}
+                                            margin="dense"
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            label="Kezdés éve"
+                                            name="StartYear"
+                                            value={editData.StartYear}
+                                            onChange={handleChange}
+                                            margin="dense"
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            label="University"
+                                            name="University"
+                                            value={editData.University}
+                                            onChange={handleChange}
+                                            margin="dense"
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            label="Major ID"
+                                            name="MajorId"
+                                            value={editData.MajorId}
+                                            onChange={handleChange}
+                                            margin="dense"
+                                        />
+                                        {updateError && (
+                                            <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                                                {updateError}
+                                            </Typography>
+                                        )}
+                                        <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                                            <Button variant="contained" color="primary" onClick={handleSave} disabled={updating}>
+                                                Mentés
+                                            </Button>
+                                            <Button variant="outlined" color="secondary" onClick={handleCancel} disabled={updating}>
+                                                Mégse
+                                            </Button>
+                                        </Box>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Typography variant="h4" gutterBottom>
+                                            {user?.username}
+                                        </Typography>
+                                        <Typography variant="body1" color="textSecondary" gutterBottom>
+                                            {user?.email}
+                                        </Typography>
+                                        <Box sx={{ my: 1 }}>
+                                            <Typography variant="subtitle1">
+                                                <strong>Kezdés éve:</strong> {user?.startYear}
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                <strong>Major:</strong> {user?.majorName || "N/A"}
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                <strong>University:</strong> {user?.university}
+                                            </Typography>
+                                        </Box>
+                                        {user?.completedSubjects && user.completedSubjects.$values?.length > 0 ? (
+                                            <Box sx={{ mt: 1 }}>
+                                                <Typography variant="h6">Elvégzett tantárgyak:</Typography>
+                                                {user.completedSubjects.$values.map((subject) => (
+                                                    <Typography variant="body2" key={subject.subjectId}>
+                                                        - {subject.name}
+                                                    </Typography>
+                                                ))}
+                                            </Box>
+                                        ) : (
+                                            <Box sx={{ mt: 1 }}>
+                                                <Typography variant="h6">Elvégzett tantárgyak:</Typography>
+                                                <Typography variant="body2" color="textSecondary">
+                                                    Nincs megjeleníthető tantárgy.
+                                                </Typography>
+                                            </Box>
+                                        )}
+                                        <Box sx={{ mt: 2 }}>
+                                            <Button variant="contained" onClick={handleEdit}>
+                                                Módosítás
+                                            </Button>
+                                        </Box>
+                                    </>
+                                )}
+                            </Box>
                         </Box>
-                    </Grid>
-                )}
+                    </Card>
+                </Grid>
             </Grid>
-
-            <Notification
-                open={notification.open}
-                message={notification.message}
-                severity={notification.severity}
-                onClose={handleNotificationClose}
-            />
-        </Container>
+        </Box>
     );
 };
 
