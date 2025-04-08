@@ -48,7 +48,7 @@ const useUserData = () => {
           setLoading(false);
         }
       }
-    };
+    });
 
   // Az adatok betöltése a hook inicializálásakor és amikor isLoggedIn változik
   useEffect(() => {
