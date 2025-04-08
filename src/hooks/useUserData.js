@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -11,13 +11,11 @@ const useUserData = () => {
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) return;
+  // Függvény a felhasználói adatok lekéréséhez
+  const fetchUserData = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return;
 
         const response = await axios.get(
           `${process.env.REACT_APP_API_BASE_URL}/user/me`,
@@ -52,17 +50,20 @@ const useUserData = () => {
       }
     };
 
+  // Az adatok betöltése a hook inicializálásakor és amikor isLoggedIn változik
+  useEffect(() => {
     if (isLoggedIn) {
       fetchUserData();
     } else {
       setUser(null);
       setLoading(false);
     }
+  }, [isLoggedIn, fetchUserData]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [isLoggedIn]);
+  // Új függvény: frissíti a user adatokat
+  const refreshUserData = async () => {
+    await fetchUserData();
+  };
 
   const handleDeactivate = async () => {
     try {
@@ -97,7 +98,6 @@ const useUserData = () => {
         `${process.env.REACT_APP_API_BASE_URL}/user/subjects`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Ensure the returned value is an array
       return Array.isArray(response.data) ? response.data : [];
     } catch (err) {
       console.error("Error fetching subjects:", err);

@@ -5,26 +5,24 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CustomDropdown from "./CustomDropdown";
 import { useNavigate } from 'react-router-dom';
+import useUserData from "../hooks/useUserData";
 
-const UserProfileDropdown = ({ anchorEl, onMenuClick, onMenuClose, user }) => {
+const UserProfileDropdown = ({ anchorEl, onMenuClick, onMenuClose }) => {
   const { logout } = useAuth();
   const theme = useTheme();
   const navigate = useNavigate();
+  const { user } = useUserData();
 
   const handleLogoutClick = () => {
     logout();
     onMenuClose();
   };
 
-  // Retrieve the base URL for profile pictures from the .env file
-  const profileBaseUrl = process.env.REACT_APP_PROFILE_PICTURE_BASE_URL || ""; // Default to empty string if not defined
-
-  // Construct the profile picture URL
+  const profileBaseUrl = process.env.REACT_APP_PROFILE_PICTURE_BASE_URL || "";
   const displayAvatar = user?.profilePicturePath
-    ? `${profileBaseUrl}ProfilePictures/${user?.profilePicturePath}`
-    : "https://via.placeholder.com/40"; // Fallback image if no profile picture
-
-  const displayName = user?.username || "Felhasználó név"; // Fallback name if no username
+    ? `${profileBaseUrl}ProfilePictures/${user.profilePicturePath}`
+    : "https://via.placeholder.com/40";
+  const displayName = user?.username || "Felhasználó név";
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -48,7 +46,7 @@ const UserProfileDropdown = ({ anchorEl, onMenuClick, onMenuClose, user }) => {
       >
         <Avatar
           src={displayAvatar}
-          alt={displayName}
+          alt={`${displayName} Profile Picture`}
           sx={{ width: 30, height: 30, [theme.breakpoints.down('sm')]: { width: 25, height: 25 } }}
         />
         <Typography variant="body1" sx={{ marginLeft: "8px", [theme.breakpoints.down('sm')]: { fontSize: '0.8rem' } }}>
