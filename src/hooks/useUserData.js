@@ -27,7 +27,14 @@ const useUserData = () => {
         );
 
         if (isMounted) {
-          setUser(response.data);
+          const formattedUser = {
+            ...response.data,
+            completedSubjects: {
+              ...response.data.completedSubjects,
+              values: response.data.completedSubjects?.$values || [],
+            },
+          };
+          setUser(formattedUser);
           setLoading(false);
         }
       } catch (err) {
@@ -106,10 +113,30 @@ const useUserData = () => {
         { completedSubjectIds },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setUser((prev) => ({ ...prev, completedSubjects: completedSubjectIds }));
+      setUser((prev) => ({
+        ...prev,
+        completedSubjects: completedSubjectIds,
+        universityId: prev.universityId, // Ensure universityId remains intact
+        majorId: prev.majorId, // Ensure majorId remains intact
+      }));
     } catch (err) {
       console.error("Error updating completed subjects:", err);
       setError("Hiba történt a tantárgyak frissítése során.");
+    }
+  };
+
+  const updateUserDetails = async (updatedDetails) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_BASE_URL}/user/me`,
+        updatedDetails,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setUser((prev) => ({ ...prev, ...response.data })); // Update user state with new details
+    } catch (err) {
+      console.error("Error updating user details:", err);
+      setError("Hiba történt a felhasználói adatok frissítése során.");
     }
   };
 
@@ -122,6 +149,7 @@ const useUserData = () => {
     handleDeactivate,
     fetchAvailableSubjects,
     updateCompletedSubjects,
+    updateUserDetails, // Export the function
   };
 };
 
