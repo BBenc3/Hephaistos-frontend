@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -10,6 +10,14 @@ const useUserData = () => {
   const [error, setError] = useState(null);
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
+  const isMountedRef = useRef(true);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Függvény a felhasználói adatok lekéréséhez
   const fetchUserData = useCallback(async () => {
@@ -24,7 +32,7 @@ const useUserData = () => {
           }
         );
 
-        if (isMounted) {
+        if (isMountedRef.current) {
           const formattedUser = {
             ...response.data,
             completedSubjects: {
@@ -42,13 +50,13 @@ const useUserData = () => {
           logout();
           navigate("/login");
         }
-        if (isMounted) {
+        if (isMountedRef.current) {
           console.error("Error fetching user data:", err);
           setError("Hiba történt a felhasználói adatok lekérése közben.");
           setLoading(false);
         }
       }
-    });
+    }, [logout, navigate]);
 
   // Az adatok betöltése a hook inicializálásakor és amikor isLoggedIn változik
   useEffect(() => {

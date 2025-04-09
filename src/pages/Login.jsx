@@ -98,7 +98,23 @@ const Login = () => {
     >
       <Box sx={{ flexGrow: 1, width: { xs: '90%', sm: '60%', md: '40%' } }}>
         <LoginForm handleLogin={login} setNotification={setNotification} />
+        
+        {/* Registration redirection button */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3 }}>
+          <Typography variant="body1" gutterBottom>
+            Még nincs fiókod?
+          </Typography>
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{ mt: 1 }}
+            onClick={() => navigate('/register')}
+          >
+            Regisztráció
+          </Button>
+        </Box>
       </Box>
+      
       {errorNotification}
       <Notification
         open={notification.open}
