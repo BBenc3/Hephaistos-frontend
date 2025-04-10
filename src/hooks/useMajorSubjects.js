@@ -25,26 +25,26 @@ const useMajorSubjects = () => {
         }
       );
 
-      console.log("Response data:", response.data); // Naplózzuk a választ
+      console.log("Response data:", response.data); // Log response data for debugging
 
-      // Ellenőrizzük, hogy van-e '$values' kulcs a válaszban
+      // Check if '$values' exists and handle it
       const subjectsData = response.data?.$values || [];
 
       setSubjects(
         subjectsData.map((subject) => ({
           id: subject.id,
           name: subject.name,
-          code: subject.code, // Ha szükséges, hozzáadhatod
-          creditValue: subject.creditValue, // Ha szükséges, hozzáadhatod
-          isElective: subject.isElective, // Ha szükséges, hozzáadhatod
-          isEvenSemester: subject.isEvenSemester, // Ha szükséges, hozzáadhatod
+          code: subject.code,
+          creditValue: subject.creditValue,
+          isElective: subject.isElective,
+          isEvenSemester: subject.isEvenSemester,
         }))
       );
       setError(null);
     } catch (err) {
       console.error("Hiba a tárgyak lekérésekor:", err);
       setError("Nem sikerült betölteni a tárgyakat.");
-      setSubjects([]); // Ha hiba van, akkor ne maradjanak régi tárgyak
+      setSubjects([]);
     } finally {
       setLoading(false);
     }
@@ -61,5 +61,6 @@ const useMajorSubjects = () => {
     refresh: fetchSubjects,
   };
 };
+
 
 export default useMajorSubjects;

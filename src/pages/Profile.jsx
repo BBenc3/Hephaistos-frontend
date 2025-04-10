@@ -35,7 +35,6 @@ const ProfilePage = () => {
   const { universities, loading: universitiesLoading, error: universitiesError } = useUniversities();
   console.log("Fetched universities:", universities); // Debugging line
 
-
   // A useMajorSubjects hookból kapjuk az elérhető tárgyakat a felhasználó szakához
   const { subjects: majorSubjects, loading: subjectsLoading, error: subjectsError, refresh: refreshMajorSubjects } = useMajorSubjects();
 
@@ -53,7 +52,6 @@ const ProfilePage = () => {
     ? `${profileBaseUrl}ProfilePictures/${user?.profilePicturePath}`
     : "https://via.placeholder.com/80"; // Fallback image if no profile picture
 
-  // Modified first useEffect to remove universities dependency and update state only once
   useEffect(() => {
     if (user && !editableUser) {
       const completed = Array.isArray(user.completedSubjects?.values)
@@ -61,13 +59,12 @@ const ProfilePage = () => {
         : [];
       setSelectedSubjects(completed);
       setEditableUser({ ...user });
-      setSelectedUniversityId(user.universityId || "");
-      const majors = universities.find((u) => u.id === user.universityId)?.majors || [];
+      setSelectedUniversityId(user.university?.id || "");
+      const majors = universities.find((u) => u.id === user.university?.id)?.majors || [];
       setAvailableMajors(majors);
     }
   }, [user]);
 
-  // Modified second useEffect to update availableMajors only when changed
   useEffect(() => {
     if (selectedUniversityId) {
       const selectedUni = universities.find((u) => u.id === selectedUniversityId);
@@ -117,7 +114,6 @@ const ProfilePage = () => {
   return (
     <Box sx={{ p: 4 }}>
       {errorNotification}
-
       <Paper sx={{ p: 4, mb: 4 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
           <Avatar
@@ -174,7 +170,7 @@ const ProfilePage = () => {
               <FormControl fullWidth disabled={!isEditing}>
                 <InputLabel>Szak</InputLabel>
                 <Select
-                  value={editableUser?.majorId || ""} // Default to user's major
+                  value={editableUser?.major?.id || ""} // Default to user's major
                   label="Szak"
                   onChange={(e) =>
                     setEditableUser((prev) => ({
@@ -247,7 +243,7 @@ const ProfilePage = () => {
                     onClick={() => {
                       setIsEditing(false);
                       setEditableUser({ ...user });
-                      setSelectedUniversityId(user.universityId || "");
+                      setSelectedUniversityId(user.university?.id || "");
                     }}
                     fullWidth
                   >
@@ -269,8 +265,8 @@ const ProfilePage = () => {
           <List>
             {Array.isArray(user.completedSubjects?.values) &&
               user.completedSubjects.values.length > 0 ? (
-              user.completedSubjects.values.map((s) => (
-                <ListItem key={s.subjectId}>
+              user.completedSubjects.values.map((s, idx) => (
+                <ListItem key={`${s.subjectId}-${idx}`}>
                   <ListItemText primary={s.name} />
                 </ListItem>
               ))
@@ -291,21 +287,21 @@ const ProfilePage = () => {
             </Typography>
           ) : (
             <List>
-              {majorSubjects.length > 0 ? ( // Check if subjects exist
-                majorSubjects.map((subject) => (
-                  <ListItem key={subject.id}>
+              {majorSubjects.length > 0 ? (
+                majorSubjects.map((subject, idx) => (
+                  <ListItem key={`${subject.id}-${idx}`}>
                     <Checkbox
                       checked={selectedSubjects.includes(subject.id)}
                       onChange={() => handleCheckboxToggle(subject.id)}
                     />
                     <ListItemText
                       primary={`${subject.name}`}
-                      secondary={`Szak: ${subject.majorName} – Egyetem: ${subject.universityName}`}
+                      secondary={`Kód: ${subject.code} – Kredit érték: ${subject.creditValue}`}
                     />
                   </ListItem>
                 ))
               ) : (
-                <Typography variant="body2">Nincsenek elérhető tárgyak.</Typography> // Fallback message
+                <Typography variant="body2">Nincsenek elérhető tárgyak.</Typography>
               )}
             </List>
           )}
@@ -313,6 +309,7 @@ const ProfilePage = () => {
             Mentés
           </Button>
         </Paper>
+
       </Box>
     </Box>
   );

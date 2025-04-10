@@ -16,6 +16,8 @@ import { useMediaQuery } from '@mui/material';
 import Notification from './components/Notification';
 import ProfilePage from './pages/Profile';
 import { generateTheme } from "./styles/theme"; // Import the theme generation function
+import ManageUsers from './pages/ManageUsers';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -44,7 +46,8 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/profile" element={<ProfilePage/>} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/manage-users" element={<ProtectedRoute element={<ManageUsers />} />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

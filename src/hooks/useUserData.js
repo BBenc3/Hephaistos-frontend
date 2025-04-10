@@ -12,7 +12,6 @@ const useUserData = () => {
   const navigate = useNavigate();
   const isMountedRef = useRef(true);
 
-
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -29,6 +28,8 @@ const useUserData = () => {
         const data = response.data;
         const formattedUser = {
           ...data,
+          universityId: data.university?.id || "",
+          majorId: data.major?.id || "",
           completedSubjects: {
             ...data.completedSubjects,
             values: data.completedSubjects?.$values || [],
