@@ -33,6 +33,8 @@ const ProfilePage = () => {
   } = useUserData();
 
   const { universities, loading: universitiesLoading, error: universitiesError } = useUniversities();
+  console.log("Fetched universities:", universities); // Debugging line
+
 
   // A useMajorSubjects hookból kapjuk az elérhető tárgyakat a felhasználó szakához
   const { subjects: majorSubjects, loading: subjectsLoading, error: subjectsError, refresh: refreshMajorSubjects } = useMajorSubjects();
@@ -51,30 +53,30 @@ const ProfilePage = () => {
     ? `${profileBaseUrl}ProfilePictures/${user?.profilePicturePath}`
     : "https://via.placeholder.com/80"; // Fallback image if no profile picture
 
+  // Modified first useEffect to remove universities dependency and update state only once
   useEffect(() => {
-    if (user) {
+    if (user && !editableUser) {
       const completed = Array.isArray(user.completedSubjects?.values)
         ? user.completedSubjects.values.map((s) => s.subjectId)
         : [];
       setSelectedSubjects(completed);
       setEditableUser({ ...user });
       setSelectedUniversityId(user.universityId || "");
-      setAvailableMajors(
-        universities.find((u) => u.id === user.universityId)?.majors || []
-      );
+      const majors = universities.find((u) => u.id === user.universityId)?.majors || [];
+      setAvailableMajors(majors);
     }
-  }, [user, universities]);
+  }, [user]);
 
+  // Modified second useEffect to update availableMajors only when changed
   useEffect(() => {
     if (selectedUniversityId) {
       const selectedUni = universities.find((u) => u.id === selectedUniversityId);
-      setAvailableMajors(selectedUni?.majors || []);
+      const majors = selectedUni?.majors || [];
+      setAvailableMajors((prevMajors) =>
+        JSON.stringify(prevMajors) !== JSON.stringify(majors) ? majors : prevMajors
+      );
     }
   }, [selectedUniversityId, universities]);
-
-  useEffect(() => {
-    console.log("Fetched major subjects:", majorSubjects); // Debug log
-  }, [majorSubjects]);
 
   const handleCheckboxToggle = (subjectId) => {
     setSelectedSubjects((prev) =>
@@ -103,7 +105,14 @@ const ProfilePage = () => {
   };
 
   if (loading || universitiesLoading || subjectsLoading) return <CircularProgress />;
-  if (!user || universitiesError || subjectsError) return null;
+  if (universitiesError || subjectsError)
+    return <Typography variant="body2" color="error">
+      Hiba történt az adatok betöltésekor.
+    </Typography>;
+  if (!user)
+    return <Typography variant="body2" color="error">
+      Nem sikerült betölteni a felhasználói adatokat.
+    </Typography>;
 
   return (
     <Box sx={{ p: 4 }}>
@@ -259,7 +268,7 @@ const ProfilePage = () => {
           <Divider sx={{ mb: 2 }} />
           <List>
             {Array.isArray(user.completedSubjects?.values) &&
-            user.completedSubjects.values.length > 0 ? (
+              user.completedSubjects.values.length > 0 ? (
               user.completedSubjects.values.map((s) => (
                 <ListItem key={s.subjectId}>
                   <ListItemText primary={s.name} />

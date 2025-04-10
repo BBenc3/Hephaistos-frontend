@@ -147,7 +147,12 @@ export default function Navbar({ isDarkMode, setIsDarkMode }) {
           />
         ) : (
           !isMobile && (
-            <CustomButton size="small" onClick={() => navigate("/login")}>
+            <CustomButton
+              size="small"
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
               Bejelentkezés
             </CustomButton>
           )

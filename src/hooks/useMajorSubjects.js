@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 const useMajorSubjects = () => {
@@ -6,38 +6,60 @@ const useMajorSubjects = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchSubjects = async () => {
+  const fetchSubjects = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/me/allsubjects`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        setError("Nem sikerült betölteni a tárgyakat.");
+        setSubjects([]);
+        return;
+      }
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/user/me/allsubjects`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Response data:", response.data); // Naplózzuk a választ
+
+      // Ellenőrizzük, hogy van-e '$values' kulcs a válaszban
+      const subjectsData = response.data?.$values || [];
+
       setSubjects(
-        Array.isArray(response.data) // Ensure response is an array
-          ? response.data.map((subject) => ({
-              id: subject.id,
-              name: subject.name,
-              majorName: subject.majorName || "N/A", // Handle missing fields
-              universityName: subject.universityName || "N/A",
-            }))
-          : []
+        subjectsData.map((subject) => ({
+          id: subject.id,
+          name: subject.name,
+          code: subject.code, // Ha szükséges, hozzáadhatod
+          creditValue: subject.creditValue, // Ha szükséges, hozzáadhatod
+          isElective: subject.isElective, // Ha szükséges, hozzáadhatod
+          isEvenSemester: subject.isEvenSemester, // Ha szükséges, hozzáadhatod
+        }))
       );
       setError(null);
     } catch (err) {
       console.error("Hiba a tárgyak lekérésekor:", err);
       setError("Nem sikerült betölteni a tárgyakat.");
+      setSubjects([]); // Ha hiba van, akkor ne maradjanak régi tárgyak
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchSubjects();
-  }, []);
+  }, [fetchSubjects]);
 
-  return { subjects, loading, error, refresh: fetchSubjects };
+  return {
+    subjects,
+    loading,
+    error,
+    refresh: fetchSubjects,
+  };
 };
 
 export default useMajorSubjects;

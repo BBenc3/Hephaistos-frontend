@@ -19,6 +19,7 @@ export const useUniversities = () => {
             }))
           : [];
         setUniversities(normalizedData);
+        console.log("Fetched universities:", normalizedData); // Debugging line
       } catch (err) {
         console.error("Failed to fetch universities:", err);
         setError(err);

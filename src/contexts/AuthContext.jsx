@@ -4,7 +4,6 @@ import axios from "axios";
 const AuthContext = createContext();
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL + "/auth";
-const USER_API_URL = process.env.REACT_APP_API_BASE_URL + "/user";
 
 const initialState = {
   isLoggedIn: false,
@@ -27,12 +26,7 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      dispatch({ type: "LOGIN_SUCCESS" });
-    }
-  }, []);
+
 
   const login = async (credentials) => {
     try {
@@ -79,20 +73,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateCompletedSubjects = async (completedSubjectIds) => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      await axios.put(
-        `${USER_API_URL}/completedSubjects`,
-        { completedSubjectIds },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    } catch (err) {
-      console.error("Error updating completed subjects:", err);
-      throw err;
-    }
-  };
-
   return (
     <AuthContext.Provider
       value={{
@@ -101,7 +81,6 @@ export const AuthProvider = ({ children }) => {
         logout,
         requestOtp,
         verifyOtp,
-        updateCompletedSubjects,
       }}
     >
       {children}

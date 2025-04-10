@@ -12,53 +12,45 @@ const useUserData = () => {
   const navigate = useNavigate();
   const isMountedRef = useRef(true);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false;
-    };
-  }, []);
 
-  // Függvény a felhasználói adatok lekéréséhez
   const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) return;
 
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/user/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        if (isMountedRef.current) {
-          const formattedUser = {
-            ...response.data,
-            completedSubjects: {
-              ...response.data.completedSubjects,
-              values: response.data.completedSubjects?.$values || [],
-            },
-          };
-          setUser(formattedUser);
-          setLoading(false);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/user/me`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          logout();
-          navigate("/login");
-        }
+      );
+      console.log("User data response:", response.data); // Debugging line
+      if (isMountedRef.current) {
+        const data = response.data;
+        const formattedUser = {
+          ...data,
+          completedSubjects: {
+            ...data.completedSubjects,
+            values: data.completedSubjects?.$values || [],
+          },
+        };
+        setUser(formattedUser);
+        setLoading(false);
+      }
+    } catch (err) {
+      if (err.response?.status === 401) {
+        logout();
+        navigate("/login");
+      } else {
+        console.error("Error fetching user data:", err);
         if (isMountedRef.current) {
-          console.error("Error fetching user data:", err);
           setError("Hiba történt a felhasználói adatok lekérése közben.");
           setLoading(false);
         }
       }
-    }, [logout, navigate]);
+    }
+  }, [logout, navigate]);
 
-  // Az adatok betöltése a hook inicializálásakor és amikor isLoggedIn változik
   useEffect(() => {
     if (isLoggedIn) {
       fetchUserData();
@@ -68,7 +60,6 @@ const useUserData = () => {
     }
   }, [isLoggedIn, fetchUserData]);
 
-  // Új függvény: frissíti a user adatokat
   const refreshUserData = async () => {
     await fetchUserData();
   };
@@ -87,7 +78,6 @@ const useUserData = () => {
 
       if (response.status === 200) {
         setUser(null);
-        setError(null);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         logout();
@@ -96,20 +86,6 @@ const useUserData = () => {
     } catch (err) {
       console.error("Error deactivating profile:", err);
       setError("Hiba történt a profil inaktiválása során.");
-    }
-  };
-
-  const fetchAvailableSubjects = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/user/subjects`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return Array.isArray(response.data) ? response.data : [];
-    } catch (err) {
-      console.error("Error fetching subjects:", err);
-      return [];
     }
   };
 
@@ -123,9 +99,10 @@ const useUserData = () => {
       );
       setUser((prev) => ({
         ...prev,
-        completedSubjects: completedSubjectIds,
-        universityId: prev.universityId, // Ensure universityId remains intact
-        majorId: prev.majorId, // Ensure majorId remains intact
+        completedSubjects: {
+          ...prev.completedSubjects,
+          values: completedSubjectIds,
+        },
       }));
     } catch (err) {
       console.error("Error updating completed subjects:", err);
@@ -141,7 +118,10 @@ const useUserData = () => {
         updatedDetails,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setUser((prev) => ({ ...prev, ...response.data })); // Update user state with new details
+      setUser((prev) => ({
+        ...prev,
+        ...response.data,
+      }));
     } catch (err) {
       console.error("Error updating user details:", err);
       setError("Hiba történt a felhasználói adatok frissítése során.");
@@ -155,9 +135,9 @@ const useUserData = () => {
       <Notification message={error} severity="error" open={true} />
     ) : null,
     handleDeactivate,
-    fetchAvailableSubjects,
     updateCompletedSubjects,
-    updateUserDetails, // Export the function
+    updateUserDetails,
+    refreshUserData,
   };
 };
 
