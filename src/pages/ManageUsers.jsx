@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import { Container, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Checkbox, FormControlLabel, MenuItem } from '@mui/material';
 import useUserData from "../hooks/useUserData";
-import MenuItem from '@mui/material/MenuItem';
 
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
@@ -47,138 +46,132 @@ const ManageUsers = () => {
             await axios.put(
                 `${process.env.REACT_APP_API_BASE_URL}/User/admin/${selectedUser.id}`,
                 {
-                    rname, // included username if needed by the endpoint
-                    username: selectedUser.username, l,
+                    username: selectedUser.username,
                     email: selectedUser.email,
                     role: selectedUser.role,
                     note: selectedUser.note,
-                    status: selectedUser.status, tYear,
+                    status: selectedUser.status,
                     startYear: selectedUser.startYear,
-                    active: selectedUser.active, majorId: selectedUser.majorId
+                    active: selectedUser.active,
                     majorId: selectedUser.majorId
-                }, { headers: { Authorization: `Bearer ${token}` } }
+                },
                 { headers: { Authorization: `Bearer ${token}` } }
-            ); alog(false);
+            );
             setOpenEditDialog(false);
         } catch (error) {
             console.error("Error updating user:", error);
-            console.error("Error updating user:", error);
         }
-    }
-};
     };
-if (loading) return <Typography>Betöltés...</Typography>;
-if (loading) return <Typography>Betöltés...</Typography>;
 
-return (
-        <Container>aphy variant="h4" gutterBottom>Felhasználók kezelése</Typography>
+    if (loading) return <Typography>Betöltés...</Typography>;
+
+    return (
+        <Container>
             <Typography variant="h4" gutterBottom>Felhasználók kezelése</Typography>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>ID</TableCell>ableCell>
+                        <TableCell>ID</TableCell>
                         <TableCell>Felhasználónév</TableCell>
-                        <TableCell>Email</TableCell>eCell>
+                        <TableCell>Email</TableCell>
                         <TableCell>Bejegyzés Év</TableCell>
-                        <TableCell>Szerep</TableCell>ell>Műveletek</TableCell>
-                        <TableCell>Műveletek</TableCell>ow>
-                    </TableRow>>
+                        <TableCell>Szerep</TableCell>
+                        <TableCell>Műveletek</TableCell>
+                    </TableRow>
                 </TableHead>
                 <TableBody>
                     {users.map(u => (
                         <TableRow key={u.id}>
-                            <TableCell>{u.id}</TableCell>ll>
+                            <TableCell>{u.id}</TableCell>
                             <TableCell>{u.username}</TableCell>
-                            <TableCell>{u.email}</TableCell>Cell>
-                            <TableCell>{u.startYear}</TableCell>{u.role}</TableCell>
+                            <TableCell>{u.email}</TableCell>
+                            <TableCell>{u.startYear}</TableCell>
                             <TableCell>{u.role}</TableCell>
-                            <TableCell>variant="outlined" onClick={() => handleEdit(u)}>Szerkesztés</Button>
-                                <Button variant="outlined" onClick={() => handleEdit(u)}>Szerkesztés</Button>Cell>
-                            </TableCell> </TableRow >
-                        </TableRow >
-                    ))}bleBody >
-                </TableBody >            </Table >
-            </Table >
+                            <TableCell>
+                                <Button variant="outlined" onClick={() => handleEdit(u)}>Szerkesztés</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
 
-    { selectedUser && (tDialog(false)} fullWidth >
-                <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)} fullWidth>lhasználó szerkesztése</DialogTitle>
-                    <DialogTitle>Felhasználó szerkesztése</DialogTitle> >
+            {selectedUser && (
+                <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)} fullWidth>
+                    <DialogTitle>Felhasználó szerkesztése</DialogTitle>
                     <DialogContent>
                         <TextField
-                            fullWidthl"
+                            fullWidth
                             margin="normal"
                             label="Felhasználónév"
-                            value={selectedUser.username || ""}  onChange={(e) => handleDialogChange("email", e.target.value)}
+                            value={selectedUser.username || ""}
                             onChange={(e) => handleDialogChange("username", e.target.value)}
                         />
                         <TextField
-                            fullWidth"
+                            fullWidth
                             margin="normal"
                             label="Email"
-                            value={selectedUser.email || ""}  onChange={(e) => handleDialogChange("role", e.target.value)}
+                            value={selectedUser.email || ""}
                             onChange={(e) => handleDialogChange("email", e.target.value)}
                         />
                         <TextField
                             select
                             fullWidth
                             margin="normal"
-                            label="Szerep"  onChange={(e) => handleDialogChange("note", e.target.value)}
+                            label="Szerep"
                             value={selectedUser.role || ""}
                             onChange={(e) => handleDialogChange("role", e.target.value)}
                         >
                             <MenuItem value="User">User</MenuItem>
                             <MenuItem value="Admin">Admin</MenuItem>
                         </TextField>
-                        <TextField  onChange={(e) => handleDialogChange("status", e.target.value)}
+                        <TextField
                             fullWidth
                             margin="normal"
                             label="Megjegyzés"
                             value={selectedUser.note || ""}
-                            onChange={(e) => handleDialogChange("note", e.target.value)}zés Év"
+                            onChange={(e) => handleDialogChange("note", e.target.value)}
                         />
                         <TextField
-                            fullWidth  onChange={(e) => handleDialogChange("startYear", parseInt(e.target.value, 10))}
+                            fullWidth
                             margin="normal"
-                            label="Státusz"abel
-                            value={selectedUser.status || ""}
-                            onChange={(e) => handleDialogChange("status", e.target.value)}
-                        />
-                        <TextField  onChange={(e) => handleDialogChange("active", e.target.checked)}
-                            fullWidth   />
-                            margin="normal"
-                            label="Bejegyzés Év"  label="Aktív"
+                            label="Bejegyzés Év"
                             type="number"
                             value={selectedUser.startYear || ""}
                             onChange={(e) => handleDialogChange("startYear", parseInt(e.target.value, 10))}
                         />
-                        <FormControlLabeld"
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Státusz"
+                            value={selectedUser.status || ""}
+                            onChange={(e) => handleDialogChange("status", e.target.value)}
+                        />
+                        <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={selectedUser.active || false}  onChange={(e) => handleDialogChange("majorId", e.target.value ? parseInt(e.target.value, 10) : null)}
+                                    checked={selectedUser.active || false}
                                     onChange={(e) => handleDialogChange("active", e.target.checked)}
-                                />>
+                                />
                             }
                             label="Aktív"
-                        />ant="contained" onClick={handleDialogSave}>Mentés</Button>
-                        <TextFieldlogActions>
-                            fullWidth  </Dialog>
-margin = "normal"
-label = "MajorId"  </Container >
-    type="number"  );
-value = { selectedUser.majorId || "" }};
-onChange = {(e) => handleDialogChange("majorId", e.target.value ? parseInt(e.target.value, 10) : null)}
-                        />export default ManageUsers;
+                        />
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="MajorId"
+                            type="number"
+                            value={selectedUser.majorId || ""}
+                            onChange={(e) => handleDialogChange("majorId", parseInt(e.target.value, 10))}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" onClick={handleDialogSave}>Mentés</Button>
+                        <Button onClick={() => setOpenEditDialog(false)}>Mégse</Button>
+                    </DialogActions>
+                </Dialog>
+            )}
+        </Container>
+    );
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-export default ManageUsers;};    );        </Container >            )}                </Dialog >                    </DialogActions >                        <Button variant="contained" onClick={handleDialogSave}>Mentés</Button>                        <Button onClick={() => setOpenEditDialog(false)}>Mégse</Button>                    <DialogActions>                    </DialogContent>
+export default ManageUsers;
