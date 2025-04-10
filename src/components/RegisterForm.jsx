@@ -11,7 +11,7 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const RegisterForm = ({ setNotification }) => {
+const RegisterForm = ({ setNotification, defaultStartYear }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { universities, loading, error } = useUniversities();
@@ -23,9 +23,9 @@ const RegisterForm = ({ setNotification }) => {
     username: '',
     email: '',
     password: '',
-    startYear: '',
+    startYear: defaultStartYear || '', // Használja a defaultStartYear-t, ha meg van adva
     majorId: '',
-    status: 'Active',
+    status: 'Aktív',
   });
 
   const handleUniversityChange = (e) => {
@@ -155,8 +155,8 @@ const RegisterForm = ({ setNotification }) => {
               onChange={handleChange}
               label="Státusz"
             >
-              <MenuItem value="Active">Aktív</MenuItem>
-              <MenuItem value="Passive">Passzív</MenuItem>
+              <MenuItem value="Aktív">Aktív</MenuItem>
+              <MenuItem value="Passzív">Passzív</MenuItem>
             </Select>
           </FormControl>
           <Button type="submit" variant="contained" color="primary" fullWidth size="large" sx={{ mt: 2 }}>

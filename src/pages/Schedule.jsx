@@ -4,7 +4,8 @@ import { useTheme, Button, Grid, Paper, Typography } from '@mui/material';
 import { useDarkMode } from '../hooks/useDarkMode';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useAuth } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom'; // added import for navigation
+import { Link } from 'react-router-dom';
+import { colors } from '../styles/theme'; // Import colors for fallback if needed
 
 const Schedule = () => {
   const theme = useTheme();
@@ -18,7 +19,7 @@ const Schedule = () => {
   // If user is not logged in, show login instructions and a login button.
   if (!isLoggedIn) {
     return (
-      <div style={{ padding: '20px', backgroundColor: theme.palette.background.default }}>
+      <div style={{ padding: theme.spacing(3), backgroundColor: theme.palette.background.default }}>
         <Typography variant="h5" gutterBottom>
           Kérjük jelentkezz be a rendszerbe!
         </Typography>
@@ -29,8 +30,8 @@ const Schedule = () => {
           variant="contained"
           color="primary"
           component={Link}
-          to="/login" // points to the login page
-          style={{ marginTop: '20px' }}
+          to="/login"
+          sx={{ marginTop: theme.spacing(2) }}
         >
           Bejelentkezés
         </Button>
@@ -77,11 +78,13 @@ const Schedule = () => {
   };
 
   return (
-    <div style={{
-      padding: '20px',
-      backgroundColor: theme.palette.background.default,
-      [theme.breakpoints.down('sm')]: { padding: '10px' }
-    }}>
+    <div
+      style={{
+        padding: theme.spacing(3),
+        backgroundColor: theme.palette.background.default,
+        [theme.breakpoints.down('sm')]: { padding: theme.spacing(2) },
+      }}
+    >
       <Typography variant="h4" gutterBottom>Órarend</Typography>
 
       {isPending ? (
@@ -92,26 +95,41 @@ const Schedule = () => {
             <Grid container spacing={2}>
               {daysOfWeek.map(day => (
                 <Grid item xs={12} sm={6} md={2} key={day}>
-                  <Paper style={{
-                    padding: '15px',
-                    backgroundColor: isDarkMode ? theme.palette.grey[800] : theme.palette.grey[100],
-                    marginBottom: '10px',
-                    minHeight: '200px'
-                  }}>
-                    <Typography variant="h6" style={{ marginBottom: '10px', textAlign: 'center' }}>{day}</Typography>
+                  <Paper
+                    sx={{
+                      padding: theme.spacing(2),
+                      backgroundColor: theme.palette.background.paper,
+                      marginBottom: theme.spacing(2),
+                      minHeight: '200px',
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        marginBottom: theme.spacing(1),
+                        textAlign: 'center',
+                        color: theme.palette.text.primary,
+                      }}
+                    >
+                      {day}
+                    </Typography>
                     <hr />
                     {schedule[day].length > 0 ? (
                       schedule[day].map((classItem, index) => (
-                        <div key={`${day}-${index}`} style={{ marginBottom: '8px' }}>
-                          <Typography><b>{classItem.subjectName}</b></Typography>
-                          <Typography variant="body2">
+                        <div key={`${day}-${index}`} style={{ marginBottom: theme.spacing(1) }}>
+                          <Typography sx={{ color: theme.palette.text.primary }}>
+                            <b>{classItem.subjectName}</b>
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
                             {classItem.startTime.substring(0, 5)} - {classItem.endTime.substring(0, 5)}
                           </Typography>
                           <hr />
                         </div>
                       ))
                     ) : (
-                      <Typography variant="body2" color="textSecondary">Nincsenek órák</Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Nincsenek órák
+                      </Typography>
                     )}
                   </Paper>
                 </Grid>
@@ -128,7 +146,8 @@ const Schedule = () => {
         color="primary"
         onClick={Generate}
         disabled={isPending}
-        style={{ marginTop: '20px' }}>
+        sx={{ marginTop: theme.spacing(2) }}
+      >
         Generálás
       </Button>
     </div>

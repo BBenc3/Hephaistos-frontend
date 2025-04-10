@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import { useTheme } from '@mui/material/styles';
 import { Box, Typography, TextField } from "@mui/material";
 
 const ForgotPassword = () => {
   const theme = useTheme();
+  const { requestOtp, verifyOtp } = useAuth();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -13,7 +14,7 @@ const ForgotPassword = () => {
 
   const handleSendOtp = async () => {
     try {
-      await axios.post('https://localhost:5001/api/auth/generate-otp', { email });
+      await requestOtp(email);
       setStep(2);
     } catch (error) {
       console.error(error);
@@ -22,9 +23,7 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async () => {
     try {
-      await axios.put('https://localhost:5001/api/auth/change-password-after-otp',
-        { email, otp, newPassword }
-      );
+      await verifyOtp(email, otp, newPassword);
       console.log('Password changed successfully');
     } catch (error) {
       console.error(error);

@@ -26,8 +26,6 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-
-
   const login = async (credentials) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/login`, credentials, {
@@ -63,7 +61,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyOtp = async (email, otp, newPassword) => {
     try {
-      await axios.put(`${API_BASE_URL}/change-password-after-otp`, {
+      await axios.put(`${API_BASE_URL}/resetPassword`, {
         email,
         otp,
         newPassword,

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Box, Grid, InputAdornment } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext'; // Az AuthContext importálása
 
 const LoginForm = ({ setNotification }) => {
@@ -29,7 +29,7 @@ const LoginForm = ({ setNotification }) => {
 
         try {
             await login({ usernameOrEmail: formData.usernameOrEmail, password: formData.password });
-            setNotification({ open: true, message: 'Login successful!', severity: 'success' });
+            setNotification({ open: true, message: 'Sikeres bejelentkezés!', severity: 'success' });
         } catch (err) {
             setNotification({ open: true, message: error, severity: 'error' });
         }
@@ -51,7 +51,7 @@ const LoginForm = ({ setNotification }) => {
             onSubmit={handleSubmit}
         >
             <TextField
-                label="Username or Email"
+                label="Felhasználónév vagy Email"
                 variant="outlined"
                 name="usernameOrEmail"
                 value={formData.usernameOrEmail}
@@ -59,7 +59,7 @@ const LoginForm = ({ setNotification }) => {
                 required
             />
             <TextField
-                label="Password"
+                label="Jelszó"
                 variant="outlined"
                 type={showPassword ? 'text' : 'password'}
                 name="password"
@@ -79,7 +79,18 @@ const LoginForm = ({ setNotification }) => {
             <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={12}>
                     <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Login
+                        Bejelentkezés
+                    </Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <Button
+                        component={Link}
+                        to="/forgotpassword"
+                        variant="text"
+                        color="secondary"
+                        fullWidth
+                    >
+                        Elfelejtett jelszó
                     </Button>
                 </Grid>
             </Grid>

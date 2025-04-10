@@ -22,6 +22,7 @@ import { useTheme } from "@mui/material/styles";
 import useUserData from "../hooks/useUserData";
 import { useUniversities } from "../hooks/useUniversities";
 import useMajorSubjects from "../hooks/useMajorSubjects";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const {
@@ -30,6 +31,7 @@ const ProfilePage = () => {
     errorNotification,
     updateCompletedSubjects,
     updateUserDetails,
+    handleDeactivate, // Import the deactivate function
   } = useUserData();
 
   const { universities, loading: universitiesLoading, error: universitiesError } = useUniversities();
@@ -43,6 +45,20 @@ const ProfilePage = () => {
   const [selectedUniversityId, setSelectedUniversityId] = useState("");
   const [availableMajors, setAvailableMajors] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+
+  const navigate = useNavigate(); // For redirecting after deactivation
+
+  const handleDeactivateProfile = async () => {
+    const confirmDeactivate = window.confirm("Biztosan inaktiválni szeretnéd a profilodat?");
+    if (!confirmDeactivate) return;
+
+    try {
+      await handleDeactivate();
+      navigate("/login"); // Redirect to login after deactivation
+    } catch (error) {
+      console.error("Error deactivating profile:", error);
+    }
+  };
 
   // Retrieve the base URL for profile pictures from the .env file
   const profileBaseUrl = process.env.REACT_APP_PROFILE_PICTURE_BASE_URL || ""; // Default to empty string if not defined
@@ -251,6 +267,17 @@ const ProfilePage = () => {
                   </Button>
                 </>
               )}
+            </Grid>
+            {/* Add the "Profil inaktiválása" button */}
+            <Grid item xs={12} md={4}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleDeactivateProfile}
+                fullWidth
+              >
+                Profil inaktiválása
+              </Button>
             </Grid>
           </Grid>
         </Box>

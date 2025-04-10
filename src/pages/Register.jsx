@@ -26,8 +26,9 @@ const Register = () => {
       }}
     >
       <Box sx={{ flexGrow: 1, width: '100%', [theme.breakpoints.up('md')]: { width: '50%' } }}>
-        <RegisterForm setNotification={setNotification} />
-        
+        {/* Pass the current year as the default start year */}
+        <RegisterForm setNotification={setNotification} defaultStartYear={new Date().getFullYear()} />
+
         {/* Login redirection button */}
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, mb: 3 }}>
           <Typography variant="body1" gutterBottom>

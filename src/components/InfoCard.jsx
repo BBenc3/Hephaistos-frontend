@@ -1,9 +1,11 @@
 import React from "react";
 import { Card, CardContent, CardActions, Typography, Button, Paper, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const InfoCard = ({ title, description, sx, icon: Icon }) => {
   const theme = useTheme();
+  const navigate = useNavigate(); // Initialize useNavigate
   const iconColor = theme.palette.mode === 'dark' ? '#FFFFFF' : '#000000'; // Set icon color based on theme mode
 
   return (
@@ -82,8 +84,14 @@ const InfoCard = ({ title, description, sx, icon: Icon }) => {
             paddingBottom: theme.spacing(2),
           }}
         >
-          <Button size="small" variant="contained" sx={{ width: '150px', backgroundColor: '#1D8C8C' }}>Próbálja ki</Button> {/* Change button color */}
-          <Button size="small" sx={{ marginBottom: theme.spacing(1), fontSize: '0.68rem', fontStyle: 'italic', textTransform: 'none' }}>További információ</Button> {/* Make button smaller, italic, and not all uppercase */}
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => { navigate("/schedule"); }} // Fix navigate function
+            sx={{ width: '150px', backgroundColor: '#1D8C8C' }}
+          >
+            Próbálja ki
+          </Button>
         </CardActions>
       </Card>
     </Paper>
